@@ -12,7 +12,7 @@ pyinputplus, termcolor
 
 ## EXCUSES
 
-Known Bug: Players' Pawns on the same card will only show one of them, cause it's a mess to draw a better board with ASCII. They are there though.)
+Known Bug: Players' Pawns on the same card will only show one of them, cause it's a mess to draw a better board with ASCII. (They are there though.)
 
 ## LINKS
 
