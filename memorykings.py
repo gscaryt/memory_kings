@@ -534,21 +534,6 @@ def recruit_check(cards_vector, players_vector, validate):
     for i in range(1, len(players_vector)):
         m = players_vector[i].positions[0]
         n = players_vector[i].positions[1]
-        log.debug(
-            f"recruit_check() - {f != m} and {cards_vector[f].token == None}"
-            f" and {cards_vector[f].color == cards_vector[m].color}"
-            f" and {cards_vector[f].rank == cards_vector[m].rank}"
-        )
-        log.debug(
-            f"recruit_check() - {f != n} and {cards_vector[f].token == None}"
-            f" and {cards_vector[f].color == cards_vector[n].color}"
-            f" and {cards_vector[f].rank == cards_vector[n].rank}"
-        )
-        log.debug(
-            f"recruit_check() - {m != n} and {cards_vector[m].token == None}"
-            f" and {cards_vector[m].color == cards_vector[n].color}"
-            f" and {cards_vector[m].rank == cards_vector[n].rank}"
-        )
         if (
             (f != m)
             and (cards_vector[f].token == None)
