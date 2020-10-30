@@ -1,6 +1,6 @@
 import pyinputplus as pyip
 import logging as log
-import random, termcolor
+import random, termcolor, pygame
 
 log.basicConfig(level=log.DEBUG, format=" %(asctime)s -  %(levelname)s -  %(message)s")
 log.disable(log.CRITICAL)
@@ -138,6 +138,11 @@ def run():
             game_state.players_vector_gen(player_total)
             setup_board(board, game_state.cards_vector, game_state.players_vector)
             while True:
+                ### PYGAME ###
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        validate.is_finished = True
+                ### PYGAME ###
                 if validate.is_finished:
                     break
                 else:
@@ -664,6 +669,9 @@ def hidden_board(board, cards_vector):
             print(" ")
 
 def print_board(board, cards_vector, players_vector):
+    ### PYGAME ###
+    show_board(board, cards_vector, players_vector)
+    ### PYGAME ###
     for i in range(len(cards_vector)):
         card = cards_vector[i]
         for j in range(len(players_vector)):
@@ -764,6 +772,106 @@ def print_colored_board(cards_vector, players_vector, card_index):
     else:
         code = "[" + counter + counter_token + card.code[1] + token + pawn + "]"
     print(code, end=" ")
+
+### PYGAME ###
+# Code is a mess from here, cause I'm still testing things and deciding what to do.
+# The screen is working though, you can't click or interact, but it updates based on the terminal moves.
+# Added stuff to: print_board() and run()
+
+pygame.init()
+
+screen_size = screen_width, screen_height = (800, 600)
+corner = (150,50)
+BLACK = (0,0,0)
+WHITE = (255,255,255)
+GREY = (100,100,100)
+
+screen = pygame.display.set_mode(screen_size)
+pygame.display.set_caption('Memory Kings')
+# clock = pygame.time.Clock()
+
+class Image:
+    '''Methods for getting and returning the images paths (strings).'''
+
+    def card(self, cards_vector, card_index): # Cards = 100x100
+        card = cards_vector[card_index]
+        return pygame.image.load('images/' + card.color.lower() + '_' + card.rank.lower() + '.png')
+
+    def pawn(self, players_vector, player_index): # Pawns = 30x30
+        player = players_vector[player_index]
+        return pygame.image.load('images/pawn_' + (player.color.lower()).replace(" ", "") + '.png')
+
+    def token(self, cards_vector, card_index): # Tokens = 30x30
+        card = cards_vector[card_index]
+        return pygame.image.load('images/token_' + (card.token.lower()).replace(" ", "") + '.png')
+
+class Button:
+    '''For a button to have an "action_func()" with several arguments (action_arg),\n
+     add them as a single tuple (e.g. action_func((a, b, c, d))) and separate it in the\n
+     beginning of that function.\n I think I can clean this up a bit.'''
+    def __init__(self, image, center_x, center_y, angle, scale, hover_image=None, action_func=None, action_arg=None):
+        self.image = image
+        self.center_x = center_x
+        self.center_y = center_y
+        self.angle = angle
+        self.scale = scale
+        self.hover_image = hover_image
+        self.action_func = action_func
+        self.action_arg = action_arg
+
+    def button(self):
+        image_path = 'images/' + self.image
+        mouse = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()
+        original_image = pygame.image.load(image_path).convert()
+        scaled_image = pygame.transform.rotozoom(original_image, self.angle, self.scale)
+        self.image_rect = scaled_image.get_rect()
+        self.image_rect.center = (self.center_x, self.center_y)
+        if self.image_rect.collidepoint(mouse) and self.hover_image != None:
+            hover_path = 'images/' + self.hover_image
+            hover = pygame.image.load(hover_path).convert()
+            scaled_hover = pygame.transform.rotozoom(hover, self.angle, self.scale)
+            self.hover_rect = scaled_hover.get_rect()
+            self.hover_rect.center = (self.center_x, self.center_y)
+            screen.blit(scaled_hover, self.hover_rect)
+        else:
+            screen.blit(scaled_image, self.image_rect)
+        if self.action_func != None and click[0] == 1:
+            screen.blit(scaled_image, self.image_rect)
+            if self.action_arg != None:
+                self.action_func(self.action_arg)
+            else:
+                self.action_func()
+
+def show_board(board, cards_vector, players_vector):
+    cards_state_check(cards_vector, players_vector)
+    get_image = Image()
+    screen.fill(GREY)
+    for x in range(5):
+        for y in range(5):
+            coordinates = corner[0]+100*x, corner[1]+100*y
+            card_index = board.WIDTH*(y)+(x)
+            if cards_vector[card_index].open:
+                card_image = get_image.card(cards_vector, card_index)
+                screen.blit(card_image, (coordinates))
+            elif cards_vector[card_index].back == 'Black':
+                screen.blit(pygame.image.load('images/black_back.png'), (coordinates))
+            elif cards_vector[card_index].back == 'White':
+                screen.blit(pygame.image.load('images/white_back.png'), (coordinates))
+            if cards_vector[card_index].token != None:
+                token_image = get_image.token(cards_vector, card_index)
+                screen.blit(token_image, (coordinates[0]+66, coordinates[1]+66))
+            for player_index in range(len(players_vector)):
+                if players_vector[0].positions[0] == card_index:
+                    pawn_image = get_image.pawn(players_vector, 0)
+                    screen.blit(pawn_image, (coordinates[0]+4, coordinates[1]+4))
+                elif players_vector[player_index].positions[0] == card_index:
+                    pawn_image = get_image.pawn(players_vector, player_index)
+                    screen.blit(pawn_image, (coordinates[0]+4, coordinates[1]+66))
+                elif players_vector[player_index].positions[1] == card_index:
+                    pawn_image = get_image.pawn(players_vector, player_index)
+                    screen.blit(pawn_image, (coordinates[0]+66, coordinates[1]+4))
+    pygame.display.update()
 
 # SYSTEM
 
