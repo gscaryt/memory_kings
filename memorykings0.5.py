@@ -218,7 +218,7 @@ def create_players(players_vector):
     """
     selected_colors = []
     if len(players_vector) == 2:
-        players_vector[0].color = "Counter King"
+        players_vector[0].color = "Counter"
     log.debug(
         f"create_players(): The Counter (player[0]) is set with color {players_vector[0].color}"
         f" on {[players_vector[0].coordinates[0]]} and {[players_vector[0].coordinates[0]]}"
@@ -800,11 +800,11 @@ class Image:
 
     def pawn(self, players_vector, player_index): # Pawns = 30x30
         player = players_vector[player_index]
-        return pygame.image.load('images/pawn_' + (player.color.lower()).replace(" ", "") + '.png')
+        return pygame.image.load('images/pawn_' + player.color.lower() + '.png')
 
     def token(self, cards_vector, card_index): # Tokens = 30x30
         card = cards_vector[card_index]
-        return pygame.image.load('images/token_' + (card.token.lower()).replace(" ", "") + '.png')
+        return pygame.image.load('images/token_' + card.token.lower() + '.png')
 
 class Button:
     '''For a button to have an "action_func()" with several arguments (action_arg),\n
