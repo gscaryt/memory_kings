@@ -31,9 +31,6 @@ class Game:
         self.turn = 1
         log.debug(f'choose_colors() - Chosen Colors: {self.color_order}')
 
-    def move_check(self, col, row):
-        pass
-
     def recruit_check(self):
         pass
 
