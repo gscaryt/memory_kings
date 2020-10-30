@@ -774,9 +774,10 @@ def print_colored_board(cards_vector, players_vector, card_index):
     print(code, end=" ")
 
 ### PYGAME ###
-# Code is a mess from here, cause I'm still testing things and deciding what to do.
-# The screen is working though, you can't click or interact, but it updates based on the terminal moves.
-# Added stuff to: print_board() and run()
+    ''' Code is a mess from here, cause I'm still testing things and deciding what to do.
+    The screen is working though, you can't click or interact,\n
+    but it updates based on the terminal moves.
+    Added stuff to: print_board() and run() '''
 
 pygame.init()
 
