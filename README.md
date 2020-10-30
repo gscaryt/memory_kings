@@ -1,6 +1,7 @@
 # Memory Kings in Python 3
 
-For now, the game runs with all its rules for Multiplayer and Solo modes on Terminal.
+For now, the game (on memorykings0.5.py) is a standalone file that runs all rules for Multiplayer and Solo modes on Terminal.
+The rest of the files are for the next version.
 
 ## TODO
 
