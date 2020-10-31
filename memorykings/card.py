@@ -7,6 +7,7 @@ class Card:
         self.rank = rank
         self.back = back
         self.image = color + '_' + rank + '.png'
+        self.recruited = None
         self.col = self.position % board_cols
         self.row = self.position // board_cols
 

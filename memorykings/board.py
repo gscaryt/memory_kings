@@ -1,7 +1,7 @@
 import pygame, random
 import logging as log
-from .card import Card
 from .constants import ALL_CARDS, CORNER, CARD_SIZE
+from .card import Card
 
 log.basicConfig(level=log.DEBUG, format=" %(asctime)s -  %(levelname)s -  %(message)s")
 #log.disable(log.CRITICAL)

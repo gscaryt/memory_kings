@@ -1,4 +1,4 @@
-import pygame
+import pygame, time
 from memorykings.constants import WINDOW_WIDTH, WINDOW_HEIGHT, CORNER, CARD_SIZE
 from memorykings.game import Game
 from memorykings.display import Display
@@ -14,10 +14,9 @@ def main():
     # GENERATING GAME
     run = True
     game = Game()
-    game.setup(5,5)
+    game.setup_board(5,5)
     game.choose_colors()
-    game.create_players(4)
-
+    game.create_players(1)
 
     # SIMPLIFYING CALLS
     board = game.board
@@ -31,17 +30,26 @@ def main():
     while run:
 
         for event in pygame.event.get():
+            if game.end_game_check():
+                time.sleep(3)
+                run = False
 
             if event.type == pygame.QUIT:
                 run = False
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if not game.all_pawns_set:
-                    game.place_pawns(board)
-                elif game.turn == 0 and len(game.player) == 2:
-                    game.counter_move(board)
+                    game.place_pawns()
+                elif game.next_turn == 0 and len(player) == 2:
+                    game.counter_move()
                 else:
-                    player[game.turn].select_or_move(game, board, player)
+                    game.select_or_move()
+                    
+                if game.all_pawns_set:
+                    game.counter_recruit()
+                    game.recruit_check()
+                    if game.forward == True:
+                        game.change_turn()
 
             main_screen.print_grid(GAME_WINDOW, board, player)
             main_screen.print_pawns(GAME_WINDOW, player)
