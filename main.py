@@ -38,10 +38,10 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if not game.all_pawns_set:
                     game.place_pawns(board)
-                elif player[game.turn].selected == -1:
-                    player[game.turn].select_pawn(game, board, player)       
+                elif game.turn == 0 and len(game.player) == 2:
+                    game.counter_move(board)
                 else:
-                    player[1].move(game, board, player)
+                    player[game.turn].select_or_move(game, board, player)
 
             main_screen.print_grid(GAME_WINDOW, board, player)
             main_screen.print_pawns(GAME_WINDOW, player)

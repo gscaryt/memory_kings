@@ -100,7 +100,7 @@ class Player:
 
     # SELECT AND/OR MOVE
 
-    def select_pawn(self, game, board, player_array):
+    def select_or_move(self, game, board, player_array):
         turn = game.turn
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()

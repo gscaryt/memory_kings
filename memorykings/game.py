@@ -48,10 +48,18 @@ class Game:
             self.turn = 0
         if self.turn == 0 and len(self.player) != 2:
             self.turn = 1
-        else:
-            log.debug(f'change_turn - The Counter should move now.')
         log.debug(f'change_turn - Next Player: {self.turn}')
-        
+
+    def counter_move(self, board):
+        counter = self.player[0].pawn[0]
+        if counter.row % 2 == 0 and not counter.col == board.cols:
+            counter.move_pawn(board, counter.col+1, counter.row)
+        elif counter.row % 2 != 0 and not counter.col == 0:
+            counter.move_pawn(board, counter.col-1, counter.row)
+        else:
+            counter.move_pawn(board, counter.col, counter.row+1)
+        self.change_turn()
+
 ## INTERACTION
 
     def click_to_grid(self, board):
