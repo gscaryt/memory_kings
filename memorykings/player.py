@@ -16,6 +16,8 @@ class Player:
         self.token = []
         self.selected = -1
 
+    # PLACEMENT
+
     def place_pawn(self, board, col, row):
         self.pawn.append(Pawn(board, self.color, col, row))
 
@@ -23,17 +25,10 @@ class Player:
         self.token.append(Token(board,self.color,col,row))
         self.token.append(Token(board,self.color,col2,row2))
         self.score += 1
-    
-    def counter_move(self, board):
-        counter = self.pawn[0] # Counter King has only pawn[0] of player[0].
-        if counter.row % 2 != 0 and not counter.col == board.cols:
-            counter.col += 1
-        elif counter.row % 2 == 0 and not counter.col == 0:
-            counter.col -= 1
-        else:
-            counter.row += 1
 
-    def move_check(self, player_array, board, col, row):
+    # CHECK
+
+    def move_check(self, board, player_array, col, row):
         pawn = self.pawn[self.selected]
         card = board.card[pawn.position]
         if (col, row) == (pawn.col, pawn.row):
@@ -103,14 +98,18 @@ class Player:
             (CORNER[1]+CARD_SIZE*(self.pawn[pawn_num].row+1))-(PAWN_SIZE*(self.order))-5
             )
 
-    def select_pawn(self, game):
+    # SELECT AND/OR MOVE
+
+    def select_pawn(self, game, board, player_array):
         turn = game.turn
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
-        if turn == self.order:
+        if turn == 0:
+            game.change_turn()
+        elif turn == self.order:
             if self.selected != -1:
-                if not self.player_move(game):
-                    log.debug(f'select_pawn() - Failed to move. Select again.')
+                if not self.move(game, board, player_array):
+                    log.debug(f'select_pawn() - Failed to move. Unselected.')
                     self.selected = -1
             else:
                 for pawn_num in range(len(self.pawn)):
@@ -131,15 +130,16 @@ class Player:
                     else:
                         self.selected = -1
 
-    def player_move(self, game, player_array, board):
+    def move(self, game, board, player_array):
         if self.selected != -1:
             click = pygame.mouse.get_pressed()
             if click[0] == 1:
                 coordinates = game.click_to_grid(board)
                 if coordinates != None:
-                    if self.move_check(player_array, board, coordinates[0], coordinates[1]):
-                        self.pawn[self.selected].move(board, coordinates[0], coordinates[1])
+                    if self.move_check(board, player_array, coordinates[0], coordinates[1]):
+                        self.pawn[self.selected].move_pawn(board, coordinates[0], coordinates[1])
                         self.selected = -1
+                        game.change_turn()
                         return True
                     else:
                         self.selected = -1
@@ -147,3 +147,12 @@ class Player:
                 else:
                     self.selected = -1
                     return False
+
+    def counter_move(self, board):
+        counter = self.pawn[0] # Counter King has only pawn[0] of player[0].
+        if counter.row % 2 != 0 and not counter.col == board.cols:
+            counter.col += 1
+        elif counter.row % 2 == 0 and not counter.col == 0:
+            counter.col -= 1
+        else:
+            counter.row += 1

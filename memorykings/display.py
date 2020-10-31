@@ -15,7 +15,7 @@ class Display:
     def get_image(self, image, width, height):
         return pygame.transform.scale(pygame.image.load(IMAGES_PATH + image), (width, height))
     
-    def print_grid(self, window, player_array, board):
+    def print_grid(self, window, board, player_array):
         card_array = board.card
         window.fill(DARK_GREY)
         for card_position in range(len(card_array)):

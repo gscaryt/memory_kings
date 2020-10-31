@@ -15,18 +15,16 @@ def main():
     run = True
     game = Game()
     game.setup(5,5)
-    game.choose_colors('ORANGE')
+    game.choose_colors('ORANGE', 'PURPLE')
     game.create_players(1)
+
 
     # SIMPLIFYING CALLS
     board = game.board
     player = game.player # Array containing all players.
 
     # SETUP PAWNS
-    player[0].place_pawn(board, 2, 4)
-    player[1].place_pawn(board, 0, 0, )
-    player[1].place_pawn(board, 3, 3)
-    log.debug(f'Pawn 0: {player[1].pawn[0].position} Pawn 1: {player[1].pawn[1].position} Counter: {player[0].pawn[0].position}')
+    # log.debug(f'Pawn 0: {player[1].pawn[0].position} Pawn 1: {player[1].pawn[1].position} Counter: {player[0].pawn[0].position}')
     main_screen = Display()
     
     # GAME_LOOP
@@ -38,12 +36,14 @@ def main():
                 run = False
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if game.player[game.turn].selected == -1:
-                    game.player[game.turn].select_pawn(game)
+                if not game.all_pawns_set:
+                    game.place_pawns(board)
+                elif player[game.turn].selected == -1:
+                    player[game.turn].select_pawn(game, board, player)       
                 else:
-                    game.player[1].player_move(game, player, board)
+                    player[1].move(game, board, player)
 
-            main_screen.print_grid(GAME_WINDOW, player, board)
+            main_screen.print_grid(GAME_WINDOW, board, player)
             main_screen.print_pawns(GAME_WINDOW, player)
             main_screen.print_tokens(GAME_WINDOW, player)
             pygame.display.update()

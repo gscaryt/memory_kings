@@ -8,7 +8,7 @@ class Pawn:
         self.image = 'pawn_' + self.color + '.png'
         self.position = self.row*board.cols+self.col
 
-    def move(self, board, col, row):
+    def move_pawn(self, board, col, row):
         self.record_position()
         self.col = col
         self.row = row
