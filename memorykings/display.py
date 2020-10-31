@@ -1,16 +1,22 @@
 import pygame
+import logging as log
 from .constants import CARD_SIZE, IMAGES_PATH, CORNER, DARK_GREY, PAWN_SIZE, TOKEN_SIZE
 from .card import Card
 from .player import Player
 
-class Screen:
+import logging as log
+log.basicConfig(level=log.DEBUG, format=" %(asctime)s -  %(levelname)s -  %(message)s")
+#log.disable(log.CRITICAL)
+
+class Display:
     def __init__(self):
         pass
     
     def get_image(self, image, width, height):
         return pygame.transform.scale(pygame.image.load(IMAGES_PATH + image), (width, height))
     
-    def print_grid(self, window, board, player_array, card_array):
+    def print_grid(self, window, player_array, board):
+        card_array = board.card
         window.fill(DARK_GREY)
         for card_position in range(len(card_array)):
             card = card_array[card_position]
@@ -41,7 +47,7 @@ class Screen:
         for i in range(len(player_array)):
             for j in range(len(player_array[i].pawn)):
                 pawn = player_array[i].pawn[j]
-                coords_on_screen = player_array[i].get_pawn_location(j)
+                coords_on_screen = player_array[i].get_pawn_screen_location(j)
                 pawn_image = self.get_image(pawn.image, PAWN_SIZE, PAWN_SIZE)
                 window.blit(pawn_image, coords_on_screen)
 

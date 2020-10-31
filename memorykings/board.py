@@ -47,6 +47,6 @@ class Board:
                 back = "White"
             else:
                 back = "Black"
-            self.card.append(Card(i, color, rank, back, self.cols))
+            self.card.append(Card(self.cols, i, color, rank, back))
             log.debug(f'gen_grid() - Card Created: {i} {self.card[i].color} {self.card[i].rank}')
         log.debug(f'gen_grid() - Cards Array: {self.card}')
