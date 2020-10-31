@@ -147,12 +147,3 @@ class Player:
                 else:
                     self.selected = -1
                     return False
-
-    def counter_move(self, board):
-        counter = self.pawn[0] # Counter King has only pawn[0] of player[0].
-        if counter.row % 2 != 0 and not counter.col == board.cols:
-            counter.col += 1
-        elif counter.row % 2 == 0 and not counter.col == 0:
-            counter.col -= 1
-        else:
-            counter.row += 1

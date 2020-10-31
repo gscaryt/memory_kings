@@ -20,7 +20,7 @@ class Game:
         self.board = Board(cols, rows)
         self.board.gen_grid()
 
-    def choose_colors(self, color1, color2=None, color3=None, color4=None):
+    def choose_colors(self, color1='ORANGE', color2='PURPLE', color3='BLACK', color4='WHITE'):
         self.color_order = ('COUNTER', color1, color2, color3, color4)
         log.debug(f'choose_colors() - Chosen Colors: {self.color_order}')
 
@@ -30,23 +30,20 @@ class Game:
             log.debug(f'create_players() - Player {self.player[i].order} - {self.player[i].color} created.')
 
     def place_pawns(self, board):
-        try: 
-            self.all_pawns_set = bool(self.player[len(self.player)-1].pawn[1])
-            self.change_turn()
-        except:
-            log.debug('All pawns were not positioned yet.')
         if self.turn == 0 and len(self.player) != 2:
             self.turn += 1
         elif self.turn == 0 and len(self.player) == 2 and len(self.player[0].pawn) == 0:
             self.player[self.turn].place_pawn(board, 0, 0)
             self.change_turn()
-        elif len(self.player) != 2:
-            if len(self.player[self.turn].pawn) != 2:
-                click_pos = self.click_to_grid(board)
-                self.player[self.turn].place_pawn(board, click_pos[0], click_pos[1])
-                self.change_turn()
-            else:
-                self.change_turn()
+        elif self.turn == 0 and len(self.player) == 2 and len(self.player[0].pawn) == 1:
+            self.change_turn()
+        else:
+            click_pos = self.click_to_grid(board)
+            self.player[self.turn].place_pawn(board, click_pos[0], click_pos[1])
+            self.change_turn()
+        self.all_pawns_set = bool(len(self.player[len(self.player)-1].pawn) == 2)
+        if self.all_pawns_set:
+            self.turn = 1
 
     def change_turn(self):
         if self.turn != len(self.player)-1:
@@ -59,7 +56,7 @@ class Game:
 
     def counter_move(self, board):
         counter = self.player[0].pawn[0]
-        if counter.row % 2 == 0 and not counter.col == board.cols:
+        if counter.row % 2 == 0 and not counter.col == board.cols-1:
             counter.move_pawn(board, counter.col+1, counter.row)
         elif counter.row % 2 != 0 and not counter.col == 0:
             counter.move_pawn(board, counter.col-1, counter.row)
