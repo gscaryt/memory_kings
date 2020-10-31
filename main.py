@@ -16,7 +16,7 @@ def main():
     game = Game()
     game.setup(5,5)
     game.choose_colors('ORANGE', 'PURPLE')
-    game.create_players(1)
+    game.create_players(2)
 
 
     # SIMPLIFYING CALLS

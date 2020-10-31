@@ -30,14 +30,21 @@ class Game:
             log.debug(f'create_players() - Player {self.player[i].order} - {self.player[i].color} created.')
 
     def place_pawns(self, board):
-        self.all_pawns_set = bool(self.player[len(self.player)-1].pawn)
-        if self.turn == 0 and len(self.player) == 2 and len(self.player[0].pawn) == 0:
+        try: 
+            self.all_pawns_set = bool(self.player[len(self.player)-1].pawn[1])
+            self.change_turn()
+        except:
+            log.debug('All pawns were not positioned yet.')
+        if self.turn == 0 and len(self.player) != 2:
+            self.turn += 1
+        elif self.turn == 0 and len(self.player) == 2 and len(self.player[0].pawn) == 0:
             self.player[self.turn].place_pawn(board, 0, 0)
             self.change_turn()
-        else:
+        elif len(self.player) != 2:
             if len(self.player[self.turn].pawn) != 2:
                 click_pos = self.click_to_grid(board)
                 self.player[self.turn].place_pawn(board, click_pos[0], click_pos[1])
+                self.change_turn()
             else:
                 self.change_turn()
 
