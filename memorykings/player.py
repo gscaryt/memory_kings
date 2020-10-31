@@ -27,3 +27,17 @@ class Player:
         board.card[self.token[-1].position].recruited = self.color
         self.score += 1
         log.debug(f'Player {self.color} score: {self.score}')
+
+    # INTERFACE
+
+    def get_pawn_screen_location(self, pawn_num):
+        if self.color == 'COUNTER':
+            return (
+            (CORNER[0]+CARD_SIZE*(self.pawn[pawn_num].col))+(PAWN_SIZE*pawn_num)+5, 
+            (CORNER[1]+CARD_SIZE*(self.pawn[pawn_num].row))-(PAWN_SIZE*(0))+5
+            )
+        else:
+            return (
+            (CORNER[0]+CARD_SIZE*(self.pawn[pawn_num].col))+(PAWN_SIZE*pawn_num)+5, 
+            (CORNER[1]+CARD_SIZE*(self.pawn[pawn_num].row+1))-(PAWN_SIZE*(self.order))-5
+            )

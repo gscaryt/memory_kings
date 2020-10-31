@@ -73,7 +73,7 @@ class Game:
                     self.pawn_selected = -1
             else:
                 for pawn_num in range(len(self.player[next_turn].pawn)):
-                    coords = self.player[next_turn].get_pawn_screen_location(pawn_num)
+                    coords = self.player[self.next_turn].get_pawn_screen_location(pawn_num)
                     log.debug(f'select_pawn() - Pawn {pawn_num}: {coords}')
                     log.debug(
                         f'select_pawn() - {click[0] == 1}'
@@ -263,18 +263,7 @@ class Game:
                 log.debug(f'click_to_grid() - Mouse click outside the board.')
                 return None
 
-    def get_pawn_screen_location(self, pawn_num):
-        player = self.player[self.next_turn]
-        if player.color == 'COUNTER':
-            return (
-            (CORNER[0]+CARD_SIZE*(player.pawn[pawn_num].col))+(PAWN_SIZE*pawn_num)+5, 
-            (CORNER[1]+CARD_SIZE*(player.pawn[pawn_num].row))-(PAWN_SIZE*(0))+5
-            )
-        else:
-            return (
-            (CORNER[0]+CARD_SIZE*(player.pawn[pawn_num].col))+(PAWN_SIZE*pawn_num)+5, 
-            (CORNER[1]+CARD_SIZE*(player.pawn[pawn_num].row+1))-(PAWN_SIZE*(player.order))-5
-            )
+
 
 ## TODO
 
