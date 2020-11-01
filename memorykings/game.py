@@ -13,10 +13,10 @@ class Game:
         self.round_number = 0
         self.who_recruited = None
         self.player = []
-        self.next_turn = 0
+        self.turn = 0
         self.pawn_selected = -1
-        self.forward = True
         self.all_pawns_set = False
+        self.next_turn = False
 
 
     def setup_board(self, cols, rows):
@@ -33,47 +33,47 @@ class Game:
             log.debug(f'create_players() - Player {self.player[i].order} - {self.player[i].color} created.')
 
     def place_pawns(self):
-        if self.next_turn == 0 and len(self.player) != 2:
-            self.next_turn += 1
-        elif self.next_turn == 0 and len(self.player) == 2 and len(self.player[0].pawn) == 0:
-            self.player[self.next_turn].place_pawn(self.board, 0, 0)
+        if self.turn == 0 and len(self.player) != 2:
+            self.turn += 1
+        elif self.turn == 0 and len(self.player) == 2 and len(self.player[0].pawn) == 0:
+            self.player[self.turn].place_pawn(self.board, 0, 0)
             self.change_turn()
-        elif self.next_turn == 0 and len(self.player) == 2 and len(self.player[0].pawn) == 1:
+        elif self.turn == 0 and len(self.player) == 2 and len(self.player[0].pawn) == 1:
             self.change_turn()
         else:
             click_pos = self.click_to_grid()
-            self.player[self.next_turn].place_pawn(self.board, click_pos[0], click_pos[1])
+            self.player[self.turn].place_pawn(self.board, click_pos[0], click_pos[1])
             self.change_turn()
         self.all_pawns_set = bool(len(self.player[len(self.player)-1].pawn) == 2)
         if self.all_pawns_set:
-            self.next_turn = 1
+            self.turn = 1
 
     def change_turn(self):
-        if self.next_turn != len(self.player)-1:
-            self.next_turn += 1
+        if self.turn != len(self.player)-1:
+            self.turn += 1
         else:
-            self.next_turn = 0
-        if self.next_turn == 0 and len(self.player) != 2:
-            self.next_turn = 1
-        self.forward = False
-        log.debug(f'change_turn - Next Player: {self.next_turn}')
+            self.turn = 0
+        if self.turn == 0 and len(self.player) != 2:
+            self.turn = 1
+        self.next_turn = False
+        log.debug(f'change_turn - Next Player: {self.turn}')
 
 ## SELECT
 
     def select_or_move(self):
-        next_turn = self.next_turn
+        turn = self.turn
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
-        if next_turn == 0:
+        if turn == 0:
             self.change_turn()
-        elif next_turn == self.player[next_turn].order:
+        elif turn == self.player[turn].order:
             if self.pawn_selected != -1:
                 if not self.move():
                     log.debug(f'select_pawn() - Failed to move. Unselected.')
                     self.pawn_selected = -1
             else:
-                for pawn_num in range(len(self.player[next_turn].pawn)):
-                    coords = self.player[self.next_turn].get_pawn_screen_location(pawn_num)
+                for pawn_num in range(len(self.player[turn].pawn)):
+                    coords = self.player[self.turn].get_pawn_screen_location(pawn_num)
                     log.debug(f'select_pawn() - Pawn {pawn_num}: {coords}')
                     log.debug(
                         f'select_pawn() - {click[0] == 1}'
@@ -85,7 +85,7 @@ class Game:
                         and coords[1] < mouse[1] < coords[1]+PAWN_SIZE
                     ):
                         self.pawn_selected = pawn_num
-                        log.debug(f'select_pawn() - Pawn Selected: {self.pawn_selected} is on the {self.board.card[self.player[next_turn].pawn[self.pawn_selected].position].rank} Card')
+                        log.debug(f'select_pawn() - Pawn Selected: {self.pawn_selected} is on the {self.board.card[self.player[turn].pawn[self.pawn_selected].position].rank} Card')
                         break
                     else:
                         self.pawn_selected = -1
@@ -99,21 +99,21 @@ class Game:
                 coordinates = self.click_to_grid()
                 if coordinates != None:
                     if self.move_check(coordinates[0], coordinates[1]):
-                        self.player[self.next_turn].pawn[self.pawn_selected].move_pawn(self.board, coordinates[0], coordinates[1])
+                        self.player[self.turn].pawn[self.pawn_selected].move_pawn(self.board, coordinates[0], coordinates[1])
                         self.pawn_selected = -1
-                        self.forward = True
-                        return True
+                        self.next_turn = True
+                        return
                     else:
                         self.pawn_selected = -1
-                        self.forward = False
-                        return False
+                        self.next_turn = False
+                        return
                 else:
                     self.pawn_selected = -1
-                    self.forward = False
-                    return False
+                    self.next_turn = False
+                    return
 
     def move_check(self, col, row):
-        pawn = self.player[self.next_turn].pawn[self.pawn_selected]
+        pawn = self.player[self.turn].pawn[self.pawn_selected]
         card = self.board.card[pawn.position]
         if (col, row) == (pawn.col, pawn.row):
             ## Move to Same Location Attempt
@@ -176,14 +176,15 @@ class Game:
             counter.move_pawn(self.board, counter.col-1, counter.row)
         else:
             counter.move_pawn(self.board, counter.col, counter.row+1)
-        self.forward = True
+        self.next_turn = True
 
 ## RECRUIT
 
     def recruit_check(self):
-        pawn = self.player[self.next_turn].pawn
+        pawn = self.player[self.turn].pawn
         card = self.board.card
-        if self.next_turn == 0:
+        self.counter_recruit()
+        if self.turn == 0:
             return
         if pawn[0].position != pawn[1].position:
             if (
@@ -192,50 +193,52 @@ class Game:
                 ):
                 if card[pawn[0].position].recruited != None:
                     log.debug(f"recruit_check() - These cards were already recruited by Player {card[pawn[0].position].recruited}")
-                    return False
+                    self.who_recruited = None
                 else:
-                    self.player[self.next_turn].place_tokens(self.board, pawn[0].col, pawn[0].row, pawn[1].col, pawn[1].row)
-                    return True
+                    self.player[self.turn].place_tokens(self.board, pawn[0].col, pawn[0].row, pawn[1].col, pawn[1].row)
+                    self.who_recruited = self.player[self.turn].color
             else:
                 log.debug(f'recruit_check() - Cards are different.')
-                return False
+                self.who_recruited = None
         else:
             log.debug(f'recruit_check() - Pawns are in the same card.')
-            return False
+            self.who_recruited = None
 
     def counter_recruit(self):
         if len(self.player) == 2:
             counter = self.player[0].pawn[0]
-            other_pawn = self.player[self.next_turn].pawn
-            card = self.board.card[counter.position]
+            card_on_counter = self.board.card[counter.position]
             for i in range(2):
-                if (card.recruited == None 
-                    and counter.position != other_pawn[i].position
-                    and counter.color == other_pawn[i].color
-                    and counter.rank == other_pawn[i].rank):
-                    self.player[0].place_tokens(self.board, counter.col, counter.row, other_pawn[i].col, other_pawn[i].row)
+                other_pawn = self.player[1].pawn[i]
+                card_on_other_pawn = self.board.card[other_pawn.position]
+                if (card_on_counter.recruited == None 
+                    and counter.position != other_pawn.position
+                    and card_on_counter.color == card_on_other_pawn.color
+                    and card_on_counter.rank == card_on_other_pawn.rank):
+                    self.player[0].place_tokens(self.board, counter.col, counter.row, other_pawn.col, other_pawn.row)
                     log.debug('counter_recruit() - The counter recruited one pair.')
-                    return True
+                    self.who_recruited = 'COUNTER'
                 else:
-                    return False
+                    self.who_recruited = None
 
 ## END GAME
 
     def end_game_check(self):
         try:
             if self.player[0].pawn[0].position == 24:
-                log.debug('The game is finished! Counter on the 25 card.')
+                log.debug('end_game_check() - The game is finished! Counter on the 25 card.')
                 return True
             elif len(self.player) == 2:
                 if self.player[0].score == 6:
-                    log.debug('The game is finished! Counter recruited 6 pairs')
+                    log.debug('end_game_check() - The game is finished! Counter recruited 6 pairs')
                     return True
                 elif self.player[1].score == 6:
-                    log.debug('The game is finished! You win with 6 pairs')
+                    log.debug('end_game_check() - The game is finished! You won with 6 pairs')
                     return True
             else:
                 for i in range(len(self.player)-1):
                     if self.player[i].score == 12//(len(self.player)-1):
+                        log.debug('end_game_check() - The game is finished! You won!')
                         return True
             return False
         except: 

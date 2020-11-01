@@ -17,14 +17,11 @@ def main():
     game.setup_board(5,5)
     game.choose_colors()
     game.create_players(1)
+    main_screen = Display()
 
     # SIMPLIFYING CALLS
     board = game.board
     player = game.player # Array containing all players.
-
-    # SETUP PAWNS
-    # log.debug(f'Pawn 0: {player[1].pawn[0].position} Pawn 1: {player[1].pawn[1].position} Counter: {player[0].pawn[0].position}')
-    main_screen = Display()
     
     # GAME_LOOP
     while run:
@@ -40,17 +37,19 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if not game.all_pawns_set:
                     game.place_pawns()
-                elif game.next_turn == 0 and len(player) == 2:
-                    game.counter_move()
                 else:
-                    game.select_or_move()
+                    if game.turn == 0 and len(player) == 2:
+                        game.counter_move()
+                    else:
+                        game.select_or_move()
                     
                 if game.all_pawns_set:
                     game.counter_recruit()
                     game.recruit_check()
-                    if game.forward == True:
-                        game.change_turn()
-
+                
+                if game.next_turn == True:
+                    game.change_turn()
+                            
             main_screen.print_grid(GAME_WINDOW, board, player)
             main_screen.print_pawns(GAME_WINDOW, player)
             main_screen.print_tokens(GAME_WINDOW, player)
