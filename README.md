@@ -1,19 +1,22 @@
 # Memory Kings in Python 3
 
-For now, the game (on memorykings0.5.py) is a standalone file that runs all rules for Multiplayer and Solo modes on Terminal.
-The rest of the files are for the next version.
+memorykings0.5.py stable running all rules for Multiplayer and Solo modes on Terminal. Stage: 90-99%
+
+main.py runs the game in Pygame. Stage: 70-80%
 
 ## TODO
 
-Currently working on adding grahics with Pygame.
+- Work
 
 ## NON STANDARD MODULES
 
-pyinputplus, termcolor
+For main.py: pygame
+For memorykings0.5.py: pyinputplus, termcolor
 
 ## EXCUSES
 
-Known Bug: Players' Pawns on the same card will only show one of them, cause it's a mess to draw a better board with ASCII. (They are there though.)
+memorykings0.5.py: Players' Pawns on the same card will only show one of them, cause it's a mess to draw a better board with ASCII. (They are there though.)
+main.py: Is not done yet.
 
 ## LINKS
 
