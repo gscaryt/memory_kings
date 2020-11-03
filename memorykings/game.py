@@ -5,24 +5,21 @@ from .board import Board, Card
 
 import logging as log
 log.basicConfig(level=log.DEBUG, format=" %(asctime)s -  %(levelname)s -  %(message)s")
-log.disable(log.CRITICAL)
+#log.disable(log.CRITICAL)
 
 class Game:
     def __init__(self):
-        self.counter_turns = 0
-        self.round_number = 0
         self.current_turn = 0
-        self.current_player = 0
+        self.current_player = None
         self.pawn_selected = False
         self.end_turn = False
         self.all_pawns_set = False
-        self.just_recruited = None
 
     def setup_board(self, cols, rows):
         self.board = Board(cols, rows)
         self.board.gen_grid()
 
-    def choose_colors(self, color1='ORANGE', color2='PURPLE', color3='BLACK', color4='WHITE'):
+    def choose_colors(self, color1='PURPLE', color2='BLACK', color3='WHITE', color4='ORANGE'):
         self.color_order = ('COUNTER', color1, color2, color3, color4)
         log.debug(f'choose_colors() - Chosen Colors: {self.color_order}')
 
@@ -69,23 +66,7 @@ class Game:
             else:
                 return
 
-    def change_turn(self):
-        '''Increases the current turn up to the last player\n
-        and then back to 0.'''
-        if self.current_turn < self.num_of_players-1:
-            self.current_turn += 1
-        else:
-            self.current_turn = 0
-
-        if self.current_turn == 0 and self.num_of_players > 2:
-            '''If multiplayer, skip the CounterKing turn (0)'''
-            self.current_turn = 1
-        
-        self.current_player = Player.array[self.current_turn]
-        self.end_turn = False
-        log.debug(f'change_turn - Next Player: {self.current_player.color}')
-
-## SELECT
+## SELECT/MOVE
 
     def select(self, event):
         mouse = pygame.mouse.get_pos()
@@ -97,6 +78,7 @@ class Game:
                     log.debug(f'select() - Failed to move. Unselected.')
                     self.pawn_selected = False
                 else:
+                    log.debug(f'select() - Successful move. Unselected and end_turn (unless recruited).')
                     self.pawn_selected = False
                     self.end_turn = True
 
@@ -123,8 +105,40 @@ class Game:
                         self.pawn_selected = False
                         self.end_turn = False
 
+## GAME FLOW
 
-## RECRUIT
+    def change_turn(self):
+        '''Increases the current turn up to the last player\n
+        and then back to 0.'''
+        if self.current_turn < self.num_of_players-1:
+            self.current_turn += 1
+        else:
+            self.current_turn = 0
+
+        if self.current_turn == 0 and self.num_of_players > 2:
+            '''If multiplayer, skip the CounterKing turn (0)'''
+            self.current_turn = 1
+        
+        self.current_player = Player.array[self.current_turn]
+        self.end_turn = False
+        log.debug(f'change_turn - Next Player: {self.current_player.color}')
+
+    def round(self, event):
+        if self.num_of_players == 2 and Player.recruited == 0:
+            time.sleep(0.05)
+            self.counter.pawn[0].move(self.board)
+            self.recruit_check()
+        if self.num_of_players == 2 and self.current_turn == 0:
+            time.sleep(0.05)
+            self.counter.pawn[0].move(self.board)
+            self.end_turn = True
+            self.recruit_check()
+        else:
+            self.select(event)
+            Player.recruited = None
+            self.recruit_check()
+
+## CHECKS
 
     def recruit_check(self):
         if self.num_of_players == 2:
@@ -135,20 +149,6 @@ class Game:
             self.current_turn = Player.recruited
             self.current_player = Player.array[self.current_turn]
             self.end_turn = False
-
-## TURNS
-
-    def round(self, event):
-        if self.num_of_players == 2 and self.current_turn == 0:
-            time.sleep(0.05)
-            self.counter.pawn[0].move(self.board)
-            self.end_turn = True
-            self.recruit_check()
-        else:
-            self.select(event)
-            self.recruit_check()
-
-## END GAME
 
     def end_game_check(self):
         try:

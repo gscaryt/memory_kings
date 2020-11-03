@@ -3,7 +3,7 @@ from .constants import PAWN_SIZE, CARD_SIZE, CORNER
 
 import logging as log
 log.basicConfig(level=log.DEBUG, format=" %(asctime)s -  %(levelname)s -  %(message)s")
-log.disable(log.CRITICAL)
+#log.disable(log.CRITICAL)
 
 
 ### PLAYERS ###

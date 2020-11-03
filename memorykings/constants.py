@@ -1,7 +1,9 @@
 import pygame
 
 WINDOW_WIDTH, WINDOW_HEIGHT = 800, 600
-CORNER = 150, 50 # Board upper left corner. For 5x5. Can become a variable and adjust depending on the grid Size later.
+CORNER = 150, 50 
+    '''Board upper left corner. For 5x5. Can become a variable\n
+    and adjust depending on the grid Size later.'''
 
 WHITE = 255,255,255
 DARK_GREY = 50,50,50
@@ -13,7 +15,7 @@ COLORS = ["RED", "GREEN", "BLUE", "YELLOW", "PURPLE", "BROWN", "PINK", "DARK_GRE
 RANKS = ["BISHOP", "ROOK", "KNIGHT", "QUEEN"]
 BACKS = ["BLACK", "WHITE"]
 
-GRID = 5, 5
+GRID = 5, 5 # SHOULD BECOME VARIABLE LATER
 
 CARD_SIZE = 100
 CARD_BORDER = 5

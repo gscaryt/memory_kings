@@ -74,65 +74,75 @@ class Card:
     def is_token(self, token_array):
         for token in token_array:
             if (token.position == self.position):
-                log.debug(f'is_token() - There is a {token.color} token in Card {self.position}')
+                #log.debug(f'is_token() - There is a {token.color} token on Card {self.position}')
                 return token.color
-        log.debug(f'is_token() - There is no Token in the Card {self.position}')
+        #log.debug(f'is_token() - There is no Token on Card {self.position}')
         return None
 
-    def escort_check(self, pawn, token_array, col, row):
+    def escort_token_check(self, pawn, token_array, col, row):
+        log.debug(f'escort_token_check() - Is token {self.is_token(token_array)} on {self.position}. Pawn position: {pawn.position}')
         if (self.is_token(token_array) != None
-        or self.is_token(token_array) != pawn.color):
-            return False
+        and self.is_token(token_array) != pawn.color):
+            log.debug(f"escort_token_check() - There is an Opponent's Token on Card {self.position}")
+            return True
 
 class Bishop(Card):
     def escort_check(self, pawn, token_array, col, row):
-        super().escort_check(pawn, token_array, col, row)
-        if abs(col - self.col) == abs(row - self.row):
-            log.debug(f"escort_check() - Valid Bishop Escort."
-            f" {self.col}, {self.row} >> {col}, {row}")
-            return True
+        if not self.escort_token_check(pawn,token_array,col,row):
+            if abs(col - self.col) == abs(row - self.row):
+                log.debug(f"escort_check() - Valid Bishop Escort."
+                f" {self.col}, {self.row} >> {col}, {row}")
+                return True
+            else:
+                log.debug(f"escort_check() - The Bishop cannot Escort to {col}, {row}.")
+                return False
         else:
-            log.debug(f"escort_check() - The Bishop cannot Escort to {col}, {row}.")
             return False
 
 class Rook(Card):
     def escort_check(self, pawn, token_array, col, row):
-        super().escort_check(pawn,token_array,col,row)
-        if col == self.col or row == self.row:
-            log.debug(f"escort_check() - Valid Rook Escort."
-            f" {self.col}, {self.row} >> {col}, {row}")
-            return True
-        else:
-            log.debug(f"escort_check() - The Rook cannot Escort to {col}, {row}.")
+        if self.escort_token_check(pawn,token_array,col,row):
             return False
+        else:
+            if col == self.col or row == self.row:
+                log.debug(f"escort_check() - Valid Rook Escort."
+                f" {self.col}, {self.row} >> {col}, {row}")
+                return True
+            else:
+                log.debug(f"escort_check() - The Rook cannot Escort to {col}, {row}.")
+                return False
 
 class Knight(Card):
     def escort_check(self, pawn, token_array, col, row):
-        super().escort_check(pawn, token_array, col, row)
-        if (
-            (abs(col-self.col) == 2 and abs(row-self.row) == 1) 
-            or (abs(col-self.col) == 1 and abs(row-self.row) == 2)
-            ):
-            log.debug(f"escort_check() - Valid Knight Escort."
-            f" {self.col}, {self.row} >> {col}, {row}")
-            return True
+        if not self.escort_token_check(pawn,token_array,col,row):
+            if (
+                (abs(col-self.col) == 2 and abs(row-self.row) == 1) 
+                or (abs(col-self.col) == 1 and abs(row-self.row) == 2)
+                ):
+                log.debug(f"escort_check() - Valid Knight Escort."
+                f" {self.col}, {self.row} >> {col}, {row}")
+                return True
+            else:
+                log.debug(f"escort_check() - The Knight cannot Escort to {col}, {row}.")
+                return False
         else:
-            log.debug(f"escort_check() - The Knight cannot Escort to {col}, {row}.")
             return False
 
 class Queen(Card):
     def escort_check(self, pawn, token_array, col, row):
-        super().escort_check(pawn,token_array,col,row)
-        if (
-            (abs(col - self.col) == abs(row - self.row))
-            or ((col == self.col) or (row == self.row))
-            ):
-            log.debug(f"escort_check() - Valid Queen Escort."
-            f" {self.col}, {self.row} >> {col}, {row}")
-            return True
+        if not self.escort_token_check(pawn,token_array,col,row):
+            if (
+                (abs(col - self.col) == abs(row - self.row))
+                or ((col == self.col) or (row == self.row))
+                ):
+                log.debug(f"escort_check() - Valid Queen Escort."
+                f" {self.col}, {self.row} >> {col}, {row}")
+                return True
+            else:
+                log.debug(f"escort_check() - The Queen cannot Escort to {col}, {row}.")
+                return False
         else:
-            log.debug(f"escort_check() - The Queen cannot Escort to {col}, {row}.")
             return False
-    
+
     def queen_advice(self):
         pass

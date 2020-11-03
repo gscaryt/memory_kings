@@ -7,7 +7,7 @@ from memorykings.display import Display
 
 import logging as log
 log.basicConfig(level=log.DEBUG, format=" %(asctime)s -  %(levelname)s -  %(message)s")
-log.disable(log.CRITICAL)
+#log.disable(log.CRITICAL)
 
 GAME_WINDOW = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption('Memory Kings')
@@ -18,7 +18,7 @@ def main():
     game = Game()
     game.setup_board(5,5)
     game.choose_colors()
-    game.create_players(1)
+    game.create_players(2)
     main_screen = Display()
 
     # SIMPLIFYING CALLS
