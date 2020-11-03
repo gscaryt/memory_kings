@@ -145,6 +145,6 @@ class Queen(Card):
         else:
             return False
 
-    def queen_advice(self):
+'''    def queen_advice(self):
         if queen_revealed():
-            
+            '''
