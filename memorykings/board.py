@@ -146,4 +146,5 @@ class Queen(Card):
             return False
 
     def queen_advice(self):
-        pass
+        if queen_revealed():
+            
