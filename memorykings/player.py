@@ -3,7 +3,7 @@ from .constants import PAWN_SIZE, CARD_SIZE, CORNER
 
 import logging as log
 log.basicConfig(level=log.DEBUG, format=" %(asctime)s -  %(levelname)s -  %(message)s")
-#log.disable(log.CRITICAL)
+log.disable(log.CRITICAL)
 
 
 ### PLAYERS ###
@@ -65,6 +65,7 @@ class CounterKing(Player):
                 break
             else:
                 Player.recruited = None
+
 
 ### PAWNS ###
     
@@ -142,6 +143,7 @@ class Counter(Pawn):
 
     def get_screen_location(self, pawn_num, player_order):
         return (CORNER[0]+CARD_SIZE*(self.col))+5, (CORNER[1]+CARD_SIZE*(self.row))+5
+
 
 ### TOKENS ###
 

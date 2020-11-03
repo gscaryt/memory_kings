@@ -4,7 +4,7 @@ from .constants import CARD_SIZE, IMAGES_PATH, CORNER, DARK_GREY, PAWN_SIZE, TOK
 
 import logging as log
 log.basicConfig(level=log.DEBUG, format=" %(asctime)s -  %(levelname)s -  %(message)s")
-#log.disable(log.CRITICAL)
+log.disable(log.CRITICAL)
 
 class Display:
     def __init__(self):

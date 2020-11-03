@@ -5,7 +5,7 @@ from .board import Board, Card
 
 import logging as log
 log.basicConfig(level=log.DEBUG, format=" %(asctime)s -  %(levelname)s -  %(message)s")
-#log.disable(log.CRITICAL)
+log.disable(log.CRITICAL)
 
 class Game:
     def __init__(self):
