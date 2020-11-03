@@ -1,4 +1,4 @@
-import pygame, random
+import pygame, random, time
 from .constants import COLORS, RANKS, BACKS, CARD_SIZE, CORNER
 
 import logging as log
@@ -75,9 +75,7 @@ class Card:
     def is_token(self, token_array):
         for token in token_array:
             if (token.position == self.position):
-                #log.debug(f'is_token() - There is a {token.color} token on Card {self.position}')
                 return token.color
-        #log.debug(f'is_token() - There is no Token on Card {self.position}')
         return None
 
     def escort_token_check(self, pawn, token_array, col, row):
@@ -86,6 +84,19 @@ class Card:
         and self.is_token(token_array) != pawn.color):
             log.debug(f"escort_token_check() - There is an Opponent's Token on Card {self.position}")
             return True
+
+    def activate(self, player_array):
+        for player in player_array:
+            for pawn in player.pawn:
+                for token in player.token:
+                    if token.position == self.position:
+                        return False
+                if pawn.previous == self.position:
+                    return False
+        return True
+
+    def special(self, window, display, board, player_array, event):
+        pass
 
 class Bishop(Card):
     def escort_check(self, pawn, token_array, col, row):
@@ -145,6 +156,13 @@ class Queen(Card):
         else:
             return False
 
-'''    def queen_advice(self):
-        if queen_revealed():
-            '''
+    def special(self, window, display, board, player_array, event):
+        if self.activate(player_array):
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                click_pos = board.click_to_grid()
+                card = board.get_card(click_pos[0], click_pos[1])
+                coords_on_screen = CORNER[0]+CARD_SIZE*card.col, CORNER[1]+CARD_SIZE*card.row
+                card_image = display.get_image(card.image, CARD_SIZE, CARD_SIZE)
+                window.blit(card_image, coords_on_screen)
+                pygame.display.update()
+                time.sleep(1)

@@ -73,13 +73,17 @@ class Game:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.pawn_selected:
                 click_pos = self.board.click_to_grid()
-                if not self.pawn_selected.move(self.board, Card.deck, click_pos[0], click_pos[1]):
+                if click_pos != None:
+                    if not self.pawn_selected.move(self.board, Card.deck, click_pos[0], click_pos[1]):
+                        log.debug(f'select() - Failed to move. Unselected.')
+                        self.pawn_selected = False
+                    else:
+                        log.debug(f'select() - Successful move. Unselected and end_turn (unless recruited).')
+                        self.pawn_selected = False
+                        self.end_turn = True
+                else:
                     log.debug(f'select() - Failed to move. Unselected.')
                     self.pawn_selected = False
-                else:
-                    log.debug(f'select() - Successful move. Unselected and end_turn (unless recruited).')
-                    self.pawn_selected = False
-                    self.end_turn = True
 
             else:
                 self.current_player = Player.array[self.current_turn]

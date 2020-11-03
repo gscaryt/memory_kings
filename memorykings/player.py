@@ -133,6 +133,7 @@ class Counter(Pawn):
         self.position = 0
 
     def move(self, board):
+        self.record_position()
         if self.row % 2 == 0 and not self.col == board.cols-1:
             self.col = self.col+1
         elif self.row % 2 != 0 and not self.col == 0:

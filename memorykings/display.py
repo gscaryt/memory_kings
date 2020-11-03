@@ -1,4 +1,4 @@
-import pygame
+import pygame, time
 from .constants import CARD_SIZE, IMAGES_PATH, CORNER, DARK_GREY, PAWN_SIZE, TOKEN_SIZE
 
 import logging as log
@@ -52,3 +52,4 @@ class Display:
                     )
                 token_image = self.get_image(token.image, TOKEN_SIZE, TOKEN_SIZE)
                 window.blit(token_image, coords_on_screen)
+
