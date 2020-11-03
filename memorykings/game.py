@@ -8,13 +8,6 @@ log.basicConfig(level=log.DEBUG, format=" %(asctime)s -  %(levelname)s -  %(mess
 log.disable(log.CRITICAL)
 
 class Game:
-    def __init__(self):
-        self.current_turn = 0
-        self.current_player = None
-        self.pawn_selected = False
-        self.end_turn = False
-        self.all_pawns_set = False
-
     def setup_board(self, cols, rows):
         self.board = Board(cols, rows)
         self.board.gen_grid()
@@ -29,13 +22,18 @@ class Game:
         counter = CounterKing(0, "COUNTER")
         log.debug(f'create_players() - Player {counter.order} - {counter.color} created.')
         log.debug(f'{Player.array}')
+
         for i in range(1, num_of_players+1):
             player = Player(i, self.color_order[i])
             log.debug(f'create_players() - Player {player.order} - {player.color} created.')
         self.num_of_players = len(Player.array)
         log.debug(f'{Player.array}')
+
+        self.current_turn = 0
         self.current_player = Player.array[self.current_turn]
         self.counter = Player.array[0]
+        self.all_pawns_set = False
+        self.end_turn = False
 
     def place_pawns(self):
             if not self.all_pawns_set:
@@ -62,6 +60,7 @@ class Game:
                 self.all_pawns_set = bool(len(last_player.pawn) == 2)
                 if self.all_pawns_set:
                     self.current_turn = 1
+                    self.pawn_selected = False
                     log.debug(f'place_pawns() - All pawns set: {self.all_pawns_set}')
             else:
                 return
