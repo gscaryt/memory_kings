@@ -12,8 +12,9 @@ main.py runs the game in Pygame. Stage: 70-80%
 
 ## NON STANDARD MODULES
 
-For main.py: pygame
-For memorykings0.5.py: pyinputplus, termcolor
+For main: import pygame
+
+For old_versions/memorykings0.5.py: import pyinputplus, termcolor
 
 ## EXCUSES
 
