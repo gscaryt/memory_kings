@@ -3,7 +3,7 @@ from .constants import COLORS, RANKS, BACKS, CARD_SIZE, CORNER
 
 import logging as log
 log.basicConfig(level=log.DEBUG, format=" %(asctime)s -  %(levelname)s -  %(message)s")
-log.disable(log.CRITICAL)
+#log.disable(log.CRITICAL)
 
 ### BOARD ###
 
@@ -13,7 +13,6 @@ class Board:
         self.rows = rows
         self.width = self.cols*CARD_SIZE
         self.height = self.rows*CARD_SIZE
-        self.grid = [] # REDUNDANT FOR NOW... NOT SURE IF NEEDED.
 
     def gen_grid(self):
         Queen("", "QUEEN", "BLACK") # Generate the Queen Card first.
@@ -31,7 +30,11 @@ class Board:
             Card.deck[i].position = i
             Card.deck[i].col = i % self.cols
             Card.deck[i].row = i // self.cols
-        self.grid = Card.deck[i:self.cols*(1+i)] # REDUNDANT FOR NOW... NOT SURE IF NEEDED
+        self.grid = []
+        for i in range(0, len(Card.deck), self.cols):
+            grid_slice = Card.deck[i:i+self.cols] # REDUNDANT FOR NOW... NOT SURE IF NEEDED
+            self.grid.append(grid_slice)
+        print(self.grid)
 
     def get_card(self, col, row):
         return self.grid[col][row]
@@ -90,12 +93,16 @@ class Card:
             for pawn in player.pawn:
                 for token in player.token:
                     if token.position == self.position:
+                        print(f"activate() - DON'T ACTIVATE Card {self.position}")
                         return False
                 if pawn.previous == self.position:
+                    print(f"activate() - DON'T ACTIVATE Card {self.position}")
                     return False
-        return True
+        print(f"activate() - ACTIVATE Card {self.position}")
+        return self.special()
 
-    def special(self, window, display, board, player_array, event):
+    def special(self):
+        '''Standard Cards have no special effects.'''
         pass
 
 class Bishop(Card):
@@ -156,13 +163,5 @@ class Queen(Card):
         else:
             return False
 
-    def special(self, window, display, board, player_array, event):
-        if self.activate(player_array):
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                click_pos = board.click_to_grid()
-                card = board.get_card(click_pos[0], click_pos[1])
-                coords_on_screen = CORNER[0]+CARD_SIZE*card.col, CORNER[1]+CARD_SIZE*card.row
-                card_image = display.get_image(card.image, CARD_SIZE, CARD_SIZE)
-                window.blit(card_image, coords_on_screen)
-                pygame.display.update()
-                time.sleep(1)
+    def special(self):
+        pass

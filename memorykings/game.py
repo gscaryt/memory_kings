@@ -79,6 +79,7 @@ class Game:
                         self.pawn_selected = False
                     else:
                         log.debug(f'select() - Successful move. Unselected and end_turn (unless recruited).')
+                        Card.deck[self.pawn_selected.position].activate(Player.array)
                         self.pawn_selected = False
                         self.end_turn = True
                 else:
@@ -127,6 +128,7 @@ class Game:
         log.debug(f'change_turn - Next Player: {self.current_player.color}')
 
     def round(self, event):
+        self.get_all_pawns_positions()
         if self.num_of_players == 2 and Player.recruited == 0:
             time.sleep(0.05)
             self.counter.pawn[0].move(self.board)
@@ -142,6 +144,11 @@ class Game:
             self.recruit_check()
 
 ## CHECKS
+
+    def get_all_pawns_positions(self):
+        for player in Player.array:
+            for pawn in player.pawn:
+                pawn.previous = pawn.position
 
     def recruit_check(self):
         if self.num_of_players == 2:
@@ -173,7 +180,7 @@ class Game:
             return False
         except: 
             pass
-
+        
 ## TODO
 
     def queen_check(self):

@@ -76,14 +76,14 @@ class Pawn:
         self.row = row
         self.image = 'pawn_' + self.color + '.png'
         self.position = self.row*board.cols+self.col
+        self.previous = self.position
 
     def move(self, board, card_array, col, row):
         if self.move_check(card_array, col, row):
-            self.record_position()
             self.col = col
             self.row = row
             self.position = row*board.cols+col
-            print(f'move() - The Pawn Moved: New Coordinates: {self.col, self.row}'
+            log.debug(f'move() - The Pawn Moved: New Coordinates: {self.col, self.row}'
                 f' New Position: {self.position}')
             return True
         else:
@@ -115,9 +115,6 @@ class Pawn:
         else:
             return False
 
-    def record_position(self):
-        self.previous = self.position
-
     def get_screen_location(self, pawn_num, player_order):
         return (
         (CORNER[0]+CARD_SIZE*(self.col))+(PAWN_SIZE*pawn_num)+5, 
@@ -131,9 +128,9 @@ class Counter(Pawn):
         self.row = 0
         self.image = 'pawn_counter.png'
         self.position = 0
+        self.previous = 0
 
     def move(self, board):
-        self.record_position()
         if self.row % 2 == 0 and not self.col == board.cols-1:
             self.col = self.col+1
         elif self.row % 2 != 0 and not self.col == 0:
