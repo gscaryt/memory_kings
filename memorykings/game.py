@@ -12,7 +12,7 @@ class Game:
         self.board = Board(cols, rows)
         self.board.gen_grid()
 
-    def choose_colors(self, color1='PURPLE', color2='BLACK', color3='WHITE', color4='ORANGE'):
+    def choose_colors(self, color1='PURPLE', color2='WHITE', color3='ORANGE', color4='BLACK'):
         self.color_order = ('COUNTER', color1, color2, color3, color4)
         log.debug(f'choose_colors() - Chosen Colors: {self.color_order}')
 
@@ -180,8 +180,3 @@ class Game:
             return False
         except: 
             pass
-        
-## TODO
-
-    def queen_check(self):
-        pass

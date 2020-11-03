@@ -164,4 +164,5 @@ class Queen(Card):
             return False
 
     def special(self):
+        # TODO How to make this work to peek a card?
         pass

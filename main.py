@@ -18,7 +18,7 @@ def main():
     game = Game()
     game.setup_board(5,5)
     game.choose_colors()
-    game.create_players(2)
+    game.create_players(2) # Can change number from 1 (SOLO GAME) up to 4.
     main_screen = Display()
 
     # GAME_LOOP
