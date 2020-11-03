@@ -21,9 +21,6 @@ def main():
     game.create_players(2)
     main_screen = Display()
 
-    # SIMPLIFYING CALLS
-    
-    
     # GAME_LOOP
     while run:
 

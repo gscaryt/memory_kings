@@ -1,5 +1,4 @@
 import pygame
-import logging as log
 from .constants import CARD_SIZE, IMAGES_PATH, CORNER, DARK_GREY, PAWN_SIZE, TOKEN_SIZE
 
 import logging as log
