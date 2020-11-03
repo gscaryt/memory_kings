@@ -1,9 +1,10 @@
 import pygame
 
 WINDOW_WIDTH, WINDOW_HEIGHT = 800, 600
-CORNER = 150, 50 
-    '''Board upper left corner. For 5x5. Can become a variable\n
-    and adjust depending on the grid Size later.'''
+CORNER = 150, 50
+'''CORNER = Board upper left corner for 5x5.\n 
+Can become a variable and adjust depending on 
+the grid Size later.'''
 
 WHITE = 255,255,255
 DARK_GREY = 50,50,50
