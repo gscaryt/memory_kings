@@ -2,9 +2,9 @@ import pygame, time
 from .players import Player
 
 class Power():
-    def peek_card(self, window, display, board, card_array, player_array):
+    def peek_card(self, window, display, game, board, card_array, player_array):
         print('Peek Card starts running.')
-        display.print_all(window, board, card_array, player_array)
+        display.print_all(window, game, board, card_array, player_array)
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:

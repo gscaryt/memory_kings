@@ -51,8 +51,10 @@ class Display:
                 token_image = self.get_image(token.image, TOKEN_SIZE, TOKEN_SIZE)
                 window.blit(token_image, coords_on_screen)
 
-    def print_all(self, window, board, card_array, player_array):
+    def print_all(self, window, game, board, card_array, player_array):
         self.print_grid(window, board, card_array, player_array)
+        self.print_selected(window, game)
+        self.print_valid_moves(window, game, board, card_array)
         self.print_pawns(window, player_array)
         self.print_tokens(window, player_array)
         pygame.display.update()
@@ -76,4 +78,21 @@ class Display:
             pygame.display.update()
             time.sleep(1.5)
             return True
+
+    def print_selected(self, window, game):
+        if not game.pawn_selected == False:
+            coords_on_screen = list(game.pawn_selected.get_screen_location(game.pawn_selected_num, game.current_turn))
+            coords_on_screen[0] -= 6
+            coords_on_screen[1] -= 6
+            pawn_image = self.get_image('selected_shadow.png', PAWN_SIZE+12, PAWN_SIZE+12)
+            window.blit(pawn_image, coords_on_screen)
+
+    def print_valid_moves(self, window, game, board, card_array):
+        if not game.pawn_selected == False:
+            for i in range(board.cols*board.rows):
+                card = card_array[i]
+                coords_on_screen = CORNER[0]+CARD_SIZE*card.col, CORNER[1]+CARD_SIZE*card.row
+                if not game.pawn_selected.move_check(card_array, card.col, card.row):
+                    image = self.get_image('unavailable.png', CARD_SIZE, CARD_SIZE)
+                    window.blit(image, coords_on_screen)
 

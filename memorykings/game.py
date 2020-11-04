@@ -44,6 +44,7 @@ class Game:
         self.num_of_players = len(Player.array)
         self.current_turn = 0
         self.current_player = Player.array[self.current_turn]
+        self.pawn_selected = False
         self.counter = Player.array[0]
         self.all_pawns_set = False
         self.end_turn = False
@@ -101,7 +102,7 @@ class Game:
                         self.pawn_selected = False
                     else:
                         log.debug(f'select() - Successful move.')
-                        if not Card.deck[self.pawn_selected.position].activate(window, display, self.board, Player.array):
+                        if not Card.deck[self.pawn_selected.position].activate(window, self, display, self.board, Player.array):
                             self.pawn_selected = False
                             self.end_turn = True
                             
@@ -125,6 +126,7 @@ class Game:
                         and coords[1] < mouse[1] < coords[1]+PAWN_SIZE
                     ):
                         self.pawn_selected = self.current_player.pawn[pawn_num]
+                        self.pawn_selected_num = pawn_num
                         self.end_turn = False
                         log.debug(f'select() - Pawn Selected: {self.pawn_selected} is on the {Card.deck[self.pawn_selected.position]} Card')
                         break
@@ -155,14 +157,14 @@ class Game:
     def round(self, window, display):
         self.get_all_pawns_positions()
         if self.num_of_players == 2 and Player.who_recruited == 0:
-            time.sleep(0.05)
+            time.sleep(0.7)
             self.counter.pawn[0].move(self.board)
             self.recruit_check()
-        if self.num_of_players == 2 and self.current_turn == 0:
-            time.sleep(0.05)
+        elif self.num_of_players == 2 and self.current_turn == 0:
             self.counter.pawn[0].move(self.board)
             self.end_turn = True
             self.recruit_check()
+            time.sleep(0.7)
         else:
             self.select(window, display)
             Player.who_recruited = None
@@ -220,5 +222,4 @@ class Game:
             return False
         except: 
             pass
-        
         

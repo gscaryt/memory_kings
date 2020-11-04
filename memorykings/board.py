@@ -98,6 +98,7 @@ class Board:
 
 class Card:
     deck = []
+    
     def __init__(self, color, rank, back):
         self.color = color
         self.rank = rank
@@ -138,7 +139,7 @@ class Card:
                 )
             return True
 
-    def activate(self, window, display, board, player_array):
+    def activate(self, window, game, display, board, player_array):
         '''
         Check if a card was hidden or open when a pawn moves
         to it. Special powers (like the Queen's Peeking Card) only
@@ -154,9 +155,9 @@ class Card:
                     print(f"activate() - DON'T ACTIVATE Card {self.position}")
                     return False
         print(f"activate() - ACTIVATE Card {self.position}")
-        return self.special(window, display, board, player_array)
+        return self.special(window, game, display, board, player_array)
 
-    def special(self, window, display, board, player_array):
+    def special(self, window, game, display, board, player_array):
         '''Standard Cards have no special effects.'''
         pass
 
@@ -234,8 +235,8 @@ class Queen(Card):
         else:
             return False
 
-    def special(self, window, display, board, player_array):
+    def special(self, window, game, display, board, player_array):
         '''When the Queen is activated, the Player can
         peek any hidden card from the board.'''
         print(powers)
-        powers.peek_card(window, display, board, Card.deck, player_array)
+        powers.peek_card(window, display, game, board, Card.deck, player_array)

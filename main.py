@@ -48,7 +48,7 @@ def main():
             if game.end_turn == True:
                 game.change_turn()
                             
-            main_screen.print_all(GAME_WINDOW, game.board, Card.deck, Player.array)
+            main_screen.print_all(GAME_WINDOW, game, game.board, Card.deck, Player.array)
     pygame.quit()
 
 main()
