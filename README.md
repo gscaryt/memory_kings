@@ -6,7 +6,6 @@ main.py runs the game in Pygame. Stage: 70-80%
 
 ## TODO
 
-- Round flow
 - Queen's advice/peek
 - Showing score on the window
 
