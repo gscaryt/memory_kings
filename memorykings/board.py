@@ -1,9 +1,15 @@
 import pygame, random, time
-from .constants import COLORS, RANKS, BACKS, CARD_SIZE, CORNER
+from .constants import COLORS, RANKS, BACKS, CARD_SIZE, CORNER, COLOR_NUMBER
 
 import logging as log
 log.basicConfig(level=log.DEBUG, format=" %(asctime)s -  %(levelname)s -  %(message)s")
-#log.disable(log.CRITICAL)
+log.disable(log.CRITICAL)
+
+''' 
+This module contains:
+BOARD: Board()
+CARDS: Card(), Bishop(Card), Rook(Card), Knight(Card), and Queen(Card)
+'''
 
 ### BOARD ###
 
@@ -15,9 +21,20 @@ class Board:
         self.height = self.rows*CARD_SIZE
 
     def gen_grid(self):
-        Queen("", "QUEEN", "BLACK") # Generate the Queen Card first.
+        '''
+        Generates all the Cards that are appended to the
+        deck array, shuffles the cards, attributes their
+        position and coordinates and forms a grid array.
+
+        Note: Dependency of how many colors based on the board 
+        size is (cols*rows-special_cards)/(backs*ranks)
+        '''
+        # GENERATE SPECIAL CARDS OUTSIDE THE LOOP
+        Queen("", "QUEEN", "BLACK") 
+
+        # GENERATE CARD_TYPE BASED ON THEIR RANK
         for _, back in enumerate(BACKS):
-            for _, color in enumerate(COLORS[: 4]): # Colors = (cols*rows - special_cards)/(backs*ranks)
+            for _, color in enumerate(COLORS[: COLOR_NUMBER]):
                 for _, rank in enumerate(RANKS):
                     if rank == "BISHOP":
                         Bishop(color, rank, back)
@@ -25,21 +42,32 @@ class Board:
                         Rook(color, rank, back)
                     elif rank == "KNIGHT":
                         Knight(color, rank, back)
+
+        # SHUFFLE AND ADD ATTRIBUTES TO EACH CARD
         random.shuffle(Card.deck)
         for i, _ in enumerate(Card.deck):
             Card.deck[i].position = i
             Card.deck[i].col = i % self.cols
             Card.deck[i].row = i // self.cols
+
+        # SELF.GRID IS REDUNDANT FOR NOW... NOT SURE IF NEEDED
         self.grid = []
         for i in range(0, len(Card.deck), self.cols):
-            grid_slice = Card.deck[i:i+self.cols] # REDUNDANT FOR NOW... NOT SURE IF NEEDED
+            grid_slice = Card.deck[i:i+self.cols]
             self.grid.append(grid_slice)
-        print(self.grid)
 
     def get_card(self, col, row):
+        '''
+        Uses the grid array to get a Card instance.
+        Maybe can replace the need for "relative position".
+        '''
         return self.grid[col][row]
 
     def click_to_grid(self):
+        '''
+        Converts the pixel coordinates of a mouse click
+        to card coordinates in the grid and returns them.
+        '''
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
         click_pos = [0, 0]
@@ -48,12 +76,15 @@ class Board:
                 or mouse[0] > CORNER[0]+self.rows*CARD_SIZE
                 or mouse[1] > CORNER[1]+self.cols*CARD_SIZE):
                 for i in range(self.rows):
-                    if i < (mouse[0]-150)/CARD_SIZE and (mouse[0]-150-CARD_SIZE)/CARD_SIZE < i:
+                    if (i < (mouse[0]-CORNER[0])/CARD_SIZE 
+                    and (mouse[0]-CORNER[0]-CARD_SIZE)/CARD_SIZE < i):
                         click_pos[0] = i
                 for j in range(self.cols):
-                    if j < (mouse[1]-50)/CARD_SIZE and (mouse[1]-50-CARD_SIZE)/CARD_SIZE < j:
+                    if (j < (mouse[1]-CORNER[1])/CARD_SIZE 
+                    and (mouse[1]-CORNER[1]-CARD_SIZE)/CARD_SIZE < j):
                         click_pos[1] = j
-                log.debug(f'click_to_grid() - Mouse click on {mouse} represents the {click_pos} coordinates.')
+                log.debug(f'click_to_grid() - Mouse click on {mouse}' 
+                f'represents the {click_pos} coordinates.')
                 return click_pos
             else:
                 log.debug(f'click_to_grid() - Mouse click outside the board.')
@@ -75,20 +106,41 @@ class Card:
         self.row = 0
         Card.deck.append(self)
 
-    def is_token(self, token_array):
+    def get_token(self, token_array):
+        '''
+        Returns the color of a token in the same
+        position as this card instance.
+        '''
         for token in token_array:
             if (token.position == self.position):
                 return token.color
         return None
 
     def escort_token_check(self, pawn, token_array, col, row):
-        log.debug(f'escort_token_check() - Is token {self.is_token(token_array)} on {self.position}. Pawn position: {pawn.position}')
-        if (self.is_token(token_array) != None
-        and self.is_token(token_array) != pawn.color):
-            log.debug(f"escort_token_check() - There is an Opponent's Token on Card {self.position}")
+        '''
+        Check to see if there is a token of a different player
+        on the same card as the pawn trying to move and if they 
+        have the same color. A pawn cannot use Escort movement 
+        if the card has a token of an opponent.
+        '''
+        log.debug(
+            f'escort_token_check() - Is token {self.get_token(token_array)}' 
+            f' on {self.position}. Pawn position: {pawn.position}'
+            )
+        if (self.get_token(token_array) != None
+        and self.get_token(token_array) != pawn.color):
+            log.debug(
+                f"escort_token_check() - There is an Opponent's Token"
+                f" on Card {self.position}"
+                )
             return True
 
-    def activate(self, player_array):
+    def activate(self, player_array, event):
+        '''
+        Check if a card was hidden or open when a pawn moves
+        to it. Special powers (like the Queen's Peeking Card) only
+        activate when a card is flipped from facing down to up.
+        '''
         for player in player_array:
             for pawn in player.pawn:
                 for token in player.token:
@@ -99,14 +151,18 @@ class Card:
                     print(f"activate() - DON'T ACTIVATE Card {self.position}")
                     return False
         print(f"activate() - ACTIVATE Card {self.position}")
-        return self.special()
+        return self.special(event)
 
-    def special(self):
+    def special(self, event):
         '''Standard Cards have no special effects.'''
         pass
 
 class Bishop(Card):
     def escort_check(self, pawn, token_array, col, row):
+        '''
+        Calls an escort_token_check and then checks if the
+        destination is on a diagonal from the card.
+        ''' 
         if not self.escort_token_check(pawn,token_array,col,row):
             if abs(col - self.col) == abs(row - self.row):
                 log.debug(f"escort_check() - Valid Bishop Escort."
@@ -120,6 +176,10 @@ class Bishop(Card):
 
 class Rook(Card):
     def escort_check(self, pawn, token_array, col, row):
+        '''
+        Calls an escort_token_check and then checks if the
+        destination is on a orthogonal from the card.
+        ''' 
         if self.escort_token_check(pawn,token_array,col,row):
             return False
         else:
@@ -133,6 +193,10 @@ class Rook(Card):
 
 class Knight(Card):
     def escort_check(self, pawn, token_array, col, row):
+        '''
+        Calls an escort_token_check and then checks if the
+        destination is on an "L" pattern from the card.
+        ''' 
         if not self.escort_token_check(pawn,token_array,col,row):
             if (
                 (abs(col-self.col) == 2 and abs(row-self.row) == 1) 
@@ -149,6 +213,10 @@ class Knight(Card):
 
 class Queen(Card):
     def escort_check(self, pawn, token_array, col, row):
+        '''
+        Calls an escort_token_check and then checks if the 
+        destination is orthogonal or diagonal from the card.
+        ''' 
         if not self.escort_token_check(pawn,token_array,col,row):
             if (
                 (abs(col - self.col) == abs(row - self.row))
@@ -163,6 +231,8 @@ class Queen(Card):
         else:
             return False
 
-    def special(self):
-        # TODO How to make this work to peek a card?
+    def special(self, event):
+        '''When the Queen is activated, the Player can
+        peek any hidden card from the board.'''
+        # TODO Still don't know how to add this without making a mess.
         pass

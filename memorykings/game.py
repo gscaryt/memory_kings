@@ -9,16 +9,29 @@ log.disable(log.CRITICAL)
 
 class Game:
     def setup_board(self, cols, rows):
+        '''
+        Instantiates the board within the Game
+        '''
         self.board = Board(cols, rows)
         self.board.gen_grid()
 
     def choose_colors(self, color1='PURPLE', color2='WHITE', color3='ORANGE', color4='BLACK'):
+        '''
+        Takes the color choice from each player and
+        put them in a tuple to create the players in order.
+
+        The COUNTER is automatically added as the 0th choice
+        even in a multiplayer game.
+        '''
         self.color_order = ('COUNTER', color1, color2, color3, color4)
         log.debug(f'choose_colors() - Chosen Colors: {self.color_order}')
 
     def create_players(self, num_of_players):
-        '''Start by creating a CounterKing in the 0th Player.array position\n
-        then create the other players.'''
+        '''
+        Start by creating a CounterKing in the 0th Player.array 
+        position even if it is a multiplayer game. Afterwards,
+        creates the actual Players.
+        '''
         counter = CounterKing(0, "COUNTER")
         log.debug(f'create_players() - Player {counter.order} - {counter.color} created.')
         log.debug(f'{Player.array}')
@@ -36,34 +49,43 @@ class Game:
         self.end_turn = False
 
     def place_pawns(self):
-            if not self.all_pawns_set:
-                if self.num_of_players == 2 and self.current_turn == 0:
-                    '''If this is a Solo game, and the CounterKing has no pawns, place the Counter pawn'''
-                    if len(self.current_player.pawn) == 0:
-                        self.current_player.place_pawn()
-                        self.change_turn()
-                    else:
-                        self.change_turn()
-                else:
-                    '''If this is a Multiplayer game (num_of_players >2), skip the turn 0\n
-                    and place a Player's Pawn until all pawns of all players were placed.'''
-                    if self.num_of_players > 2 and self.current_turn == 0:
-                        self.current_turn += 1
-                        self.current_player = Player.array[self.current_turn]
-                    else:
-                        click_pos = self.board.click_to_grid()
-                        self.current_player.place_pawn(self.board, click_pos[0], click_pos[1])
-                        self.change_turn()
+        '''
+        If this is a Solo game, place the Counter pawn.
+        (The Counter has only one pawn, so the second turn is skipped)
+
+        If this is a Multiplayer game, skips the turn 0, so the 
+        Counter Pawn is not placed.
+
+        Placement continues until the last player placed 2 pawns.
+        '''
+        if not self.all_pawns_set:
+            if self.num_of_players == 2 and self.current_turn == 0:
                 
-                '''self.all_pawns_set returns True if the last player has placed all their 2 pawns'''
-                last_player = Player.array[self.num_of_players-1]
-                self.all_pawns_set = bool(len(last_player.pawn) == 2)
-                if self.all_pawns_set:
-                    self.current_turn = 1
-                    self.pawn_selected = False
-                    log.debug(f'place_pawns() - All pawns set: {self.all_pawns_set}')
+                if len(self.current_player.pawn) == 0:
+                    self.current_player.place_pawn()
+                    self.change_turn()
+                else:
+                    self.change_turn()
             else:
-                return
+                '''If this is a Multiplayer game (num_of_players >2), skip the turn 0\n
+                and place a Player's Pawn until all pawns of all players were placed.'''
+                if self.num_of_players > 2 and self.current_turn == 0:
+                    self.current_turn += 1
+                    self.current_player = Player.array[self.current_turn]
+                else:
+                    click_pos = self.board.click_to_grid()
+                    self.current_player.place_pawn(self.board, click_pos[0], click_pos[1])
+                    self.change_turn()
+            
+            '''self.all_pawns_set returns True if the last player has placed all their 2 pawns'''
+            last_player = Player.array[self.num_of_players-1]
+            self.all_pawns_set = bool(len(last_player.pawn) == 2)
+            if self.all_pawns_set:
+                self.current_turn = 1
+                self.pawn_selected = False
+                log.debug(f'place_pawns() - All pawns set: {self.all_pawns_set}')
+        else:
+            return
 
 ## SELECT/MOVE
 
@@ -79,7 +101,6 @@ class Game:
                         self.pawn_selected = False
                     else:
                         log.debug(f'select() - Successful move. Unselected and end_turn (unless recruited).')
-                        Card.deck[self.pawn_selected.position].activate(Player.array)
                         self.pawn_selected = False
                         self.end_turn = True
                 else:
@@ -112,8 +133,10 @@ class Game:
 ## GAME FLOW
 
     def change_turn(self):
-        '''Increases the current turn up to the last player\n
-        and then back to 0.'''
+        '''
+        Increases the current turn up to the last player
+        and then back to 0. Updates the current_player.
+        '''
         if self.current_turn < self.num_of_players-1:
             self.current_turn += 1
         else:
@@ -129,7 +152,7 @@ class Game:
 
     def round(self, event):
         self.get_all_pawns_positions()
-        if self.num_of_players == 2 and Player.recruited == 0:
+        if self.num_of_players == 2 and Player.who_recruited == 0:
             time.sleep(0.05)
             self.counter.pawn[0].move(self.board)
             self.recruit_check()
@@ -140,43 +163,60 @@ class Game:
             self.recruit_check()
         else:
             self.select(event)
-            Player.recruited = None
+            Player.who_recruited = None
             self.recruit_check()
 
 ## CHECKS
 
     def get_all_pawns_positions(self):
+        '''
+        Records all pawns current positions as previous.
+        Used at the beginning of the round, to record the 
+        state of the board before moving so it can be 
+        checked if a card was just flipped or not
+        '''
         for player in Player.array:
             for pawn in player.pawn:
                 pawn.previous = pawn.position
 
     def recruit_check(self):
+        '''
+        Calls for Recruit Checks. On SOLO games (num_of_players == 2)
+        the Counter King has priority over recruiting.
+        '''
         if self.num_of_players == 2:
             self.counter.recruit(self.board, Card.deck)
-        if Player.recruited == None:
+        if Player.who_recruited == None:
             self.current_player.recruit(self.board, Card.deck)
-        if Player.recruited != None:
-            self.current_turn = Player.recruited
+        if Player.who_recruited != None:
+            self.current_turn = Player.who_recruited
             self.current_player = Player.array[self.current_turn]
             self.end_turn = False
 
-    def end_game_check(self):
+    def end_game_check(self, card_array):
+        '''Checks for End Game conditions'''
         try:
-            if Player.array[0].pawn[0].position == 24:
-                log.debug('end_game_check() - The game is finished! Counter on the 25 card.')
+            if Player.array[0].pawn[0].position == len(card_array)-1:
+                log.debug('end_game_check() - The game is finished!'
+                    'Counter on the 25 card.')
                 return True
             elif self.num_of_players == 2:
                 if Player.array[0].score == 6:
-                    log.debug('end_game_check() - The game is finished! Counter recruited 6 pairs')
+                    log.debug('end_game_check() - The game is finished!' 
+                        'Counter recruited 6 pairs')
                     return True
                 elif Player.array[1].score == 6:
-                    log.debug('end_game_check() - The game is finished! You won with 6 pairs')
+                    log.debug('end_game_check() - The game is finished!'
+                        'You won with 6 pairs')
                     return True
             else:
                 for player in Player.array:
                     if player.score == 12//(self.num_of_players-1):
-                        log.debug('end_game_check() - The game is finished! You won!')
+                        log.debug('end_game_check() - The game is finished!' 
+                            'You won!')
                         return True
             return False
         except: 
             pass
+        
+        

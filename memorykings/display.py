@@ -1,5 +1,5 @@
 import pygame, time
-from .constants import CARD_SIZE, IMAGES_PATH, CORNER, DARK_GREY, PAWN_SIZE, TOKEN_SIZE
+from .constants import CARD_SIZE, IMAGES_PATH, CORNER, DARK_GREY, PAWN_SIZE, TOKEN_SIZE, GRID
 
 import logging as log
 log.basicConfig(level=log.DEBUG, format=" %(asctime)s -  %(levelname)s -  %(message)s")
@@ -14,7 +14,8 @@ class Display:
     
     def print_grid(self, window, card_array, player_array):
         window.fill(DARK_GREY)
-        for card in card_array:
+        for i in range(GRID[0]*GRID[1]):
+            card = card_array[i]
             coords_on_screen = CORNER[0]+CARD_SIZE*card.col, CORNER[1]+CARD_SIZE*card.row
             is_open = False
             for player in player_array:
@@ -52,4 +53,3 @@ class Display:
                     )
                 token_image = self.get_image(token.image, TOKEN_SIZE, TOKEN_SIZE)
                 window.blit(token_image, coords_on_screen)
-
