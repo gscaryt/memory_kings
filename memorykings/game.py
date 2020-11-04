@@ -1,6 +1,6 @@
 import pygame, time
-from .constants import CARD_SIZE, PAWN_SIZE, CORNER, GRID
-from .player import Player, CounterKing
+from .constants import CARD_SIZE, PAWN_SIZE, CORNER
+from .players import Player, CounterKing
 from .board import Board, Card
 
 import logging as log
@@ -8,7 +8,7 @@ log.basicConfig(level=log.DEBUG, format=" %(asctime)s -  %(levelname)s -  %(mess
 log.disable(log.CRITICAL)
 
 class Game:
-    def setup_board(self, cols, rows):
+    def setup_board(self, cols, rows=None):
         '''
         Instantiates the board within the Game
         '''
@@ -24,13 +24,13 @@ class Game:
         even in a multiplayer game.
         '''
         self.color_order = ('COUNTER', color1, color2, color3, color4)
-        log.debug(f'choose_colors() - Chosen Colors: {self.color_order}')
 
     def create_players(self, num_of_players):
         '''
-        Start by creating a CounterKing in the 0th Player.array 
-        position even if it is a multiplayer game. Afterwards,
-        creates the actual Players.
+        1) Creates the CounterKing in the 0th Player.array 
+        position even if it is a multiplayer game. 
+        2) Creates the actual Players.
+        3) Set all Game Attributes to their starting values.
         '''
         counter = CounterKing(0, "COUNTER")
         log.debug(f'create_players() - Player {counter.order} - {counter.color} created.')
@@ -39,9 +39,9 @@ class Game:
         for i in range(1, num_of_players+1):
             player = Player(i, self.color_order[i])
             log.debug(f'create_players() - Player {player.order} - {player.color} created.')
-        self.num_of_players = len(Player.array)
         log.debug(f'{Player.array}')
 
+        self.num_of_players = len(Player.array)
         self.current_turn = 0
         self.current_player = Player.array[self.current_turn]
         self.counter = Player.array[0]
@@ -89,10 +89,10 @@ class Game:
 
 ## SELECT/MOVE
 
-    def select(self, event):
+    def select(self, window, display):
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if click[0] == 1:
             if self.pawn_selected:
                 click_pos = self.board.click_to_grid()
                 if click_pos != None:
@@ -100,9 +100,11 @@ class Game:
                         log.debug(f'select() - Failed to move. Unselected.')
                         self.pawn_selected = False
                     else:
-                        log.debug(f'select() - Successful move. Unselected and end_turn (unless recruited).')
-                        self.pawn_selected = False
-                        self.end_turn = True
+                        log.debug(f'select() - Successful move.')
+                        if not Card.deck[self.pawn_selected.position].activate(window, display, self.board, Player.array):
+                            self.pawn_selected = False
+                            self.end_turn = True
+                            
                 else:
                     log.debug(f'select() - Failed to move. Unselected.')
                     self.pawn_selected = False
@@ -150,7 +152,7 @@ class Game:
         self.end_turn = False
         log.debug(f'change_turn - Next Player: {self.current_player.color}')
 
-    def round(self, event):
+    def round(self, window, display):
         self.get_all_pawns_positions()
         if self.num_of_players == 2 and Player.who_recruited == 0:
             time.sleep(0.05)
@@ -162,7 +164,7 @@ class Game:
             self.end_turn = True
             self.recruit_check()
         else:
-            self.select(event)
+            self.select(window, display)
             Player.who_recruited = None
             self.recruit_check()
 

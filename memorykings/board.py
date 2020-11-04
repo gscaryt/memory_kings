@@ -1,5 +1,6 @@
 import pygame, random, time
-from .constants import COLORS, RANKS, BACKS, CARD_SIZE, CORNER, COLOR_NUMBER
+from .constants import COLORS, RANKS, BACKS, CARD_SIZE, CORNER
+from .specials import powers
 
 import logging as log
 log.basicConfig(level=log.DEBUG, format=" %(asctime)s -  %(levelname)s -  %(message)s")
@@ -14,9 +15,9 @@ CARDS: Card(), Bishop(Card), Rook(Card), Knight(Card), and Queen(Card)
 ### BOARD ###
 
 class Board:
-    def __init__(self, cols, rows):
+    def __init__(self, cols, rows=None):
         self.cols = cols
-        self.rows = rows
+        self.rows = rows if rows != None else cols
         self.width = self.cols*CARD_SIZE
         self.height = self.rows*CARD_SIZE
 
@@ -29,6 +30,9 @@ class Board:
         Note: Dependency of how many colors based on the board 
         size is (cols*rows-special_cards)/(backs*ranks)
         '''
+
+        COLOR_NUMBER = int((self.cols*self.rows-1+(self.cols*self.rows+1)%2)/6)
+
         # GENERATE SPECIAL CARDS OUTSIDE THE LOOP
         Queen("", "QUEEN", "BLACK") 
 
@@ -90,7 +94,6 @@ class Board:
                 log.debug(f'click_to_grid() - Mouse click outside the board.')
                 return None
 
-
 ### CARDS ###
 
 class Card:
@@ -135,7 +138,7 @@ class Card:
                 )
             return True
 
-    def activate(self, player_array, event):
+    def activate(self, window, display, board, player_array):
         '''
         Check if a card was hidden or open when a pawn moves
         to it. Special powers (like the Queen's Peeking Card) only
@@ -151,9 +154,9 @@ class Card:
                     print(f"activate() - DON'T ACTIVATE Card {self.position}")
                     return False
         print(f"activate() - ACTIVATE Card {self.position}")
-        return self.special(event)
+        return self.special(window, display, board, player_array)
 
-    def special(self, event):
+    def special(self, window, display, board, player_array):
         '''Standard Cards have no special effects.'''
         pass
 
@@ -231,8 +234,8 @@ class Queen(Card):
         else:
             return False
 
-    def special(self, event):
+    def special(self, window, display, board, player_array):
         '''When the Queen is activated, the Player can
         peek any hidden card from the board.'''
-        # TODO Still don't know how to add this without making a mess.
-        pass
+        print(powers)
+        powers.peek_card(window, display, board, Card.deck, player_array)
