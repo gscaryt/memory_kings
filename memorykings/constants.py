@@ -1,5 +1,3 @@
-import pygame
-
 CARD_SIZE = 100
 CARD_BORDER = CARD_SIZE//20
 TOKEN_SIZE = CARD_SIZE//5

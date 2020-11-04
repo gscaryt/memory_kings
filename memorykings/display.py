@@ -51,34 +51,6 @@ class Display:
                 token_image = self.get_image(token.image, TOKEN_SIZE, TOKEN_SIZE)
                 window.blit(token_image, coords_on_screen)
 
-    def print_all(self, window, game, board, card_array, player_array):
-        self.print_grid(window, board, card_array, player_array)
-        self.print_selected(window, game)
-        self.print_valid_moves(window, game, board, card_array)
-        self.print_pawns(window, player_array)
-        self.print_tokens(window, player_array)
-        pygame.display.update()
-    
-    def print_card(self, window, board, card_array, player_array, col, row):
-        card = board.grid[row][col]
-        coords_on_screen = CORNER[0]+CARD_SIZE*col, CORNER[1]+CARD_SIZE*row
-        is_open = False
-        for player in player_array:
-            for pawn in player.pawn:
-                for token in player.token:
-                    if token.position == card.position:
-                        is_open = True
-                        return False
-                if pawn.position == card.position:
-                    is_open = True
-                    return False
-        if not is_open:
-            card_image = self.get_image(card.image, CARD_SIZE, CARD_SIZE)
-            window.blit(card_image, coords_on_screen)
-            pygame.display.update()
-            time.sleep(1.5)
-            return True
-
     def print_selected(self, window, game):
         if not game.pawn_selected == False:
             coords_on_screen = list(game.pawn_selected.get_screen_location(game.pawn_selected_num, game.current_turn))
@@ -96,3 +68,33 @@ class Display:
                     image = self.get_image('unavailable.png', CARD_SIZE, CARD_SIZE)
                     window.blit(image, coords_on_screen)
 
+    def print_all(self, window, game, board, card_array, player_array):
+        self.print_grid(window, board, card_array, player_array)
+        self.print_selected(window, game)
+        self.print_valid_moves(window, game, board, card_array)
+        self.print_pawns(window, player_array)
+        self.print_tokens(window, player_array)
+        pygame.display.update()
+
+    def print_card(self, window, board, card_array, player_array, col, row):
+        '''
+        Show one hidden card for 2 seconds and turns it back down.
+        '''
+        card = board.grid[row][col]
+        coords_on_screen = CORNER[0]+CARD_SIZE*col, CORNER[1]+CARD_SIZE*row
+        is_open = False
+        for player in player_array:
+            for pawn in player.pawn:
+                for token in player.token:
+                    if token.position == card.position:
+                        is_open = True
+                        return False
+                if pawn.position == card.position:
+                    is_open = True
+                    return False
+        if not is_open:
+            card_image = self.get_image(card.image, CARD_SIZE, CARD_SIZE)
+            window.blit(card_image, coords_on_screen)
+            pygame.display.update()
+            time.sleep(2)
+            return True

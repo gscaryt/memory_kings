@@ -1,13 +1,16 @@
-# Memory Kings in Python 3
+# Memory Kings in Python 3 by G. Scary Tontini
 
-memorykings0.5.py stable running all rules for Multiplayer and Solo modes on Terminal. Stage: 90-99%
+main.py, runs the game in Pygame
 
-main.py runs the game in Pygame. Stage: 70-80%
+memorykings0.5.py stable running all rules for Multiplayer and Solo modes on Terminal
 
 ## TODO
 
-- Queen's advice/peek
 - Showing score on the window
+- Adding Intro Screen with Toggles for Number of Players and Board Size.
+- Refactor Special Powers to organise them better. Do they need their own class?
+- Implementing the restrictions based on the backs of the cards during Pawn Placement
+- Add Intro Toggle for a Alternate Setup
 
 ## NON STANDARD MODULES
 
@@ -15,10 +18,12 @@ For main: import pygame
 
 For old_versions/memorykings0.5.py: import pyinputplus, termcolor
 
-## EXCUSES
+## KNOWN ISSUES
 
-memorykings0.5.py: Players' Pawns on the same card will only show one of them, cause it's a mess to draw a better board with ASCII. (They are there though.)
-main.py: Is not done yet.
+- During Pawns Placement: 
+    In the Solo variant, player should only be able to place pawns on cards with the same Back as the Counter Pawn, and not place multiple pawns on the same card.
+    In the Multiplayer game, players should only be able to place pawns on cards with White Back, and not place multiple pawns on the same card.
+- Special Power of the Queen is a hot mess and needs refactoring (probably together with the rest of the program).
 
 ## LINKS
 

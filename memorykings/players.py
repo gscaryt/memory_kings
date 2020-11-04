@@ -1,4 +1,4 @@
-import pygame, time
+import time
 from .constants import PAWN_SIZE, CARD_SIZE, CARD_BORDER, CORNER
 
 import logging as log

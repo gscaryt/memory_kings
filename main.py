@@ -16,7 +16,7 @@ def main():
     clock = pygame.time.Clock()
     game = Game()
     main_screen = Display()
-    game.setup_board(5)
+    game.setup_board(6)
 
     # SET THE BOARD SCREEN
     WINDOW_WIDTH, WINDOW_HEIGHT = EXTRA_WIDTH+game.board.cols*CARD_SIZE, EXTRA_HEIGHT+game.board.rows*CARD_SIZE
@@ -25,7 +25,7 @@ def main():
 
     # GENERATE PLAYERS
     game.choose_colors()
-    game.create_players(1) # Can change number from 1 (SOLO GAME) up to 4.
+    game.create_players(4) # Can change number from 1 (SOLO GAME) up to 4.
 
     # GAME_LOOP
     while run:
