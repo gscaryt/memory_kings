@@ -178,16 +178,16 @@ class Game:
         if self.num_of_players == 2 and Player.who_recruited == 0:
             time.sleep(0.7)
             self.counter.pawn[0].move(board)
-            self.recruit_check(board, Card.deck)
+            self.recruit_check(board)
         elif self.num_of_players == 2 and self.current_turn == 0:
             self.counter.pawn[0].move(board)
             self.end_turn = True
-            self.recruit_check(board, Card.deck)
+            self.recruit_check(board)
             time.sleep(0.7)
         else:
             self.select(window, board, display)
             Player.who_recruited = None
-            self.recruit_check(board, Card.deck)
+            self.recruit_check(board)
 
     # CHECKS
 
@@ -202,17 +202,17 @@ class Game:
             for pawn in player.pawn:
                 pawn.previous = pawn.position
 
-    def recruit_check(self, board, who_recruited):
+    def recruit_check(self, board):
         """
         Calls for Recruit Checks. On SOLO games (num_of_players == 2)
         the Counter King has priority over recruiting.
         """
         if self.num_of_players == 2:
-            self.counter.recruit(board, Card.deck, Player.array, who_recruited)
+            self.counter.recruit(board, Card.deck)
         if Player.who_recruited is None:
             self.current_player.recruit(board, Card.deck)
         if Player.who_recruited is not None:
-            self.current_turn = who_recruited
+            self.current_turn = Player.who_recruited
             self.current_player = Player.array[self.current_turn]
             self.end_turn = False
 

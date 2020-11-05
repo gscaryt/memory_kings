@@ -2,8 +2,13 @@ import pygame
 from .constants import DARK_GREY, FPS
 from .buttons import Button, Toggle
 
-class NewGame():
-    def __init__(self, num_of_players=1, grid_size=(5, 5), setup_variant='standard'):
+class StartScreen():
+    def __init__(
+        self, 
+        num_of_players=1, 
+        grid_size=(5, 5), 
+        setup_variant='standard'
+        ):
         self.num_of_players = num_of_players
         self.grid_size = grid_size
         self.setup_variant = setup_variant
@@ -31,21 +36,53 @@ class NewGame():
     def play_game(self):
         print('Start')
         self.creating = False
-        return (self.num_of_players, self.grid_size)
 
-def start_screen(start):
+def start_menu(start):
     GAME_WINDOW = pygame.display.set_mode((250, 400))
     pygame.display.set_caption("Memory Kings")
     start.creating = True
     clock = pygame.time.Clock()
 
-    solo = Button('players_one.png', 50, 50, 40, 40, 'players_one_hover.png', start.choose_players, 1)
-    two = Button('players_two.png', 100, 50, 40, 40, 'players_two_hover.png', start.choose_players, 2)
-    three = Button('players_three.png', 150, 50, 40, 40, 'players_three_hover.png', start.choose_players, 3)
-    four = Button('players_four.png', 200, 50, 40, 40, 'players_four_hover.png', start.choose_players, 4)
-    grid = Toggle('toggle_left.png', 125, 125, 60, 20, 'toggle_right.png', start.choose_grid)
-    setup = Toggle('toggle_left.png', 125, 180, 60, 20, 'toggle_right.png', start.choose_setup)
-    logo = Button('mk_logo.png', 125, 300, 150, 150, 'mk_logo_hover.png', start.play_game)
+    solo = Button(
+        'players_one.png',
+        50, 50, 40, 40,
+        'players_one_hover.png',
+        start.choose_players, 1
+        )
+    two = Button(
+        'players_two.png',
+        100, 50, 40, 40,
+        'players_two_hover.png',
+        start.choose_players, 2
+        )
+    three = Button(
+        'players_three.png',
+        150, 50, 40, 40,
+        'players_three_hover.png',
+        start.choose_players, 3
+        )
+    four = Button(
+        'players_four.png',
+        200, 50, 40, 40,
+        'players_four_hover.png',
+        start.choose_players, 4)
+    grid = Toggle(
+        'toggle_left.png',
+        125, 125, 60, 20,
+        'toggle_right.png',
+        start.choose_grid)
+    setup = Toggle(
+        'toggle_left.png',
+        125, 180, 60, 20,
+        'toggle_right.png',
+        start.choose_setup
+        )
+    logo = Button(
+        'mk_logo.png',
+        125, 300, 150, 150,
+        'mk_logo_hover.png',
+        start.play_game
+        )
     
     while start.creating:
         clock.tick(FPS)
@@ -60,5 +97,5 @@ def start_screen(start):
             setup.switch(GAME_WINDOW)
             logo.button(GAME_WINDOW)
             if event.type == pygame.QUIT:
-                start.creating = False
+                pygame.quit()
             pygame.display.update()

@@ -1,7 +1,7 @@
 import pygame
 import time
 from memorykings.constants import EXTRA_WIDTH, EXTRA_HEIGHT, CORNER, CARD_SIZE, DARK_GREY, FPS
-from memorykings.new_game import NewGame, start_screen
+from memorykings.start_screen import StartScreen, start_menu
 from memorykings.game import Game
 from memorykings.board import Board, Card
 from memorykings.players import Player
@@ -20,16 +20,16 @@ log.basicConfig(
 
 
 def main():
-    new = NewGame()
-    start_screen(new)
+    start = StartScreen()
+    start_menu(start)
 
     clock = pygame.time.Clock()
     run = True
-    board = Board(new.grid_size[0], new.grid_size[1])
+    board = Board(start.grid_size[0], start.grid_size[1])
     board.gen_grid()
     game = Game()
     display = Display()
-    game.create_players(new.num_of_players)  # Can change number from 1 (SOLO GAME) up to 4
+    game.create_players(start.num_of_players)  # Can change number from 1 (SOLO GAME) up to 4
 
 
     WINDOW_WIDTH, WINDOW_HEIGHT = (
