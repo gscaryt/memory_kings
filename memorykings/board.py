@@ -87,16 +87,18 @@ class Board:
             ):
                 for i in range(self.rows):
                     if (
-                        i < (mouse[0] - CORNER[0]) / CARD_SIZE and
-                        (mouse[0] - CORNER[0] - CARD_SIZE) / CARD_SIZE < i
+                        i <= (mouse[0] - CORNER[0]) / CARD_SIZE and
+                        (mouse[0] - CORNER[0] - CARD_SIZE) / CARD_SIZE <= i
                     ):
                         click_pos[0] = i
+                        break
                 for j in range(self.cols):
                     if (
-                        j < (mouse[1] - CORNER[1]) / CARD_SIZE and
-                        (mouse[1] - CORNER[1] - CARD_SIZE) / CARD_SIZE < j
+                        j <= (mouse[1] - CORNER[1]) / CARD_SIZE and
+                        (mouse[1] - CORNER[1] - CARD_SIZE) / CARD_SIZE <= j
                     ):
                         click_pos[1] = j
+                        break
                 log.debug(
                     f"click_to_grid() - Mouse click on {mouse}"
                     f"represents the {click_pos} coordinates."
