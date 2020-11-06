@@ -9,8 +9,6 @@ from memorykings.display import Display
 
 import logging as log
 
-FPS = 60
-
 log.basicConfig(
     level=log.DEBUG, format=" %(asctime)s -  %(levelname)s -  %(message)s"
 )
@@ -24,9 +22,8 @@ def main():
     run = True
     board = Board(game.grid_size[0], game.grid_size[1])
     board.gen_grid()
-
     display = Display()
-    game.create_players()  # Can change number from 1 (SOLO GAME) up to 4
+    game.create_players()
 
 
     WINDOW_WIDTH, WINDOW_HEIGHT = (
