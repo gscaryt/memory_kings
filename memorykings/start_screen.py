@@ -86,6 +86,11 @@ def start_menu(game):
     t32_rect = t32.get_rect()
     t32_rect.center = (WIDTH//2+70, 200)
 
+    t4 = UBUNTU_R.render('v0.6 made by G. Scary T.', True, BLACK)
+    t4_rect = t4.get_rect()
+    t4_rect.bottomright = (WIDTH-5, HEIGHT-5)
+
+
     while game.creating:
         clock.tick(FPS)
 
@@ -110,6 +115,7 @@ def start_menu(game):
             setup.switch(GAME_WINDOW)
 
             logo.button(GAME_WINDOW)
+            GAME_WINDOW.blit(t4, t4_rect)
             
             if event.type == pygame.QUIT:
                 pygame.quit()
