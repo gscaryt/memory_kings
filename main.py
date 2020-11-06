@@ -43,7 +43,7 @@ def main():
             display.print_all(
                 GAME_WINDOW, game, board, Card.deck, Player.array
             )
-            if game.end_game_check():
+            if game.end_game_check(board):
                 time.sleep(1)
                 run = False
             if event.type == pygame.QUIT:

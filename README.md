@@ -6,9 +6,8 @@ memorykings0.5.py stable running all rules for Multiplayer and Solo modes on Ter
 
 ## TODO
 
-- Showing score on the window
-- Implementing the restrictions based on the backs of the cards during Pawn Placement
-- Add Intro Toggle for a Alternate Setup
+- Showing score on the game window
+- Add Alternate Setup option
 
 ## NON STANDARD MODULES
 
