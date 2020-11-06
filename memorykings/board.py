@@ -106,6 +106,7 @@ class Board:
                 return None
 
     def gen_standard_setup(self):
+        '''Forms a standard grid with randomly placed cards.'''
         for i, card in enumerate(Card.deck):
             card.position = i
             card.col = i % self.cols
@@ -115,6 +116,7 @@ class Board:
             self.grid.append(grid_slice)
 
     def gen_alternate_setup(self):
+        '''Forms an alternate Chess-like grid.'''
         blacks = []
         whites = []
         alternate_deck =[]
@@ -123,11 +125,18 @@ class Board:
                 blacks.append(card)
             elif card.back == 'WHITE':
                 whites.append(card)
-        for i in range(len(Card.deck)):
-            if i%2 == 0:
-                alternate_deck.append(blacks[i//2])
-            else:
-                alternate_deck.append(whites[i//2])
+
+        b = 0
+        w = 0
+        for j in range(self.rows):
+            for i in range(self.cols):
+                if i%2 == j%2:
+                    alternate_deck.append(blacks[b])
+                    b += 1
+                else:
+                    alternate_deck.append(whites[w])
+                    w += 1
+
         Card.deck = alternate_deck
         for i, card in enumerate(Card.deck):
             card.position = i
@@ -135,13 +144,7 @@ class Board:
             card.row = i // self.cols
         for i in range(0, len(Card.deck), self.cols):
             grid_slice = Card.deck[i: i + self.cols]
-            if i%2 == 0:
-                self.grid.append(grid_slice)
-                print(self.grid)
-            else:
-                grid_slice.reverse()
-                self.grid.append(grid_slice)
-                print(self.grid)
+            self.grid.append(grid_slice)
 
             
 # CARDS
