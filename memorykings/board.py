@@ -17,7 +17,6 @@ CARDS: Card(), Bishop(Card), Rook(Card), Knight(Card), and Queen(Card)
 
 # BOARD
 
-
 class Board:
     def __init__(self, cols, rows=None):
         self.cols = cols
@@ -155,7 +154,7 @@ class Card:
             )
             return True
 
-    def activate(self, window, game, display, board, player_array):
+    def activate(self, window, game, board, display, player_array):
         """
         Check if a card was hidden or open when a pawn moves
         to it. Special powers (like the Queen's Peeking Card) only
@@ -165,17 +164,17 @@ class Card:
             for pawn in player.pawn:
                 for token in player.token:
                     if token.position == self.position:
-                        print(
+                        log.debug(
                             f"activate() - DON'T ACTIVATE Card {self.position}"
                         )
                         return False
                 if pawn.previous == self.position:
-                    print(f"activate() - DON'T ACTIVATE Card {self.position}")
+                    log.debug(f"activate() - DON'T ACTIVATE Card {self.position}")
                     return False
-        print(f"activate() - ACTIVATE Card {self.position}")
-        return self.special(window, game, display, board, player_array)
+        log.debug(f"activate() - ACTIVATE Card {self.position}")
+        return self.special(window, game, board, display, player_array)
 
-    def special(self, window, game, display, board, player_array):
+    def special(self, *args, **kwargs):
         """Standard Cards have no special effects."""
         pass
 
@@ -271,13 +270,13 @@ class Queen(Card):
         else:
             return False
 
-    def special(self, window, game, display, board, player_array):
+    def special(self, window, game, board, display, player_array):
         """
         When the Queen is activated, the Player can
         peek any hidden card from the board.
         """
         log.debug("special() - Queen's Advice starts running.")
-        display.print_all(window, game, board, Card.deck, player_array)
+        display.print_all(window, game, board, self.deck, player_array)
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -286,7 +285,7 @@ class Queen(Card):
                         if not display.print_card(
                             window,
                             board,
-                            Card.deck,
+                            self.deck,
                             player_array,
                             click_pos[0],
                             click_pos[1],
@@ -298,4 +297,3 @@ class Queen(Card):
                         else:
                             log.debug("special() - Print card.")
                             return True
-        log.debug("special() - End of peek_card")

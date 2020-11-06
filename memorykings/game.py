@@ -13,15 +13,42 @@ log.disable(log.CRITICAL)
 
 class Game:
     def __init__(self):
-        self.num_of_players = None
+        self.creating = True
+        self.num_of_players = 1
+        self.grid_size = (5,5)
+        self.setup_variant = 'standard'
         self.counter = None
         self.current_player = None
-        self.current_turn = 0
+        self.current_turn = 1
         self.all_pawns_set = False
         self.pawn_selected = False
         self.end_turn = False
 
-    def create_players(self, num_of_players):
+    def choose_players(self, number):
+        self.num_of_players = number
+        log.debug(self.num_of_players)
+
+    def choose_grid(self):
+        if self.grid_size == (5, 5):
+            self.grid_size = (6, 6)
+            log.debug(self.grid_size)
+        else:
+            self.grid_size = (5, 5)
+            log.debug(self.grid_size)
+
+    def choose_setup(self):
+        if self.setup_variant == 'standard':
+            self.setup_variant = 'alternate'
+            log.debug(self.setup_variant)
+        else:
+            self.setup_variant = 'standard'
+            log.debug(self.setup_variant)
+
+    def play_game(self):
+        log.debug('Start')
+        self.creating = False
+
+    def create_players(self):
         """
         1) Creates the CounterKing in the 0th Player.array
         position even if it is a multiplayer game.
@@ -34,7 +61,7 @@ class Game:
         )
         log.debug(f"{Player.array}")
 
-        for i in range(1, num_of_players + 1):
+        for i in range(1, self.num_of_players + 1):
             player = Player(i, PLAYER_COLORS[i])
             log.debug(
                 f"create_players() - Player {player.order} - {player.color} created."
@@ -42,60 +69,41 @@ class Game:
         log.debug(f"{Player.array}")
 
         self.num_of_players = len(Player.array)
-        self.current_turn = 0
         self.current_player = Player.array[self.current_turn]
         self.pawn_selected = False
         self.counter = Player.array[0]
         self.all_pawns_set = False
         self.end_turn = False
 
-    def place_pawns(self, board):
+    def place_pawns(self, board, event):
         """
-        If this is a Solo game, place the Counter pawn.
-        (The Counter has only one pawn, so the second turn is skipped)
-
         If this is a Multiplayer game, skips the turn 0, so the
         Counter Pawn is not placed.
 
         Placement continues until the last player placed 2 pawns.
         """
-        if not self.all_pawns_set:
-            if self.num_of_players == 2 and self.current_turn == 0:
+        if self.num_of_players == 2 and len(self.counter.pawn) != 1:
+            time.sleep(0.5)
+            self.counter.place_pawn()
 
-                if len(self.current_player.pawn) == 0:
-                    self.current_player.place_pawn()
-                    self.change_turn()
-                else:
-                    self.change_turn()
-            else:
-                """
-                If this is a Multiplayer game (num_of_players >2), skip the
-                turn 0 and place a Player's Pawn until all pawns of all
-                players were placed.
-                """
-                if self.num_of_players > 2 and self.current_turn == 0:
-                    self.current_turn += 1
-                    self.current_player = Player.array[self.current_turn]
-                else:
-                    click_pos = board.click_to_grid()
-                    self.current_player.place_pawn(
-                        board, click_pos[0], click_pos[1]
-                    )
-                    self.change_turn()
-            """
-            self.all_pawns_set returns True if the last player has placed
-            all their 2 pawns
-            """
-            last_player = Player.array[self.num_of_players - 1]
-            self.all_pawns_set = bool(len(last_player.pawn) == 2)
-            if self.all_pawns_set:
-                self.current_turn = 1
-                self.pawn_selected = False
-                log.debug(
-                    f"place_pawns() - All pawns set: {self.all_pawns_set}"
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            click_pos = board.click_to_grid()
+            self.current_player.place_pawn(
+                board, click_pos[0], click_pos[1]
                 )
-        else:
-            return
+            self.change_turn()
+            if self.current_turn == 0:
+                self.current_turn = 1
+                self.current_player = Player.array[1]
+        
+        last_player = Player.array[self.num_of_players-1]
+        self.all_pawns_set = bool(len(last_player.pawn) == 2)
+        if self.all_pawns_set:
+            self.current_turn = 1
+            self.pawn_selected = False
+            log.debug(
+                f"place_pawns() - All pawns set: {self.all_pawns_set}"
+            )
 
     # SELECT/MOVE
 
@@ -114,7 +122,7 @@ class Game:
                     else:
                         log.debug(f"select() - Successful move.")
                         if not Card.deck[self.pawn_selected.position].activate(
-                            window, self, display, board, Player.array
+                            window, self, board, display, Player.array
                         ):
                             self.pawn_selected = False
                             self.end_turn = True
@@ -176,7 +184,7 @@ class Game:
     def round(self, window, board, display):
         self.get_all_pawns_positions()
         if self.num_of_players == 2 and Player.who_recruited == 0:
-            time.sleep(0.7)
+            time.sleep(1)
             self.counter.pawn[0].move(board)
             self.recruit_check(board)
         elif self.num_of_players == 2 and self.current_turn == 0:
