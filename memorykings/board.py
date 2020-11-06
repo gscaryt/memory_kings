@@ -68,7 +68,7 @@ class Board:
         Uses the grid array to get a Card instance.
         Maybe can replace the need for "relative position".
         """
-        return self.grid[col][row]
+        return self.grid[row][col]
 
     def click_to_grid(self):
         """
