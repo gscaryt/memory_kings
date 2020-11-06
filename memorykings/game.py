@@ -70,10 +70,7 @@ class Game:
 
         self.num_of_players = len(Player.array)
         self.current_player = Player.array[self.current_turn]
-        self.pawn_selected = False
         self.counter = Player.array[0]
-        self.all_pawns_set = False
-        self.end_turn = False
 
     def place_pawns(self, board, event):
         """
@@ -83,18 +80,21 @@ class Game:
         Placement continues until the last player placed 2 pawns.
         """
         if self.num_of_players == 2 and len(self.counter.pawn) != 1:
-            time.sleep(0.5)
             self.counter.place_pawn()
+            time.sleep(0.8)
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             click_pos = board.click_to_grid()
-            self.current_player.place_pawn(
-                board, click_pos[0], click_pos[1]
-                )
-            self.change_turn()
-            if self.current_turn == 0:
-                self.current_turn = 1
-                self.current_player = Player.array[1]
+            if not self.place_pawns_check(board, click_pos[0], click_pos[1]):
+                return
+            else:
+                self.current_player.place_pawn(
+                    board, click_pos[0], click_pos[1]
+                    )
+                self.change_turn()
+                if self.current_turn == 0:
+                    self.current_turn = 1
+                    self.current_player = Player.array[1]
         
         last_player = Player.array[self.num_of_players-1]
         self.all_pawns_set = bool(len(last_player.pawn) == 2)
@@ -105,6 +105,22 @@ class Game:
                 f"place_pawns() - All pawns set: {self.all_pawns_set}"
             )
 
+    def place_pawns_check(self, board, col, row):
+        '''
+        Checks if the coordinates are a valid position for
+        placing a pawn during setup.
+        1) Solo: Must start on cards with same Back as Counter.
+        2) Multiplayer: Must start on White Backs.
+        '''
+        card = board.get_card(col, row)
+        card_on_counter = board.get_card(0, 0)
+        if self.num_of_players == 2 and card.back == card_on_counter.back:
+            return True
+        elif self.num_of_players > 2 and card.back == 'WHITE':
+            return True
+        else:
+            return False
+        
     # SELECT/MOVE
 
     def select(self, window, board, display):
@@ -224,10 +240,10 @@ class Game:
             self.current_player = Player.array[self.current_turn]
             self.end_turn = False
 
-    def end_game_check(self):
+    def end_game_check(self, board):
         """Checks for End Game conditions"""
         try:
-            if Player.array[0].pawn[0].position == len(Card.deck) - 1:
+            if Player.array[0].pawn[0].position == board.cols*board.rows:
                 log.debug(
                     "end_game_check() - The game is finished!"
                     "Counter on the 25 card."
