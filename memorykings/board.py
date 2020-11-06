@@ -25,11 +25,12 @@ class Board:
         self.height = self.rows * CARD_SIZE
         self.grid = []
 
-    def gen_grid(self):
+    def gen_grid(self, game):
         """
         Generates all the Cards that are appended to the
         deck array, shuffles the cards, attributes their
-        position and coordinates and forms a grid array.
+        position and coordinates and forms a grid array
+        based on the setup variant option.
 
         Note: Dependency of how many colors based on the board
         size is (cols*rows-special_cards)/(backs*ranks)
@@ -54,14 +55,10 @@ class Board:
                         Knight(color, rank, back)
         # SHUFFLE AND ADD ATTRIBUTES TO EACH CARD
         random.shuffle(Card.deck)
-        for i, _ in enumerate(Card.deck):
-            Card.deck[i].position = i
-            Card.deck[i].col = i % self.cols
-            Card.deck[i].row = i // self.cols
-        # SELF.GRID IS REDUNDANT FOR NOW... NOT SURE IF NEEDED
-        for i in range(0, len(Card.deck), self.cols):
-            grid_slice = Card.deck[i: i + self.cols]
-            self.grid.append(grid_slice)
+        if game.setup_variant == 'alternate':
+            self.gen_alternate_setup()
+        else:
+            self.gen_standard_setup()
 
     def get_card(self, col, row):
         """
@@ -108,8 +105,46 @@ class Board:
                 log.debug(f"click_to_grid() - Mouse click outside the board.")
                 return None
 
-# CARDS
+    def gen_standard_setup(self):
+        for i, card in enumerate(Card.deck):
+            card.position = i
+            card.col = i % self.cols
+            card.row = i // self.cols
+        for i in range(0, len(Card.deck), self.cols):
+            grid_slice = Card.deck[i: i + self.cols]
+            self.grid.append(grid_slice)
 
+    def gen_alternate_setup(self):
+        blacks = []
+        whites = []
+        alternate_deck =[]
+        for i, card in enumerate(Card.deck):
+            if card.back == 'BLACK':
+                blacks.append(card)
+            elif card.back == 'WHITE':
+                whites.append(card)
+        for i in range(len(Card.deck)):
+            if i%2 == 0:
+                alternate_deck.append(blacks[i//2])
+            else:
+                alternate_deck.append(whites[i//2])
+        Card.deck = alternate_deck
+        for i, card in enumerate(Card.deck):
+            card.position = i
+            card.col = i % self.cols
+            card.row = i // self.cols
+        for i in range(0, len(Card.deck), self.cols):
+            grid_slice = Card.deck[i: i + self.cols]
+            if i%2 == 0:
+                self.grid.append(grid_slice)
+                print(self.grid)
+            else:
+                grid_slice.reverse()
+                self.grid.append(grid_slice)
+                print(self.grid)
+
+            
+# CARDS
 
 class Card:
     deck = []
