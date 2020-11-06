@@ -21,7 +21,7 @@ def main():
     clock = pygame.time.Clock()
     run = True
     board = Board(game.grid_size[0], game.grid_size[1])
-    board.gen_grid()
+    board.gen_grid(game)
     display = Display()
     game.create_players()
 
