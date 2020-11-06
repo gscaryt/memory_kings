@@ -85,6 +85,8 @@ class Game:
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             click_pos = board.click_to_grid()
+            if click_pos is None:
+                return
             if not self.place_pawns_check(board, click_pos[0], click_pos[1]):
                 return
             else:
