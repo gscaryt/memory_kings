@@ -7,8 +7,6 @@ memorykings0.5.py stable running all rules for Multiplayer and Solo modes on Ter
 ## TODO
 
 - Showing score on the window
-- Adding Intro Screen with Toggles for Number of Players and Board Size.
-- Refactor Special Powers to organise them better. Do they need their own class?
 - Implementing the restrictions based on the backs of the cards during Pawn Placement
 - Add Intro Toggle for a Alternate Setup
 
