@@ -31,9 +31,6 @@ def main():
             display.print_all(
                 GAME_WINDOW, 
                 game.board, 
-                Card.deck, 
-                Player.array, 
-                Token.array, 
                 game.current_turn, 
                 game.pawn_selected
             )

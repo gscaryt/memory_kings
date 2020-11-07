@@ -33,7 +33,7 @@ class Pawn:
         Returns True or False.
         """
         if (col, row) == (self.col, self.row):
-            """Move to Same Location Attempt"""
+            # Move to Same Location Attempt
             return False
         elif (
             (col, row) == (self.col + 1, self.row) or
@@ -41,12 +41,12 @@ class Pawn:
             (col, row) == (self.col, self.row + 1) or
             (col, row) == (self.col, self.row - 1)
         ):
-            """Move as a Pawn (1 Orthogonal)"""
+            # Move as a Pawn (1 Orthogonal)
             return True
         elif card_array[self.position].escort_check(
             self, token_array, col, row
         ):
-            """Calls escort_check method from the specific Card type."""
+            # Calls escort_check method from the specific Card type.
             return True
         else:
             return False

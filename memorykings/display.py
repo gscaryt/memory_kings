@@ -1,6 +1,9 @@
 import pygame
 import time
 from .constants import (CARD_SIZE, IMAGES_PATH, CORNER, DARK_GREY, PAWN_SIZE, TOKEN_SIZE)
+from .players import Player
+from .cards import Card
+from .tokens import Token
 
 class Display:
     def get_image(self, image, width, height):
@@ -9,20 +12,20 @@ class Display:
             pygame.image.load(IMAGES_PATH + image), (width, height)
         )
 
-    def print_grid(self, window, board, card_array, player_array):
+    def print_grid(self, window, board):
         """
         Prints the board (grid of cards). Prints the face of any
         card with a token or a pawn on it and the back of any other
         """
         window.fill(DARK_GREY)
         for i in range(board.cols * board.rows):
-            card = card_array[i]
+            card = Card.deck[i]
             coords_on_screen = (
                 CORNER[0] + CARD_SIZE * card.col,
                 CORNER[1] + CARD_SIZE * card.row,
             )
             is_open = False
-            for player in player_array:
+            for player in Player.array:
                 for pawn in player.pawn:
                     for token in player.token:
                         if token.position == card.position:
@@ -49,9 +52,9 @@ class Display:
                     )
                     window.blit(black_back, coords_on_screen)
 
-    def print_pawns(self, window, player_array):
+    def print_pawns(self, window):
         """Gets and prints all placed pawns of all players"""
-        for player_num, player in enumerate(player_array):
+        for player_num, player in enumerate(Player.array):
             for pawn_num, pawn in enumerate(player.pawn):
                 coords_on_screen = pawn.get_screen_location(player_num)
                 pawn_image = self.get_image(
@@ -59,9 +62,9 @@ class Display:
                 )
                 window.blit(pawn_image, coords_on_screen)
 
-    def print_tokens(self, window, player_array):
+    def print_tokens(self, window):
         """Gets and prints all placed tokens of all players"""
-        for player in player_array:
+        for player in Player.array:
             for token in player.token:
                 coords_on_screen = (
                     (CORNER[0] + CARD_SIZE * (1 + token.col)) - TOKEN_SIZE - 5,
@@ -83,20 +86,20 @@ class Display:
             )
             window.blit(pawn_image, coords_on_screen)
 
-    def print_invalid_moves(self, window, board, card_array, token_array, pawn_selected):
+    def print_invalid_moves(self, window, board, pawn_selected):
         """
         Prints a "deny" sign over any card that can't be reached
         by the selected pawn
         """
         if pawn_selected is not False:
             for i in range(board.cols * board.rows):
-                card = card_array[i]
+                card = Card.deck[i]
                 coords_on_screen = (
                     CORNER[0] + CARD_SIZE * card.col,
                     CORNER[1] + CARD_SIZE * card.row,
                 )
                 if not pawn_selected.move_check(
-                    card_array, token_array, card.col, card.row
+                    Card.deck, Token.array, card.col, card.row
                 ):
                     if card.position == pawn_selected.position:
                         pass
@@ -106,19 +109,7 @@ class Display:
                         )
                         window.blit(image, coords_on_screen)
 
-    def print_all(self, window, board, card_array, player_array, token_array, current_turn, pawn_selected):
-        """
-        Print all layers of the game in the order:
-        grid > select pawn highlight > valid_moves > pawns > tokens
-        """
-        self.print_grid(window, board, card_array, player_array)
-        self.print_selected(window, current_turn, pawn_selected)
-        self.print_invalid_moves(window, board, card_array, token_array, pawn_selected)
-        self.print_pawns(window, player_array)
-        self.print_tokens(window, player_array)
-        pygame.display.update()
-
-    def print_card(self, window, board, card_array, player_array, col, row):
+    def print_card(self, window, board, col, row):
         """Show one hidden card for 2 seconds and turns it back down."""
         card = board.grid[row][col]
         coords_on_screen = (
@@ -126,7 +117,7 @@ class Display:
             CORNER[1] + CARD_SIZE * row,
         )
         is_open = False
-        for player in player_array:
+        for player in Player.array:
             for pawn in player.pawn:
                 for token in player.token:
                     if token.position == card.position:
@@ -141,5 +132,17 @@ class Display:
             pygame.display.update()
             time.sleep(2)
             return True
+
+    def print_all(self, window, board, current_turn, pawn_selected):
+        """
+        Print all layers of the game in the order:
+        grid > select pawn highlight > valid_moves > pawns > tokens
+        """
+        self.print_grid(window, board)
+        self.print_selected(window, current_turn, pawn_selected)
+        self.print_invalid_moves(window, board, pawn_selected)
+        self.print_pawns(window)
+        self.print_tokens(window)
+        pygame.display.update()
 
 display = Display()

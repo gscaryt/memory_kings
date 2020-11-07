@@ -24,7 +24,7 @@ class Card:
                 return token.color
         return None
 
-    def escort_token_check(self, pawn, token_array, col, row):
+    def token_check(self, pawn, token_array, col, row):
         """
         Check to see if there is a token of a different player
         on the same card as the pawn trying to move and if they
@@ -37,7 +37,7 @@ class Card:
         ):
             return True
 
-    def activate(self, window, board, display, player_array, token_array, current_turn, pawn_selected):
+    def activate(self, player_array):
         """
         Check if a card was hidden or open when a pawn moves
         to it. Special powers (like the Queen's Peeking Card) only
@@ -50,7 +50,7 @@ class Card:
                         return False
                 if pawn.previous == self.position:
                     return False
-        return self.special(window, board, display, player_array, token_array, current_turn, pawn_selected)
+        return True
 
     def special(self, *args, **kwargs):
         """Standard Cards have no special effects."""
@@ -60,10 +60,10 @@ class Card:
 class Bishop(Card):
     def escort_check(self, pawn, token_array, col, row):
         """
-        Calls an escort_token_check and then checks if the
+        Calls an token_check and then checks if the
         destination is on a diagonal from the card.
         """
-        if not self.escort_token_check(pawn, token_array, col, row):
+        if not self.token_check(pawn, token_array, col, row):
             if abs(col - self.col) == abs(row - self.row):
                 return True
             else:
@@ -75,10 +75,10 @@ class Bishop(Card):
 class Rook(Card):
     def escort_check(self, pawn, token_array, col, row):
         """
-        Calls an escort_token_check and then checks if the
+        Calls an token_check and then checks if the
         destination is on a orthogonal from the card.
         """
-        if self.escort_token_check(pawn, token_array, col, row):
+        if self.token_check(pawn, token_array, col, row):
             return False
         else:
             if col == self.col or row == self.row:
@@ -90,10 +90,10 @@ class Rook(Card):
 class Knight(Card):
     def escort_check(self, pawn, token_array, col, row):
         """
-        Calls an escort_token_check and then checks if the
+        Calls an token_check and then checks if the
         destination is on an "L" pattern from the card.
         """
-        if not self.escort_token_check(pawn, token_array, col, row):
+        if not self.token_check(pawn, token_array, col, row):
             if (abs(col - self.col) == 2 and abs(row - self.row) == 1) or (
                 abs(col - self.col) == 1 and abs(row - self.row) == 2
             ):
@@ -107,10 +107,10 @@ class Knight(Card):
 class Queen(Card):
     def escort_check(self, pawn, token_array, col, row):
         """
-        Calls an escort_token_check and then checks if the
+        Calls an token_check and then checks if the
         destination is orthogonal or diagonal from the card.
         """
-        if not self.escort_token_check(pawn, token_array, col, row):
+        if not self.token_check(pawn, token_array, col, row):
             if (abs(col - self.col) == abs(row - self.row)) or (
                 (col == self.col) or (row == self.row)
             ):
@@ -120,12 +120,11 @@ class Queen(Card):
         else:
             return False
 
-    def special(self, window, board, display, player_array, token_array, current_turn, pawn_selected):
+    def special(self, window, display, board):
         """
         When the Queen is activated, the Player can
         peek any hidden card from the board.
         """
-        display.print_all(window, board, self.deck, player_array, token_array, current_turn, pawn_selected)
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -134,8 +133,6 @@ class Queen(Card):
                         if not display.print_card(
                             window,
                             board,
-                            self.deck,
-                            player_array,
                             click_pos[0],
                             click_pos[1],
                         ):

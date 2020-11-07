@@ -27,6 +27,8 @@ class Game:
         self.pawn_selected = False
         self.end_turn = False
 
+    # CREATING THE GAME
+
     def choose_players(self, number):
         self.num_of_players = number
 
@@ -46,6 +48,7 @@ class Game:
         self.creating = False
 
     def create_board(self):
+        '''Creates the board with the chosen grid size and setup variant'''
         self.board = Board(self.grid_size[0], self.grid_size[1])
         self.board.gen_grid(self.setup_variant)
 
@@ -153,14 +156,19 @@ class Game:
                 self.pawn_selected = False
             else:
                 # Successful move.
-                if not Card.deck[self.pawn_selected.position].activate(
-                    window, self.board, display, Player.array, Token.array, self.current_turn, self.pawn_selected
-                ):
-                    self.pawn_selected = False
-                    self.end_turn = True
-                else:
-                    self.pawn_selected = False
-                    self.end_turn = True
+                card = Card.deck[self.pawn_selected.position]
+                if card.activate(Player.array):
+                    # Check card activation.
+                    display.print_all(
+                        window, 
+                        self.board, 
+                        self.current_turn, 
+                        self.pawn_selected
+                        )
+                    card.special(window, display, self.board)
+                    # Activate special power.
+                self.pawn_selected = False
+                self.end_turn = True
         else:
             # Failed to move. Unselected."
             self.pawn_selected = False
