@@ -103,7 +103,7 @@ class Display:
             )
             window.blit(pawn_image, coords_on_screen)
 
-    def print_invalid_moves(self, window, game, board, card_array):
+    def print_invalid_moves(self, window, game, board, card_array, token_array):
         """
         Prints a "deny" sign over any card that can't be reached
         by the selected pawn
@@ -116,7 +116,7 @@ class Display:
                     CORNER[1] + CARD_SIZE * card.row,
                 )
                 if not game.pawn_selected.move_check(
-                    card_array, card.col, card.row
+                    card_array, token_array, card.col, card.row
                 ):
                     if card.position == game.pawn_selected.position:
                         pass
@@ -126,14 +126,14 @@ class Display:
                         )
                         window.blit(image, coords_on_screen)
 
-    def print_all(self, window, game, board, card_array, player_array):
+    def print_all(self, window, game, board, card_array, player_array, token_array):
         """
         Print all layers of the game in the order:
         grid > select pawn highlight > valid_moves > pawns > tokens
         """
         self.print_grid(window, board, card_array, player_array)
         self.print_selected(window, game)
-        self.print_invalid_moves(window, game, board, card_array)
+        self.print_invalid_moves(window, game, board, card_array, token_array)
         self.print_pawns(window, player_array)
         self.print_tokens(window, player_array)
         pygame.display.update()

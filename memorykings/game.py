@@ -2,7 +2,8 @@ import pygame
 import time
 from .constants import CARD_SIZE, PAWN_SIZE, CORNER, PLAYER_COLORS
 from .players import Player, CounterKing
-from .board import Card
+from .cards import Card
+from .tokens import Token
 
 import logging as log
 log.basicConfig(
@@ -26,26 +27,20 @@ class Game:
 
     def choose_players(self, number):
         self.num_of_players = number
-        log.debug(self.num_of_players)
 
     def choose_grid(self):
         if self.grid_size == (5, 5):
             self.grid_size = (6, 6)
-            log.debug(self.grid_size)
         else:
             self.grid_size = (5, 5)
-            log.debug(self.grid_size)
 
     def choose_setup(self):
         if self.setup_variant == 'standard':
             self.setup_variant = 'alternate'
-            log.debug(self.setup_variant)
         else:
             self.setup_variant = 'standard'
-            log.debug(self.setup_variant)
 
     def play_game(self):
-        log.debug('Start')
         self.creating = False
 
     def create_players(self):
@@ -103,9 +98,6 @@ class Game:
         if self.all_pawns_set:
             self.current_turn = 1
             self.pawn_selected = False
-            log.debug(
-                f"place_pawns() - All pawns set: {self.all_pawns_set}"
-            )
 
     def place_pawns_check(self, board, col, row):
         '''
@@ -133,14 +125,14 @@ class Game:
                 click_pos = board.click_to_grid()
                 if click_pos is not None:
                     if not self.pawn_selected.move(
-                        board, Card.deck, click_pos[0], click_pos[1]
+                        board, Card.deck, Token.array, click_pos[0], click_pos[1]
                     ):
-                        log.debug(f"select() - Failed to move. Unselected.")
+                        # Failed to move. Unselected."
                         self.pawn_selected = False
                     else:
-                        log.debug(f"select() - Successful move.")
+                        # Successful move.
                         if not Card.deck[self.pawn_selected.position].activate(
-                            window, self, board, display, Player.array
+                            window, self, board, display, Player.array, Token.array
                         ):
                             self.pawn_selected = False
                             self.end_turn = True
@@ -148,34 +140,23 @@ class Game:
                             self.pawn_selected = False
                             self.end_turn = True
                 else:
-                    log.debug(f"select() - Failed to move. Unselected.")
+                    # Failed to move. Unselected."
                     self.pawn_selected = False
             else:
                 self.current_player = Player.array[self.current_turn]
-                log.debug(f"select() - Current Turn: {self.current_turn}")
                 for pawn_num, pawn in enumerate(self.current_player.pawn):
                     coords = pawn.get_screen_location(
                         pawn_num, self.current_turn
-                    )
-                    log.debug(f"select() - Pawn {pawn_num}: {coords}")
-                    log.debug(
-                        f"select() -"
-                        f" {coords[0]-PAWN_SIZE < mouse[0] < coords[0]+PAWN_SIZE}"
-                        f" and {coords[1]-PAWN_SIZE < mouse[1] < coords[1]+PAWN_SIZE}"
-                        f" {mouse}"
                     )
                     if (
                         click[0] == 1 and
                         coords[0] < mouse[0] < coords[0] + PAWN_SIZE and
                         coords[1] < mouse[1] < coords[1] + PAWN_SIZE
                     ):
+                        # Pawn Selected
                         self.pawn_selected = self.current_player.pawn[pawn_num]
                         self.pawn_selected_num = pawn_num
                         self.end_turn = False
-                        log.debug(
-                            f"select() - Pawn Selected: {self.pawn_selected}"
-                            f"is on the {Card.deck[self.pawn_selected.position]} Card"
-                        )
                         break
                     else:
                         self.pawn_selected = False
@@ -193,11 +174,10 @@ class Game:
         else:
             self.current_turn = 0
         if self.current_turn == 0 and self.num_of_players > 2:
-            """If multiplayer, skip the CounterKing turn (0)"""
+            # If multiplayer, skip the CounterKing turn (0)
             self.current_turn = 1
         self.current_player = Player.array[self.current_turn]
         self.end_turn = False
-        log.debug(f"change_turn - Next Player: {self.current_player.color}")
 
     def round(self, window, board, display):
         self.get_all_pawns_positions()
@@ -245,32 +225,20 @@ class Game:
     def end_game_check(self, board):
         """Checks for End Game conditions"""
         try:
-            if Player.array[0].pawn[0].position == board.cols*board.rows:
-                log.debug(
-                    "end_game_check() - The game is finished!"
-                    "Counter on the 25 card."
-                )
+            if Player.array[0].pawn[0].position == board.cols*board.rows-1:
+                # Player Loses
                 return True
             elif self.num_of_players == 2:
                 if Player.array[0].score == 6:
-                    log.debug(
-                        "end_game_check() - The game is finished!"
-                        "Counter recruited 6 pairs"
-                    )
+                    # Player Loses
                     return True
                 elif Player.array[1].score == 6:
-                    log.debug(
-                        "end_game_check() - The game is finished!"
-                        "You won with 6 pairs"
-                    )
+                    # Player Wins
                     return True
             else:
                 for player in Player.array:
                     if player.score == 12 // (self.num_of_players - 1):
-                        log.debug(
-                            "end_game_check() - The game is finished!"
-                            "You won!"
-                        )
+                        # Player Wins
                         return True
             return False
         except:

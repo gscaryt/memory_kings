@@ -3,8 +3,10 @@ import time
 from memorykings.constants import EXTRA_WIDTH, EXTRA_HEIGHT, CORNER, CARD_SIZE, DARK_GREY, FPS
 from memorykings.start_screen import start_menu
 from memorykings.game import Game
-from memorykings.board import Board, Card
+from memorykings.board import Board
+from memorykings.cards import Card
 from memorykings.players import Player
+from memorykings.tokens import Token
 from memorykings.display import Display
 
 import logging as log
@@ -38,7 +40,7 @@ def main():
         clock.tick(FPS)
         for event in pygame.event.get():
             display.print_all(
-                GAME_WINDOW, game, board, Card.deck, Player.array
+                GAME_WINDOW, game, board, Card.deck, Player.array, Token.array,
             )
             if game.end_game_check(board):
                 time.sleep(1)
