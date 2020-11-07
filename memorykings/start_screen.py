@@ -1,13 +1,14 @@
 import pygame
-from .constants import DARK_GREY, FPS, IMAGES_PATH, WHITE, BLACK
+from .constants import DARK_GREY, FPS, IMAGES_PATH, WHITE, CORNER
 from .buttons import Button, Toggle
+from .players import Player
 
 
 def start_menu(game):
     WIDTH, HEIGHT = 250, 400
     GAME_WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Memory Kings")
-    BACKGROUND = WHITE
+    BACKGROUND = DARK_GREY
     clock = pygame.time.Clock()
     pygame.font.init()
     DIMBO_L = pygame.font.Font('fonts/dimbo_regular.ttf', 20)
@@ -57,31 +58,31 @@ def start_menu(game):
         )
 
     # TEXTS
-    t1 = DIMBO_L.render('Number of Players', True, BLACK)
+    t1 = DIMBO_L.render('Number of Players', True, WHITE)
     t1_rect = t1.get_rect()
     t1_rect.center = (WIDTH//2, 25)
 
-    t2 = DIMBO_L.render('Grid Size', True, BLACK)
+    t2 = DIMBO_L.render('Grid Size', True, WHITE)
     t2_rect = t2.get_rect()
     t2_rect.center = (WIDTH//2, 100)
-    t21 = DIMBO_R.render('5x5', True, BLACK)
+    t21 = DIMBO_R.render('5x5', True, WHITE)
     t21_rect = t21.get_rect()
     t21_rect.center = (WIDTH//2-50, 130)
-    t22 = DIMBO_R.render('6x6', True, BLACK)
+    t22 = DIMBO_R.render('6x6', True, WHITE)
     t22_rect = t22.get_rect()
     t22_rect.center = (WIDTH//2+50, 130)
 
-    t3 = DIMBO_L.render('Setup Variant', True, BLACK)
+    t3 = DIMBO_L.render('Setup Variant', True, WHITE)
     t3_rect = t3.get_rect()
     t3_rect.center = (WIDTH//2, 170)
-    t31 = DIMBO_R.render('Standard', True, BLACK)
+    t31 = DIMBO_R.render('Standard', True, WHITE)
     t31_rect = t31.get_rect()
     t31_rect.center = (WIDTH//2-70, 200)
-    t32 = DIMBO_R.render('Alternate', True, BLACK)
+    t32 = DIMBO_R.render('Alternate', True, WHITE)
     t32_rect = t32.get_rect()
     t32_rect.center = (WIDTH//2+70, 200)
 
-    t4 = UBUNTU_R.render('v0.6 made by G. Scary T.', True, BLACK)
+    t4 = UBUNTU_R.render('v0.6 made by G. Scary T.', True, WHITE)
     t4_rect = t4.get_rect()
     t4_rect.bottomright = (WIDTH-5, HEIGHT-5)
 

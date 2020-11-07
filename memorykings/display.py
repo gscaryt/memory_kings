@@ -1,6 +1,6 @@
 import pygame
 import time
-from .constants import (CARD_SIZE, IMAGES_PATH, CORNER, DARK_GREY, PAWN_SIZE, TOKEN_SIZE)
+from .constants import CARD_SIZE, IMAGES_PATH, CORNER, PAWN_SIZE, TOKEN_SIZE, WHITE, ORANGE, PURPLE, BROWN, GREY
 from .players import Player
 from .cards import Card
 from .tokens import Token
@@ -17,7 +17,6 @@ class Display:
         Prints the board (grid of cards). Prints the face of any
         card with a token or a pawn on it and the back of any other
         """
-        window.fill(DARK_GREY)
         for i in range(board.cols * board.rows):
             card = Card.deck[i]
             coords_on_screen = (
@@ -133,7 +132,30 @@ class Display:
             time.sleep(2)
             return True
 
-    def print_all(self, window, board, current_turn, pawn_selected):
+    def print_score_board(self, window, num_of_players, width, height):
+        pygame.font.init()
+        DIMBO_L = pygame.font.Font('fonts/dimbo_regular.ttf', 20)
+        COLORS = BROWN, ORANGE, PURPLE, GREY, WHITE
+        for i, player in enumerate(Player.array):
+            t1 = DIMBO_L.render(f'{player.color}: {player.score}', True, COLORS[i])
+            t1_rect = t1.get_rect()
+            if num_of_players == 2:
+                t1_rect.center = ((width//2)-(CARD_SIZE/2)+(i*CARD_SIZE), height-25)
+                window.blit(t1, t1_rect)
+            else:
+                if i != 0:
+                    if num_of_players == 3:
+                        t1_rect.center = ((width//2)-(CARD_SIZE/2)+((i-1)*CARD_SIZE), height-25)
+                        window.blit(t1, t1_rect)
+                    elif num_of_players == 4:
+                        t1_rect.center = ((width//2)-(CARD_SIZE)+((i-1)*CARD_SIZE), height-25)
+                        window.blit(t1, t1_rect)
+                    else:
+                        t1_rect.center = ((width//2)-(3*CARD_SIZE/2)+((i-1)*CARD_SIZE), height-25)
+                        window.blit(t1, t1_rect)
+        pygame.display.update()
+
+    def print_all(self, window, board, current_turn, pawn_selected, num_of_players, width, height):
         """
         Print all layers of the game in the order:
         grid > select pawn highlight > valid_moves > pawns > tokens
@@ -143,6 +165,7 @@ class Display:
         self.print_invalid_moves(window, board, pawn_selected)
         self.print_pawns(window)
         self.print_tokens(window)
+        self.print_score_board(window, num_of_players, width, height)
         pygame.display.update()
 
 display = Display()

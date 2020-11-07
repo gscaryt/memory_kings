@@ -1,6 +1,6 @@
 import pygame
 import time
-from .constants import CARD_SIZE, PAWN_SIZE, CORNER, PLAYER_COLORS
+from .constants import CARD_SIZE, PAWN_SIZE, CORNER, PLAYER_COLORS, EXTRA_HEIGHT, EXTRA_WIDTH
 from .players import Player, CounterKing
 from .board import Board
 from .cards import Card
@@ -51,6 +51,10 @@ class Game:
         '''Creates the board with the chosen grid size and setup variant'''
         self.board = Board(self.grid_size[0], self.grid_size[1])
         self.board.gen_grid(self.setup_variant)
+        self.WINDOW_WIDTH, self.WINDOW_HEIGHT = (
+        EXTRA_WIDTH + self.board.cols * CARD_SIZE,
+        EXTRA_HEIGHT + self.board.rows * CARD_SIZE,
+        )
 
     def create_players(self):
         """
@@ -163,7 +167,10 @@ class Game:
                         window, 
                         self.board, 
                         self.current_turn, 
-                        self.pawn_selected
+                        self.pawn_selected,
+                        self.WINDOW_WIDTH,
+                        self.WINDOW_HEIGHT,
+                        self.num_of_players
                         )
                     card.special(window, display, self.board)
                     # Activate special power.
