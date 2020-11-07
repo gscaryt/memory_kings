@@ -27,7 +27,7 @@ class Player:
 
     def place_pawn(self, board, col, row):
         """Places one Pawn on the col, row of the board."""
-        self.pawn.append(Pawn(board, self.color, col, row))
+        self.pawn.append(Pawn(board, self.color, len(self.pawn), col, row))
 
     def place_token(self, board, col, row):
         """Places one Token on the col, row of the board."""

@@ -3,8 +3,9 @@ from .constants import CORNER, CARD_SIZE, CARD_BORDER, PAWN_SIZE
 class Pawn:
     array = []
 
-    def __init__(self, board, color, col, row):
+    def __init__(self, board, color, index, col, row):
         self.color = color
+        self.index = index
         self.col = col
         self.row = row
         self.image = "pawn_" + self.color + ".png"
@@ -50,15 +51,15 @@ class Pawn:
         else:
             return False
 
-    def get_screen_location(self, pawn_num, player_order):
+    def get_screen_location(self, player_order):
         """
         Get pixel coordinates of a pawn on the screen.
-        Note: pawn_num and player_order are multiplying
+        Note: self.index and player_order are multiplying
         PAWN_SIZE so they don't print over each other.
         """
         return (
             (CORNER[0] + CARD_SIZE * (self.col)) +
-            (PAWN_SIZE * pawn_num) +
+            (PAWN_SIZE * self.index) +
             CARD_BORDER,
             (CORNER[1] + CARD_SIZE * (self.row + 1)) -
             (PAWN_SIZE * (player_order)) -
@@ -69,6 +70,7 @@ class Pawn:
 class Counter(Pawn):
     def __init__(self):
         self.color = "COUNTER"
+        self.index = 0
         self.col = 0
         self.row = 0
         self.image = "pawn_counter.png"
@@ -88,7 +90,7 @@ class Counter(Pawn):
             self.row = self.row + 1
         self.position = self.row * board.cols + self.col
 
-    def get_screen_location(self, pawn_num, player_order):
+    def get_screen_location(self, player_order):
         """
         Get pixel coordinates of the Counter Pawn on the
         screen (Top Left of the Cards).

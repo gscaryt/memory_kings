@@ -37,7 +37,7 @@ class Card:
         ):
             return True
 
-    def activate(self, window, game, board, display, player_array, token_array):
+    def activate(self, window, board, display, player_array, token_array, current_turn, pawn_selected):
         """
         Check if a card was hidden or open when a pawn moves
         to it. Special powers (like the Queen's Peeking Card) only
@@ -50,7 +50,7 @@ class Card:
                         return False
                 if pawn.previous == self.position:
                     return False
-        return self.special(window, game, board, display, player_array, token_array)
+        return self.special(window, board, display, player_array, token_array, current_turn, pawn_selected)
 
     def special(self, *args, **kwargs):
         """Standard Cards have no special effects."""
@@ -120,12 +120,12 @@ class Queen(Card):
         else:
             return False
 
-    def special(self, window, game, board, display, player_array, token_array):
+    def special(self, window, board, display, player_array, token_array, current_turn, pawn_selected):
         """
         When the Queen is activated, the Player can
         peek any hidden card from the board.
         """
-        display.print_all(window, game, board, self.deck, player_array, token_array)
+        display.print_all(window, board, self.deck, player_array, token_array, current_turn, pawn_selected)
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:

@@ -2,6 +2,7 @@ import pygame
 import time
 from .constants import CARD_SIZE, PAWN_SIZE, CORNER, PLAYER_COLORS
 from .players import Player, CounterKing
+from .board import Board
 from .cards import Card
 from .tokens import Token
 
@@ -18,6 +19,7 @@ class Game:
         self.num_of_players = 1
         self.grid_size = (5,5)
         self.setup_variant = 'standard'
+        self.board = None
         self.counter = None
         self.current_player = None
         self.current_turn = 1
@@ -43,6 +45,10 @@ class Game:
     def play_game(self):
         self.creating = False
 
+    def create_board(self):
+        self.board = Board(self.grid_size[0], self.grid_size[1])
+        self.board.gen_grid(self.setup_variant)
+
     def create_players(self):
         """
         1) Creates the CounterKing in the 0th Player.array
@@ -67,7 +73,7 @@ class Game:
         self.current_player = Player.array[self.current_turn]
         self.counter = Player.array[0]
 
-    def place_pawns(self, board, event):
+    def place_pawns(self, event):
         """
         If this is a Multiplayer game, skips the turn 0, so the
         Counter Pawn is not placed.
@@ -79,14 +85,14 @@ class Game:
             time.sleep(0.8)
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            click_pos = board.click_to_grid()
+            click_pos = self.board.click_to_grid()
             if click_pos is None:
                 return
-            if not self.place_pawns_check(board, click_pos[0], click_pos[1]):
+            if not self.place_pawns_check(click_pos[0], click_pos[1]):
                 return
             else:
                 self.current_player.place_pawn(
-                    board, click_pos[0], click_pos[1]
+                    self.board, click_pos[0], click_pos[1]
                     )
                 self.change_turn()
                 if self.current_turn == 0:
@@ -99,15 +105,15 @@ class Game:
             self.current_turn = 1
             self.pawn_selected = False
 
-    def place_pawns_check(self, board, col, row):
+    def place_pawns_check(self, col, row):
         '''
         Checks if the coordinates are a valid position for
         placing a pawn during setup.
         1) Solo: Must start on cards with same Back as Counter.
         2) Multiplayer: Must start on White Backs.
         '''
-        card = board.get_card(col, row)
-        card_on_counter = board.get_card(0, 0)
+        card = self.board.get_card(col, row)
+        card_on_counter = self.board.get_card(0, 0)
         if self.num_of_players == 2 and card.back == card_on_counter.back:
             return True
         elif self.num_of_players > 2 and card.back == 'WHITE':
@@ -115,54 +121,57 @@ class Game:
         else:
             return False
         
-    # SELECT/MOVE
+    # GAME FLOW
 
-    def select(self, window, board, display):
+    def select(self):
         mouse = pygame.mouse.get_pos()
+        click = pygame.mouse.get_pressed()
+        self.current_player = Player.array[self.current_turn]
+        for pawn_num, pawn in enumerate(self.current_player.pawn):
+            coords = pawn.get_screen_location(self.current_turn)
+            if (
+                click[0] == 1 and
+                coords[0] < mouse[0] < coords[0] + PAWN_SIZE and
+                coords[1] < mouse[1] < coords[1] + PAWN_SIZE
+            ):
+                # Pawn Selected
+                self.pawn_selected = self.current_player.pawn[pawn_num]
+                self.pawn_selected_num = pawn_num
+                self.end_turn = False
+                break
+            else:
+                self.pawn_selected = False
+                self.end_turn = False
+
+    def move(self, window, display):
+        click_pos = self.board.click_to_grid()
+        if click_pos is not None:
+            if not self.pawn_selected.move(
+                self.board, Card.deck, Token.array, click_pos[0], click_pos[1]
+            ):
+                # Failed to move. Unselected."
+                self.pawn_selected = False
+            else:
+                # Successful move.
+                if not Card.deck[self.pawn_selected.position].activate(
+                    window, self.board, display, Player.array, Token.array, self.current_turn, self.pawn_selected
+                ):
+                    self.pawn_selected = False
+                    self.end_turn = True
+                else:
+                    self.pawn_selected = False
+                    self.end_turn = True
+        else:
+            # Failed to move. Unselected."
+            self.pawn_selected = False
+
+    def turn(self, window, display):
         click = pygame.mouse.get_pressed()
         if click[0] == 1:
             if self.pawn_selected:
-                click_pos = board.click_to_grid()
-                if click_pos is not None:
-                    if not self.pawn_selected.move(
-                        board, Card.deck, Token.array, click_pos[0], click_pos[1]
-                    ):
-                        # Failed to move. Unselected."
-                        self.pawn_selected = False
-                    else:
-                        # Successful move.
-                        if not Card.deck[self.pawn_selected.position].activate(
-                            window, self, board, display, Player.array, Token.array
-                        ):
-                            self.pawn_selected = False
-                            self.end_turn = True
-                        else:
-                            self.pawn_selected = False
-                            self.end_turn = True
-                else:
-                    # Failed to move. Unselected."
-                    self.pawn_selected = False
+                self.move(window, display)
             else:
-                self.current_player = Player.array[self.current_turn]
-                for pawn_num, pawn in enumerate(self.current_player.pawn):
-                    coords = pawn.get_screen_location(
-                        pawn_num, self.current_turn
-                    )
-                    if (
-                        click[0] == 1 and
-                        coords[0] < mouse[0] < coords[0] + PAWN_SIZE and
-                        coords[1] < mouse[1] < coords[1] + PAWN_SIZE
-                    ):
-                        # Pawn Selected
-                        self.pawn_selected = self.current_player.pawn[pawn_num]
-                        self.pawn_selected_num = pawn_num
-                        self.end_turn = False
-                        break
-                    else:
-                        self.pawn_selected = False
-                        self.end_turn = False
-
-    # GAME FLOW
+                self.select()
 
     def change_turn(self):
         """
@@ -179,21 +188,21 @@ class Game:
         self.current_player = Player.array[self.current_turn]
         self.end_turn = False
 
-    def round(self, window, board, display):
+    def round(self, window, display):
         self.get_all_pawns_positions()
         if self.num_of_players == 2 and Player.who_recruited == 0:
             time.sleep(1)
-            self.counter.pawn[0].move(board)
-            self.recruit_check(board)
+            self.counter.pawn[0].move(self.board)
+            self.recruit_check()
         elif self.num_of_players == 2 and self.current_turn == 0:
-            self.counter.pawn[0].move(board)
+            self.counter.pawn[0].move(self.board)
             self.end_turn = True
-            self.recruit_check(board)
+            self.recruit_check()
             time.sleep(0.7)
         else:
-            self.select(window, board, display)
+            self.turn(window, display)
             Player.who_recruited = None
-            self.recruit_check(board)
+            self.recruit_check()
 
     # CHECKS
 
@@ -208,24 +217,24 @@ class Game:
             for pawn in player.pawn:
                 pawn.previous = pawn.position
 
-    def recruit_check(self, board):
+    def recruit_check(self):
         """
         Calls for Recruit Checks. On SOLO games (num_of_players == 2)
         the Counter King has priority over recruiting.
         """
         if self.num_of_players == 2:
-            self.counter.recruit(board, Card.deck)
+            self.counter.recruit(self.board, Card.deck)
         if Player.who_recruited is None:
-            self.current_player.recruit(board, Card.deck)
+            self.current_player.recruit(self.board, Card.deck)
         if Player.who_recruited is not None:
             self.current_turn = Player.who_recruited
             self.current_player = Player.array[self.current_turn]
             self.end_turn = False
 
-    def end_game_check(self, board):
+    def end_game_check(self):
         """Checks for End Game conditions"""
         try:
-            if Player.array[0].pawn[0].position == board.cols*board.rows-1:
+            if Player.array[0].pawn[0].position == self.board.cols*self.board.rows-1:
                 # Player Loses
                 return True
             elif self.num_of_players == 2:
