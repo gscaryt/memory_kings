@@ -6,7 +6,7 @@ memorykings0.5.py stable running all rules for Multiplayer and Solo modes on Ter
 
 ## TODO
 
-- Fix the Bug where the Counter Pawn moves one square more than it should when it recruits a pair.
+- Add an End Screen with the Winner and Restart or Quit option.
 
 ## NON STANDARD MODULES
 
