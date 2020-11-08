@@ -68,15 +68,6 @@ class Pawn:
 
 
 class Counter(Pawn):
-    def __init__(self):
-        self.color = "COUNTER"
-        self.index = 0
-        self.col = 0
-        self.row = 0
-        self.image = "pawn_counter.png"
-        self.position = 0
-        self.previous = 0
-
     def move(self, board):
         """
         Moves the Counter Pawn in a raster pattern

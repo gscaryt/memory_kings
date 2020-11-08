@@ -34,9 +34,9 @@ class Button:
         image_path = "images/" + self.image
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
-        original_image = pygame.image.load(image_path)
+        button_image = pygame.image.load(image_path)
         scaled_image = pygame.transform.scale(
-            original_image, (self.width, self.height)
+            button_image, (self.width, self.height)
         )
         self.image_rect = scaled_image.get_rect()
         self.image_rect.center = (self.center_x, self.center_y)

@@ -60,9 +60,9 @@ class Player:
 
 
 class CounterKing(Player):
-    def place_pawn(self):
+    def place_pawn(self, board, col, row):
         """Places the Counter Pawn."""
-        self.pawn.append(Counter())
+        self.pawn.append(Counter(board, self.color, len(self.pawn), col, row))
 
     def recruit(self, board, card_array):
         """

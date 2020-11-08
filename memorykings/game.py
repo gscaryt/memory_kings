@@ -88,7 +88,7 @@ class Game:
         Placement continues until the last player placed 2 pawns.
         """
         if self.num_of_players == 2 and len(self.counter.pawn) != 1:
-            self.counter.place_pawn()
+            self.counter.place_pawn(self.board, 0, 0)
             time.sleep(0.8)
 
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -131,6 +131,7 @@ class Game:
     # GAME FLOW
 
     def select(self):
+        '''Selects a pawn with a click.'''
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
         self.current_player = Player.array[self.current_turn]
@@ -151,6 +152,10 @@ class Game:
                 self.end_turn = False
 
     def move(self, window, display):
+        '''
+        Attempts to moves a selected pawn to the new clicked position
+        and calls the Card activate and Card special methods.
+        '''
         click_pos = self.board.click_to_grid()
         if click_pos is not None:
             if not self.pawn_selected.move(
