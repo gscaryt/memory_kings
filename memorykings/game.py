@@ -215,7 +215,7 @@ class Game:
         else:
             self.turn(window, display)
             Player.who_recruited = None
-            if self.counter.recruit(self.board, Card.deck):
+            if self.num_of_players == 2 and self.counter.recruit(self.board, Card.deck):
                 self.counter.pawn[0].move(self.board)
                 time.sleep(0.6)
         self.recruit_check()
