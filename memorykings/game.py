@@ -252,18 +252,18 @@ class Game:
             if Player.array[0].pawn[0].position == self.board.cols*self.board.rows-1:
                 # Player Loses
                 return True
-            elif self.num_of_players == 2:
-                if Player.array[0].score == 6:
-                    # Player Loses
-                    return True
-                elif Player.array[1].score == 6:
-                    # Player Wins
-                    return True
-            else:
-                for player in Player.array:
-                    if player.score == 12 // (self.num_of_players - 1):
-                        # Player Wins
-                        return True
-            return False
         except:
             pass
+        if self.num_of_players == 2:
+            if Player.array[0].score == 6:
+                # Player Loses
+                return True
+            elif Player.array[1].score == 6:
+                # Player Wins
+                return True
+        else:
+            for player in Player.array:
+                if player.score == 12 // (self.num_of_players - 1):
+                    # Player Wins
+                    return True
+        return False
