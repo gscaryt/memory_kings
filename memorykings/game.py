@@ -145,11 +145,9 @@ class Game:
                 # Pawn Selected
                 self.pawn_selected = self.current_player.pawn[pawn_num]
                 self.pawn_selected_num = pawn_num
-                self.end_turn = False
                 break
             else:
                 self.pawn_selected = False
-                self.end_turn = False
 
     def move(self, window, display):
         '''
@@ -210,19 +208,17 @@ class Game:
 
     def round(self, window, display):
         self.get_all_pawns_positions()
-        if self.num_of_players == 2 and Player.who_recruited == 0:
-            time.sleep(1)
-            self.counter.pawn[0].move(self.board)
-            self.recruit_check()
-        elif self.num_of_players == 2 and self.current_turn == 0:
+        if self.num_of_players == 2 and self.current_turn == 0:
             self.counter.pawn[0].move(self.board)
             self.end_turn = True
-            self.recruit_check()
-            time.sleep(0.7)
+            time.sleep(0.6)
         else:
             self.turn(window, display)
             Player.who_recruited = None
-            self.recruit_check()
+            if self.counter.recruit(self.board, Card.deck):
+                self.counter.pawn[0].move(self.board)
+                time.sleep(0.7)
+        self.recruit_check()
 
     # CHECKS
 

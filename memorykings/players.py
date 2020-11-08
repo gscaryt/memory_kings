@@ -58,7 +58,6 @@ class Player:
             # Pawns are in the same card.
             Player.who_recruited = None
 
-
 class CounterKing(Player):
     def place_pawn(self, board, col, row):
         """Places the Counter Pawn."""
@@ -86,8 +85,9 @@ class CounterKing(Player):
                 self.place_token(board, pawn.col, pawn.row)
                 self.score += 1
                 Player.who_recruited = self.order
-                break
+                return True
             else:
                 Player.who_recruited = None
+        return False
 
 
