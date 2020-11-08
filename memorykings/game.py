@@ -217,7 +217,7 @@ class Game:
             Player.who_recruited = None
             if self.counter.recruit(self.board, Card.deck):
                 self.counter.pawn[0].move(self.board)
-                time.sleep(0.7)
+                time.sleep(0.6)
         self.recruit_check()
 
     # CHECKS

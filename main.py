@@ -46,9 +46,7 @@ def main():
                     game.round(GAME_WINDOW, display)
                 if game.end_turn is True:
                     game.change_turn()
-
-
     pygame.quit()
-
+    quit()
 
 main()

@@ -89,5 +89,3 @@ class CounterKing(Player):
             else:
                 Player.who_recruited = None
         return False
-
-

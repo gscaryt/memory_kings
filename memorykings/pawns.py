@@ -90,4 +90,3 @@ class Counter(Pawn):
             (CORNER[0] + CARD_SIZE * (self.col)) + CARD_BORDER,
             (CORNER[1] + CARD_SIZE * (self.row)) + CARD_BORDER,
         )
-

@@ -116,3 +116,6 @@ def start_menu(game):
             if event.type == pygame.QUIT:
                 pygame.quit()
             pygame.display.update()
+
+def end_screen():
+    pass
