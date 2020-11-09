@@ -34,7 +34,7 @@ class Button:
         image_path = "images/" + self.image
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
-        button_image = pygame.image.load(image_path)
+        button_image = pygame.image.load(image_path).convert_alpha()
         scaled_image = pygame.transform.scale(
             button_image, (self.width, self.height)
         )
@@ -43,7 +43,7 @@ class Button:
 
         if self.image_rect.collidepoint(mouse) and self.hover_image is not None:
             hover_path = "images/" + self.hover_image
-            hover = pygame.image.load(hover_path)
+            hover = pygame.image.load(hover_path).convert_alpha()
             scaled_hover = pygame.transform.scale(
                 hover, (self.width, self.height)
             )
@@ -93,7 +93,7 @@ class Toggle(Button):
             image_path = "images/" + self.togleft_image
         elif self.toggle == 'right':
             image_path = "images/" + self.togright_image
-        image = pygame.image.load(image_path)
+        image = pygame.image.load(image_path).convert_alpha()
         scaled_image = pygame.transform.scale(
             image, (self.width, self.height)
         )

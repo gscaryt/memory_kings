@@ -9,7 +9,7 @@ class Display:
     def get_image(self, image, width, height):
         """Loads and returns an image with the given size"""
         return pygame.transform.scale(
-            pygame.image.load(IMAGES_PATH + image), (width, height)
+            pygame.image.load(IMAGES_PATH + image).convert_alpha(), (width, height)
         )
 
     def print_grid(self, window, board):

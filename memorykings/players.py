@@ -3,13 +3,6 @@ from .constants import PAWN_SIZE, CARD_SIZE, CARD_BORDER, CORNER
 from .pawns import Pawn, Counter
 from .tokens import Token
 
-"""
-This module contains:
-PLAYERS: Player() and CounterKing(Player)
-PAWNS: Pawn() and Counter(Pawn)
-TOKENS: Token()
-"""
-
 # PLAYERS
 
 

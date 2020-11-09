@@ -4,12 +4,6 @@ import time
 from .cards import Card, Bishop, Rook, Knight, Queen
 from .constants import COLORS, RANKS, BACKS, CARD_SIZE, CORNER
 
-"""
-This module contains:
-BOARD: Board()
-CARDS: Card(), Bishop(Card), Rook(Card), Knight(Card), and Queen(Card)
-"""
-
 class Board:
     def __init__(self, cols, rows=None):
         self.cols = cols
