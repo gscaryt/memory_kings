@@ -1,5 +1,6 @@
 from .constants import CORNER, CARD_SIZE, CARD_BORDER, PAWN_SIZE
 
+
 class Pawn:
     array = []
 
@@ -36,16 +37,14 @@ class Pawn:
             # Move to Same Location Attempt
             return False
         elif (
-            (col, row) == (self.col + 1, self.row) or
-            (col, row) == (self.col - 1, self.row) or
-            (col, row) == (self.col, self.row + 1) or
-            (col, row) == (self.col, self.row - 1)
+            (col, row) == (self.col + 1, self.row)
+            or (col, row) == (self.col - 1, self.row)
+            or (col, row) == (self.col, self.row + 1)
+            or (col, row) == (self.col, self.row - 1)
         ):
             # Move as a Pawn (1 Orthogonal)
             return True
-        elif card_array[self.position].escort_check(
-            self, token_array, col, row
-        ):
+        elif card_array[self.position].escort_check(self, token_array, col, row):
             # Calls escort_check method from the specific Card type.
             return True
         else:
@@ -58,12 +57,12 @@ class Pawn:
         PAWN_SIZE so they don't print over each other.
         """
         return (
-            (CORNER[0] + CARD_SIZE * (self.col)) +
-            (PAWN_SIZE * self.index) +
-            CARD_BORDER,
-            (CORNER[1] + CARD_SIZE * (self.row + 1)) -
-            (PAWN_SIZE * (player_order)) -
-            CARD_BORDER,
+            (CORNER[0] + CARD_SIZE * (self.col))
+            + (PAWN_SIZE * self.index)
+            + CARD_BORDER,
+            (CORNER[1] + CARD_SIZE * (self.row + 1))
+            - (PAWN_SIZE * (player_order))
+            - CARD_BORDER,
         )
 
 

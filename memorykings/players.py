@@ -51,6 +51,7 @@ class Player:
             # Pawns are in the same card.
             Player.who_recruited = None
 
+
 class CounterKing(Player):
     def place_pawn(self, board, col, row):
         """Places the Counter Pawn."""
@@ -69,10 +70,10 @@ class CounterKing(Player):
         for pawn in self.array[1].pawn:
             player_card = card_array[pawn.position]
             if (
-                counter_card.get_token(Token.array) is None and
-                counter.position != pawn.position and
-                counter_card.color == player_card.color and
-                counter_card.rank == player_card.rank
+                counter_card.get_token(Token.array) is None
+                and counter.position != pawn.position
+                and counter_card.color == player_card.color
+                and counter_card.rank == player_card.rank
             ):
                 self.place_token(board, counter.col, counter.row)
                 self.place_token(board, pawn.col, pawn.row)

@@ -1,5 +1,6 @@
 import pygame
 
+
 class Card:
     deck = []
 
@@ -32,8 +33,8 @@ class Card:
         if the card has a token of an opponent.
         """
         if (
-            self.get_token(token_array) is not None and
-            self.get_token(token_array) != pawn.color
+            self.get_token(token_array) is not None
+            and self.get_token(token_array) != pawn.color
         ):
             return True
 

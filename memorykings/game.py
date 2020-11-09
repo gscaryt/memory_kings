@@ -1,15 +1,21 @@
 import pygame
 import time
-from .constants import CARD_SIZE, PAWN_SIZE, CORNER, PLAYER_COLORS, EXTRA_HEIGHT, EXTRA_WIDTH
+from .constants import (
+    CARD_SIZE,
+    PAWN_SIZE,
+    CORNER,
+    PLAYER_COLORS,
+    EXTRA_HEIGHT,
+    EXTRA_WIDTH,
+)
 from .players import Player, CounterKing
 from .board import Board
 from .cards import Card
 from .tokens import Token
 
 import logging as log
-log.basicConfig(
-    level=log.DEBUG, format=" %(asctime)s -  %(levelname)s -  %(message)s"
-)
+
+log.basicConfig(level=log.DEBUG, format=" %(asctime)s -  %(levelname)s -  %(message)s")
 log.disable(log.CRITICAL)
 
 
@@ -17,8 +23,8 @@ class Game:
     def __init__(self):
         self.creating = True
         self.num_of_players = 1
-        self.grid_size = (5,5)
-        self.setup_variant = 'standard'
+        self.grid_size = (5, 5)
+        self.setup_variant = "standard"
         self.board = None
         self.counter = None
         self.current_player = None
@@ -39,21 +45,21 @@ class Game:
             self.grid_size = (5, 5)
 
     def choose_setup(self):
-        if self.setup_variant == 'standard':
-            self.setup_variant = 'alternate'
+        if self.setup_variant == "standard":
+            self.setup_variant = "alternate"
         else:
-            self.setup_variant = 'standard'
+            self.setup_variant = "standard"
 
     def play_game(self):
         self.creating = False
 
     def create_board(self):
-        '''Creates the board with the chosen grid size and setup variant'''
+        """Creates the board with the chosen grid size and setup variant"""
         self.board = Board(self.grid_size[0], self.grid_size[1])
         self.board.gen_grid(self.setup_variant)
         self.WINDOW_WIDTH, self.WINDOW_HEIGHT = (
-        EXTRA_WIDTH + self.board.cols * CARD_SIZE,
-        EXTRA_HEIGHT + self.board.rows * CARD_SIZE,
+            EXTRA_WIDTH + self.board.cols * CARD_SIZE,
+            EXTRA_HEIGHT + self.board.rows * CARD_SIZE,
         )
 
     def create_players(self):
@@ -98,49 +104,47 @@ class Game:
             if not self.place_pawns_check(click_pos[0], click_pos[1]):
                 return
             else:
-                self.current_player.place_pawn(
-                    self.board, click_pos[0], click_pos[1]
-                    )
+                self.current_player.place_pawn(self.board, click_pos[0], click_pos[1])
                 self.change_turn()
                 if self.current_turn == 0:
                     self.current_turn = 1
                     self.current_player = Player.array[1]
-        
-        last_player = Player.array[self.num_of_players-1]
+
+        last_player = Player.array[self.num_of_players - 1]
         self.all_pawns_set = bool(len(last_player.pawn) == 2)
         if self.all_pawns_set:
             self.current_turn = 1
             self.pawn_selected = False
 
     def place_pawns_check(self, col, row):
-        '''
+        """
         Checks if the coordinates are a valid position for
         placing a pawn during setup.
         1) Solo: Must start on cards with same Back as Counter.
         2) Multiplayer: Must start on White Backs.
-        '''
+        """
         card = self.board.get_card(col, row)
         card_on_counter = self.board.get_card(0, 0)
         if self.num_of_players == 2 and card.back == card_on_counter.back:
             return True
-        elif self.num_of_players > 2 and card.back == 'WHITE':
+        elif self.num_of_players > 2 and card.back == "WHITE":
             return True
         else:
             return False
-        
+
     # GAME FLOW
 
     def select(self):
-        '''Selects a pawn with a click.'''
+        """Selects a pawn with a click."""
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
         self.current_player = Player.array[self.current_turn]
         for pawn_num, pawn in enumerate(self.current_player.pawn):
             coords = pawn.get_screen_location(self.current_turn)
             if (
-                click[0] == 1 and
-                coords[0] < mouse[0] < coords[0] + PAWN_SIZE and
-                coords[1] < mouse[1] < coords[1] + PAWN_SIZE
+                click[0] == 1
+                and coords[0] < mouse[0] < coords[0] + PAWN_SIZE
+                and coords[1] < mouse[1] < coords[1] + PAWN_SIZE
             ):
                 # Pawn Selected
                 self.pawn_selected = self.current_player.pawn[pawn_num]
@@ -150,10 +154,10 @@ class Game:
                 self.pawn_selected = False
 
     def move(self, window, display):
-        '''
+        """
         Attempts to moves a selected pawn to the new clicked position
         and calls the Card activate and Card special methods.
-        '''
+        """
         click_pos = self.board.click_to_grid()
         if click_pos is not None:
             if not self.pawn_selected.move(
@@ -167,14 +171,14 @@ class Game:
                 if card.activate(Player.array):
                     # Check card activation.
                     display.print_all(
-                        window, 
-                        self.board, 
-                        self.current_turn, 
+                        window,
+                        self.board,
+                        self.current_turn,
                         self.pawn_selected,
                         self.WINDOW_WIDTH,
                         self.WINDOW_HEIGHT,
-                        self.num_of_players
-                        )
+                        self.num_of_players,
+                    )
                     card.special(window, display, self.board)
                     # Activate special power.
                 self.pawn_selected = False
@@ -250,7 +254,10 @@ class Game:
     def end_game_check(self):
         """Checks for End Game conditions"""
         try:
-            if Player.array[0].pawn[0].position == self.board.cols*self.board.rows-1:
+            if (
+                Player.array[0].pawn[0].position
+                == self.board.cols * self.board.rows - 1
+            ):
                 # Player Loses
                 return True
         except:

@@ -35,18 +35,14 @@ class Button:
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
         button_image = pygame.image.load(image_path).convert_alpha()
-        scaled_image = pygame.transform.scale(
-            button_image, (self.width, self.height)
-        )
+        scaled_image = pygame.transform.scale(button_image, (self.width, self.height))
         self.image_rect = scaled_image.get_rect()
         self.image_rect.center = (self.center_x, self.center_y)
 
         if self.image_rect.collidepoint(mouse) and self.hover_image is not None:
             hover_path = "images/" + self.hover_image
             hover = pygame.image.load(hover_path).convert_alpha()
-            scaled_hover = pygame.transform.scale(
-                hover, (self.width, self.height)
-            )
+            scaled_hover = pygame.transform.scale(hover, (self.width, self.height))
             self.hover_rect = scaled_hover.get_rect()
             self.hover_rect.center = (self.center_x, self.center_y)
             surface.blit(scaled_hover, self.hover_rect)
@@ -54,9 +50,9 @@ class Button:
             surface.blit(scaled_image, self.image_rect)
 
         if (
-            self.image_rect.collidepoint(mouse) and 
-            self.action_func is not None and 
-            click[0] == 1
+            self.image_rect.collidepoint(mouse)
+            and self.action_func is not None
+            and click[0] == 1
         ):
             surface.blit(scaled_image, self.image_rect)
             if self.action_arg is not None:
@@ -75,7 +71,7 @@ class Toggle(Button):
         height,
         togright_image,
         action_func=None,
-        toggle='left'
+        toggle="left",
     ):
         self.togleft_image = togleft_image
         self.center_x = center_x
@@ -89,26 +85,21 @@ class Toggle(Button):
     def switch(self, surface):
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
-        if self.toggle == 'left':
+        if self.toggle == "left":
             image_path = "images/" + self.togleft_image
-        elif self.toggle == 'right':
+        elif self.toggle == "right":
             image_path = "images/" + self.togright_image
         image = pygame.image.load(image_path).convert_alpha()
-        scaled_image = pygame.transform.scale(
-            image, (self.width, self.height)
-        )
+        scaled_image = pygame.transform.scale(image, (self.width, self.height))
         self.image_rect = scaled_image.get_rect()
         self.image_rect.center = (self.center_x, self.center_y)
         surface.blit(scaled_image, self.image_rect)
 
-        if (
-            self.image_rect.collidepoint(mouse) and 
-            click[0] == 1
-        ):
-            if self.toggle == 'right':
-                self.toggle = 'left'
+        if self.image_rect.collidepoint(mouse) and click[0] == 1:
+            if self.toggle == "right":
+                self.toggle = "left"
             else:
-                self.toggle = 'right'
+                self.toggle = "right"
             if self.action_func is not None:
                 self.action_func()
             surface.blit(scaled_image, self.image_rect)

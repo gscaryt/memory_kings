@@ -4,6 +4,7 @@ import time
 from .cards import Card, Bishop, Rook, Knight, Queen
 from .constants import COLORS, RANKS, BACKS, CARD_SIZE, CORNER
 
+
 class Board:
     def __init__(self, cols, rows=None):
         self.cols = cols
@@ -42,37 +43,37 @@ class Board:
                         Knight(color, rank, back)
         # SHUFFLE AND ADD ATTRIBUTES TO EACH CARD
         random.shuffle(Card.deck)
-        if setup_variant == 'alternate':
+        if setup_variant == "alternate":
             self.gen_alternate_setup()
         else:
             self.gen_standard_setup()
 
     def gen_standard_setup(self):
-        '''Forms a standard grid with randomly placed cards.'''
+        """Forms a standard grid with randomly placed cards."""
         for i, card in enumerate(Card.deck):
             card.position = i
             card.col = i % self.cols
             card.row = i // self.cols
         for i in range(0, len(Card.deck), self.cols):
-            grid_slice = Card.deck[i: i + self.cols]
+            grid_slice = Card.deck[i : i + self.cols]
             self.grid.append(grid_slice)
 
     def gen_alternate_setup(self):
-        '''Forms an alternate Chess-like grid.'''
+        """Forms an alternate Chess-like grid."""
         blacks = []
         whites = []
-        alternate_deck =[]
+        alternate_deck = []
         for i, card in enumerate(Card.deck):
-            if card.back == 'BLACK':
+            if card.back == "BLACK":
                 blacks.append(card)
-            elif card.back == 'WHITE':
+            elif card.back == "WHITE":
                 whites.append(card)
 
         b = 0
         w = 0
         for j in range(self.rows):
             for i in range(self.cols):
-                if i%2 == j%2:
+                if i % 2 == j % 2:
                     alternate_deck.append(blacks[b])
                     b += 1
                 else:
@@ -85,7 +86,7 @@ class Board:
             card.col = i % self.cols
             card.row = i // self.cols
         for i in range(0, len(Card.deck), self.cols):
-            grid_slice = Card.deck[i: i + self.cols]
+            grid_slice = Card.deck[i : i + self.cols]
             self.grid.append(grid_slice)
 
     def get_card(self, col, row):
@@ -105,22 +106,22 @@ class Board:
         click_pos = [0, 0]
         if click[0] == 1:
             if not (
-                mouse[0] < CORNER[0] or
-                mouse[1] < CORNER[1] or
-                mouse[0] > CORNER[0] + self.rows * CARD_SIZE or
-                mouse[1] > CORNER[1] + self.cols * CARD_SIZE
+                mouse[0] < CORNER[0]
+                or mouse[1] < CORNER[1]
+                or mouse[0] > CORNER[0] + self.rows * CARD_SIZE
+                or mouse[1] > CORNER[1] + self.cols * CARD_SIZE
             ):
                 for i in range(self.rows):
                     if (
-                        i <= (mouse[0] - CORNER[0]) / CARD_SIZE and
-                        (mouse[0] - CORNER[0] - CARD_SIZE) / CARD_SIZE <= i
+                        i <= (mouse[0] - CORNER[0]) / CARD_SIZE
+                        and (mouse[0] - CORNER[0] - CARD_SIZE) / CARD_SIZE <= i
                     ):
                         click_pos[0] = i
                         break
                 for j in range(self.cols):
                     if (
-                        j <= (mouse[1] - CORNER[1]) / CARD_SIZE and
-                        (mouse[1] - CORNER[1] - CARD_SIZE) / CARD_SIZE <= j
+                        j <= (mouse[1] - CORNER[1]) / CARD_SIZE
+                        and (mouse[1] - CORNER[1] - CARD_SIZE) / CARD_SIZE <= j
                     ):
                         click_pos[1] = j
                         break
