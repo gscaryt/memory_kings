@@ -1,7 +1,6 @@
 import pygame
-from .constants import DARK_GREY, FPS, IMAGES_PATH, WHITE, CORNER
+from .constants import DARK_GREY, FPS, WHITE
 from .buttons import Button, Toggle
-from .players import Player
 
 
 def start_menu(game):

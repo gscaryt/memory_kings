@@ -1,5 +1,3 @@
-import time
-from .constants import PAWN_SIZE, CARD_SIZE, CARD_BORDER, CORNER
 from .pawns import Pawn, Counter
 from .tokens import Token
 

@@ -3,7 +3,6 @@ import time
 from .constants import (
     CARD_SIZE,
     PAWN_SIZE,
-    CORNER,
     PLAYER_COLORS,
     EXTRA_HEIGHT,
     EXTRA_WIDTH,
@@ -260,7 +259,7 @@ class Game:
             ):
                 # Player Loses
                 return True
-        except:
+        except Exception:
             pass
         if self.num_of_players == 2:
             if Player.array[0].score == 6:

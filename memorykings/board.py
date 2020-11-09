@@ -1,6 +1,5 @@
 import pygame
 import random
-import time
 from .cards import Card, Bishop, Rook, Knight, Queen
 from .constants import COLORS, RANKS, BACKS, CARD_SIZE, CORNER
 
@@ -55,7 +54,7 @@ class Board:
             card.col = i % self.cols
             card.row = i // self.cols
         for i in range(0, len(Card.deck), self.cols):
-            grid_slice = Card.deck[i : i + self.cols]
+            grid_slice = Card.deck[i: i + self.cols]
             self.grid.append(grid_slice)
 
     def gen_alternate_setup(self):
@@ -86,7 +85,7 @@ class Board:
             card.col = i % self.cols
             card.row = i // self.cols
         for i in range(0, len(Card.deck), self.cols):
-            grid_slice = Card.deck[i : i + self.cols]
+            grid_slice = Card.deck[i: i + self.cols]
             self.grid.append(grid_slice)
 
     def get_card(self, col, row):

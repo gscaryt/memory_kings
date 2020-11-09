@@ -1,20 +1,12 @@
 import pygame
 import time
 from memorykings.constants import (
-    EXTRA_WIDTH,
-    EXTRA_HEIGHT,
-    CORNER,
-    CARD_SIZE,
     FPS,
-    WHITE,
     DARK_GREY,
 )
 from memorykings.start_screen import start_menu
 from memorykings.display import display
 from memorykings.game import Game
-from memorykings.cards import Card
-from memorykings.players import Player
-from memorykings.tokens import Token
 
 
 def main():
