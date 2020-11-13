@@ -1,53 +1,43 @@
 import pygame
 import time
-from memorykings.constants import (
-    FPS,
-    DARK_GREY,
-)
-from memorykings.start_screen import start_menu
-from memorykings.display import display
-from memorykings.game import Game
+from mkings.constants import (FPS, DARK_GREY)
+from mkings.screens import start_menu
+from mkings.display import Display
+from mkings.game import Game
 
 
 def main():
     game = Game()
-    start_menu(game)
+    display = Display()
+    start_menu(game, display)
     game.create_board()
     game.create_players()
     clock = pygame.time.Clock()
     run = True
 
-    GAME_WINDOW = pygame.display.set_mode((game.WINDOW_WIDTH, game.WINDOW_HEIGHT))
-    pygame.display.set_caption("Memory Kings")
+    display.set_game_window(game.board)
 
     # GAME_LOOP
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
-            GAME_WINDOW.fill(DARK_GREY)
-            display.print_all(
-                GAME_WINDOW,
-                game.board,
-                game.current_turn,
-                game.pawn_selected,
-                game.num_of_players,
-                game.WINDOW_WIDTH,
-                game.WINDOW_HEIGHT,
-            )
+            display.window.fill(DARK_GREY)
+            display.print_all(game.board, game.current)
             if event.type == pygame.QUIT:
                 run = False
-            if game.end_game_check():
+            if game.is_end_game():
                 time.sleep(1)
                 run = False
             else:
-                if game.all_pawns_set is not True:
+                if game._all_pawns_set is not True:
                     game.place_pawns(event)
-                if game.all_pawns_set is True:
-                    game.round(GAME_WINDOW, display)
+                if game._all_pawns_set is True:
+                    game.round(display)
                 if game.end_turn is True:
                     game.change_turn()
     pygame.quit()
     quit()
 
 
-main()
+if __name__ == "__main__":
+    main()

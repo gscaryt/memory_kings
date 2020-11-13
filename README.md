@@ -8,11 +8,9 @@ memorykings0.5.py stable running all rules for Multiplayer and Solo modes on Ter
 
 - Add an End Screen with the Winner and Restart or Quit option.
 
-## NON STANDARD MODULES
+## REQUIREMENTS
 
-For main: import pygame
-
-For old_versions/memorykings0.5.py: import pyinputplus, termcolor
+- pygame
 
 ## LINKS
 
