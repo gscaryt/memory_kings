@@ -1,9 +1,5 @@
 # Memory Kings in Python 3 by G. Scary Tontini
 
-main.py runs the game in Pygame
-
-memorykings0.5.py stable running all rules for Multiplayer and Solo modes on Terminal
-
 ## TODO
 
 - Add an End Screen with the Winner and Restart or Quit option.
