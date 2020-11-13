@@ -111,15 +111,18 @@ def end_screen(display, game):
                 display.width//2, display.height // 2 + 30)
 
     while _end_screen:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-
-            display.window.fill((BACKGROUND))
-            display.window.blit(*t1)
-            display.window.blit(*t2)
-            try:
-                display.window.blit(*t3)
-            except Exception:
-                pass
+        if game._winner is not None:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                try:
+                    display.window.fill((BACKGROUND))
+                    display.window.blit(*t1)
+                    display.window.blit(*t2)
+                    display.window.blit(*t3)
+                except Exception:
+                    pass
             pygame.display.update()
+        else:
+            pygame.quit()
+            quit()
