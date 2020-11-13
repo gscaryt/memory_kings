@@ -4,10 +4,10 @@ from .constants import DARK_GREY, FPS, WHITE
 from .buttons import Button, Toggle
 from .players import Player
 
-def _text(font, text_input, x, y, color=WHITE):
+def _text(font, text_input, x_center, y_center, color=WHITE):
     text = font.render(text_input, True, color)
     text_rect = text.get_rect()
-    text_rect.center = (x, y)
+    text_rect.center = (x_center, y_center)
     return text, text_rect
 
 
