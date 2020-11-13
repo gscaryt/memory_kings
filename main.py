@@ -1,6 +1,6 @@
 import pygame
 import time
-from mkings.constants import (FPS, DARK_GREY)
+from mkings.constants import FPS, BACKGROUND
 from mkings.screens import start_menu, end_screen
 from mkings.display import Display
 from mkings.game import Game
@@ -8,12 +8,14 @@ from mkings.game import Game
 
 def main():
     game = Game()
+    run = True
+
     display = Display()
+    clock = pygame.time.Clock()
+
     start_menu(game, display)
     game.create_board()
     game.create_players()
-    clock = pygame.time.Clock()
-    run = True
 
     display.set_game_window(game.board)
 
@@ -21,7 +23,7 @@ def main():
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
-            display.window.fill(DARK_GREY)
+            display.window.fill(BACKGROUND)
             display.print_all(game.board, game.current)
             if event.type == pygame.QUIT:
                 run = False
@@ -37,6 +39,7 @@ def main():
                     game.change_turn()
 
     end_screen(display, game)
+
     pygame.quit()
     quit()
 

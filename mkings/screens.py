@@ -1,6 +1,6 @@
 import pygame
 import time
-from .constants import DARK_GREY, FPS, WHITE
+from .constants import BACKGROUND, FPS, WHITE
 from .buttons import Button, Toggle
 from .players import Player
 
@@ -12,7 +12,6 @@ def _text(font, text_input, x_center, y_center, color=WHITE):
 
 
 def start_menu(game, display):
-    BACKGROUND = DARK_GREY
     clock = pygame.time.Clock()
     pygame.font.init()
     DIMBO_L = pygame.font.Font("fonts/dimbo_regular.ttf", 20)
@@ -79,7 +78,6 @@ def start_menu(game, display):
 
 
 def end_screen(display, game):
-    BACKGROUND = DARK_GREY
     display.width = 400
     display.height = 250
     display.window = pygame.display.set_mode((display.width, display.height))
@@ -115,14 +113,16 @@ def end_screen(display, game):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
+                display.window.fill((BACKGROUND))
+                display.window.blit(*t1)
+                display.window.blit(*t2)
                 try:
-                    display.window.fill((BACKGROUND))
-                    display.window.blit(*t1)
-                    display.window.blit(*t2)
                     display.window.blit(*t3)
                 except Exception:
                     pass
+
             pygame.display.update()
+
         else:
             pygame.quit()
             quit()

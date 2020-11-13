@@ -3,9 +3,13 @@ import time
 from .constants import PLAYER_COLORS
 from .players import Player, CounterKing
 from .board import Board
+from .cards import Card
 
 class Game:
     def __init__(self):
+        self._init()
+
+    def _init(self):
         self._creating = True
         self._grid_size = (5, 5)
         self._setup_variant = "standard"
@@ -16,6 +20,12 @@ class Game:
         self.board = None
         self.ongoing_turn = 1
         self.end_turn = False
+    
+    def _reset(self, main):
+        self._init()
+        Player.array = []
+        Card.array = []
+        main()
 
     @property
     def counter(self):
@@ -148,7 +158,6 @@ class Game:
 
             if Player.total == 2 and self.counter.recruit(self.board) == 0:
                 self.counter.pawn[0]._move(self.board)
-                print('Extra Move')
                 time.sleep(0.6)
 
         self.recruit_check()
