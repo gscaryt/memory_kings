@@ -77,7 +77,7 @@ class Game:
         Placement continues until the last player placed 2 pawns.
         """
         if Player.total == 2 and len(self.counter.pawn) != 1:
-            self.counter.place_pawn(0, 0)
+            self.counter.place_pawn(2, 4)
             time.sleep(0.8)
 
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -175,23 +175,22 @@ class Game:
                     == (self.board.cols-1, self.board.rows-1)
                 ):
                     # Player Loses
-                    print(f"Time's up! Counter on {self.counter.pawn[0].position}")
+                    self.winner = self.counter
                     return True
             except IndexError:
                 pass
-            if Player.array[0].score == 6:
+            if self.counter.score == 6:
                 # Player Loses
-                print(f"Counter recruited {Player.array[0].score}!")
+                self.winner = self.counter
                 return True
             elif Player.array[1].score == 6:
                 # Player Wins
-                print(f"Player recruited {Player.array[1].score}!")
+                self.winner = self.Player.array[1]
                 return True
         else:
             for player in Player.array:
                 if player.score == 12 // (Player.total - 1):
                     # That Player Wins
-                    print(f"{player.color} recruited 6!")
+                    self.winner = player
                     return True
-
         return False

@@ -36,7 +36,7 @@ def main():
                 if game.end_turn is True:
                     game.change_turn()
 
-    end_screen(display)
+    end_screen(display, game)
     pygame.quit()
     quit()
 

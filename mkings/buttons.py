@@ -12,20 +12,20 @@ class Button:
 
     def __init__(
         self,
-        image,
         center_x,
         center_y,
         width,
         height,
+        image,
         hover_image=None,
         action_func=None,
         action_arg=None,
     ):
-        self.image = image
         self.center_x = center_x
         self.center_y = center_y
         self.width = width
         self.height = height
+        self.image = image
         self.hover_image = hover_image
         self.action_func = action_func
         self.action_arg = action_arg
@@ -64,22 +64,23 @@ class Button:
 class Toggle(Button):
     def __init__(
         self,
-        togleft_image,
         center_x,
         center_y,
         width,
         height,
-        togright_image,
         action_func=None,
+        togleft_image="toggle_left.png",
+        togright_image="toggle_right.png",
         toggle="left",
     ):
-        self.togleft_image = togleft_image
+
         self.center_x = center_x
         self.center_y = center_y
         self.width = width
         self.height = height
-        self.togright_image = togright_image
         self.action_func = action_func
+        self.togleft_image = togleft_image
+        self.togright_image = togright_image
         self.toggle = toggle
 
     def switch(self, surface):
