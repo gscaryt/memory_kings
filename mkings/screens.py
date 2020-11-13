@@ -1,4 +1,5 @@
 import pygame
+import time
 from .constants import DARK_GREY, FPS, WHITE
 from .buttons import Button, Toggle
 
@@ -121,5 +122,28 @@ def start_menu(game, display):
             pygame.display.update()
 
 
-def end_screen():
-    pass
+def end_screen(display):
+    BACKGROUND = DARK_GREY
+    display.width = 400
+    display.height = 250
+    display.window = pygame.display.set_mode((display.width, display.height))
+    pygame.display.set_caption("Memory Kings")
+    clock = pygame.time.Clock()
+    _end_screen = True
+
+    pygame.font.init()
+    DIMBO_L = pygame.font.Font("fonts/dimbo_regular.ttf", 50)
+
+    t1 = DIMBO_L.render("Game Over", True, WHITE)
+    t1_rect = t1.get_rect()
+    t1_rect.center = (display.width // 2, display.height // 2)
+
+    while _end_screen:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+
+            display.window.fill((BACKGROUND))
+            display.window.blit(t1, t1_rect)
+            pygame.display.update()
+

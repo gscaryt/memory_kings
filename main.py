@@ -1,7 +1,7 @@
 import pygame
 import time
 from mkings.constants import (FPS, DARK_GREY)
-from mkings.screens import start_menu
+from mkings.screens import start_menu, end_screen
 from mkings.display import Display
 from mkings.game import Game
 
@@ -35,6 +35,8 @@ def main():
                     game.round(display)
                 if game.end_turn is True:
                     game.change_turn()
+
+    end_screen(display)
     pygame.quit()
     quit()
 
