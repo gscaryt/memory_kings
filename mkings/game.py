@@ -146,9 +146,9 @@ class Game:
             if self.current.turn(display, self.board):
                 self.end_turn = True
 
-            if Player.total == 2 and self.counter.recruit(self.board):
+            if Player.total == 2 and self.counter.recruit(self.board) == 0:
                 self.counter.pawn[0]._move(self.board)
-                self.end_turn = True
+                print('Extra Move')
                 time.sleep(0.6)
 
         self.recruit_check()
