@@ -84,31 +84,31 @@ def end_screen(display, game):
     display.height = 250
     display.window = pygame.display.set_mode((display.width, display.height))
     pygame.display.set_caption("Memory Kings")
-    clock = pygame.time.Clock()
     _end_screen = True
 
     pygame.font.init()
     DIMBO_50 = pygame.font.Font("fonts/dimbo_regular.ttf", 50)
     DIMBO_20 = pygame.font.Font("fonts/dimbo_regular.ttf", 20)
 
-    if Player.total == 2:
-        if game.winner == game.counter:
-            t1 = _text(DIMBO_50, "You Lost!",
-                display.width // 2, display.height // 2 - 30)
-            t2 = _text(DIMBO_20, f"The Counter King recruited {game.winner.score} {'Pairs' if game.winner.score != 1 else 'Pair'}",
-                display.width // 2, display.height // 2 + 30)
-            t3 = _text(DIMBO_20, f"and reached the Card on {game.winner.pawn[0].col+1}, {game.winner.pawn[0].row+1}.",
-                display.width // 2, display.height // 2 + 55)
+    if game._winner is not None:
+        if Player.total == 2:
+            if game._winner == game.counter:
+                t1 = _text(DIMBO_50, "You Lost!",
+                    display.width // 2, display.height // 2 - 30)
+                t2 = _text(DIMBO_20, f"The Counter King recruited {game._winner.score} {'Pairs' if game._winner.score != 1 else 'Pair'}",
+                    display.width // 2, display.height // 2 + 30)
+                t3 = _text(DIMBO_20, f"and reached the Card on {game._winner.pawn[0].col+1}, {game._winner.pawn[0].row+1}.",
+                    display.width // 2, display.height // 2 + 55)
+            else:
+                t1 = _text(DIMBO_50, "You Won!",
+                    display.width//2, display.height // 2 - 30)
+                t2 = _text(DIMBO_20, f"You recruited {game._winner.score} {'Pairs' if game._winner.score != 1 else 'Pair'}.",
+                    display.width//2, display.height // 2 + 30)
         else:
-            t1 = _text(DIMBO_50, "You Won!",
+            t1 = _text(DIMBO_50, f"Player {game._winner.color} Won!",
                 display.width//2, display.height // 2 - 30)
-            t2 = _text(DIMBO_20, f"You recruited {game.winner.score} {'Pairs' if game.winner.score != 1 else 'Pair'}.",
+            t2 = _text(DIMBO_20, f"{game._winner.score} {'Pairs' if game._winner.score != 1 else 'Pair'} Recruited.",
                 display.width//2, display.height // 2 + 30)
-    else:
-        t1 = _text(DIMBO_50, f"Player {game.winner.color} Won!",
-            display.width//2, display.height // 2 - 30)
-        t2 = _text(DIMBO_20, f"{game.winner.score} {'Pairs' if game.winner.score != 1 else 'Pair'} Recruited.",
-            display.width//2, display.height // 2 + 30)
 
     while _end_screen:
         for event in pygame.event.get():
@@ -123,4 +123,3 @@ def end_screen(display, game):
             except Exception:
                 pass
             pygame.display.update()
-

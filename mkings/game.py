@@ -11,6 +11,7 @@ class Game:
         self._setup_variant = "standard"
         self._all_pawns_set = False
         self._num_of_players = 2
+        self._winner = None
 
         self.board = None
         self.ongoing_turn = 1
@@ -175,22 +176,22 @@ class Game:
                     == (self.board.cols-1, self.board.rows-1)
                 ):
                     # Player Loses
-                    self.winner = self.counter
+                    self._winner = self.counter
                     return True
             except IndexError:
                 pass
             if self.counter.score == 6:
                 # Player Loses
-                self.winner = self.counter
+                self._winner = self.counter
                 return True
             elif Player.array[1].score == 6:
                 # Player Wins
-                self.winner = self.Player.array[1]
+                self._winner = self.Player.array[1]
                 return True
         else:
             for player in Player.array:
                 if player.score == 12 // (Player.total - 1):
                     # That Player Wins
-                    self.winner = player
+                    self._winner = player
                     return True
         return False
