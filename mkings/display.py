@@ -17,7 +17,10 @@ class Display:
         pygame.display.set_caption("Memory Kings")
     
     def _set_corner(self,board):
-        self.CORNER = int((self.DISP_W - self.CARD_SIZE*board.cols)/2), int(0)
+        self.CORNER = (
+            int((self.DISP_W - self.CARD_SIZE*board.cols)/2), 
+            int((self.DISP_W - self.CARD_SIZE*board.rows)/2),
+            )
 
     def get_image(self, image, width, height):
         """Loads and returns an image with the given size"""
@@ -122,28 +125,28 @@ class Display:
             t1_rect = t1.get_rect()
             if Player.total == 2:
                 t1_rect.center = (
-                    (self.DISP_W // 2) - (self.CARD_SIZE / 2) + (i * self.CARD_SIZE),
-                    self.DISP_H - self.CARD_SIZE//4,
+                    (self.DISP_W*0.5) - (self.CARD_SIZE*0.5) + (i * self.CARD_SIZE),
+                    self.DISP_H - self.HINT//4 - self.CORNER[1],
                 )
                 self.WINDOW.blit(t1, t1_rect)
             else:
                 if i != 0:
                     if Player.total == 3:
                         t1_rect.center = (
-                            (self.DISP_W // 2) - (self.CARD_SIZE / 2) + ((i - 1) * self.CARD_SIZE),
-                            self.DISP_H - self.CARD_SIZE//4,
+                            (self.DISP_W*0.5) - (self.CARD_SIZE*0.5) + ((i - 1) * self.CARD_SIZE),
+                            self.DISP_H - self.HINT//4 - self.CORNER[1],
                         )
                         self.WINDOW.blit(t1, t1_rect)
                     elif Player.total == 4:
                         t1_rect.center = (
-                            (self.DISP_W // 2) - (self.CARD_SIZE) + ((i - 1) * self.CARD_SIZE),
-                            self.DISP_H - self.CARD_SIZE//4,
+                            (self.DISP_W*0.5) - (self.CARD_SIZE) + ((i - 1) * self.CARD_SIZE),
+                            self.DISP_H - self.HINT//4 - self.CORNER[1],
                         )
                         self.WINDOW.blit(t1, t1_rect)
                     else:
                         t1_rect.center = (
-                            (self.DISP_W // 2) - (3 * self.CARD_SIZE / 2) + ((i - 1) * self.CARD_SIZE),
-                            self.DISP_H - self.CARD_SIZE//4,
+                            (self.DISP_W*0.5) - (3 * self.CARD_SIZE*0.5) + ((i - 1) * self.CARD_SIZE),
+                            self.DISP_H - self.HINT//4 - self.CORNER[1],
                         )
                         self.WINDOW.blit(t1, t1_rect)
         pygame.display.update()
