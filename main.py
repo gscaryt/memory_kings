@@ -1,5 +1,4 @@
 import pygame
-import time
 from mkings.constants import FPS, BACKGROUND
 from mkings.screens import start_menu, end_screen
 from mkings.display import Display
@@ -9,14 +8,13 @@ from mkings.game import Game
 def main():
     game = Game()
     run = True
-
     display = Display()
     clock = pygame.time.Clock()
 
-    start_menu(game, display)
+    start_menu(game, display) # START MENU WINDOW
+
     game.create_board()
     game.create_players()
-
     display.set_game_window(game.board)
 
     # GAME_LOOP
@@ -28,7 +26,7 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
             if game.is_end_game():
-                time.sleep(1)
+                pygame.time.wait(1000)
                 run = False
             else:
                 if game._all_pawns_set is not True:
@@ -38,7 +36,7 @@ def main():
                 if game.end_turn is True:
                     game.change_turn()
 
-    end_screen(display, game)
+    end_screen(display, game) # END GAME WINDOW
 
     pygame.quit()
     quit()

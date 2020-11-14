@@ -1,5 +1,4 @@
 import pygame
-import time
 from .constants import (
     IMAGES_PATH, 
     CARD_SIZE, 
@@ -189,5 +188,5 @@ class Display:
             card_image = self.get_image(card.image, CARD_SIZE, CARD_SIZE)
             self.window.blit(card_image, pos_on_screen)
             pygame.display.update()
-            time.sleep(2)
+            pygame.time.wait(2000)
             return True

@@ -20,16 +20,16 @@ class Player():
     def place_pawn(self, col, row):
         """
         Places one Pawn with the Player's color on the given position.
-        1) row: Row of the position to place the Pawn.
-        2) col: Column of the position to place the Pawn.
+        1) col: Column of the position to place the Pawn.
+        2) row: Row of the position to place the Pawn.
         """
         self.pawn.append(Pawn(self.color, col, row))
 
     def place_token(self, col, row):
         """
         Places one Token with the Player's color on the given position.
-        1) row: Row of the position to place the Token.
-        2) col: Column of the position to place the Token.
+        1) col: Column of the position to place the Token.
+        2) row: Row of the position to place the Token.
         """
         self.token.append(Token(self.color, col, row))
 
@@ -38,8 +38,9 @@ class Player():
             '''
             Returns the Token on the specified position.
             Returns None if there's no Token.
-            1) row: Row of the position to check.
-            2) col: Column of the position to check.
+            1) col: Column of the position to check.
+            2) row: Row of the position to check.
+
             '''
             for player in cls.array:
                 for token in player.token:
@@ -52,8 +53,8 @@ class Player():
             '''
             Returns a list with all Pawns on the specified position.
             Returns an empty list if there're no Pawns.
-            1) row: Row of the position to check.
-            2) col: Column of the position to check.
+            1) col: Column of the position to check.
+            2) row: Row of the position to check.
             '''
             pawns_on_this_position = []
             for player in cls.array:

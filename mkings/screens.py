@@ -1,6 +1,5 @@
 import pygame
-import time
-from .constants import BACKGROUND, FPS, WHITE
+from .constants import BACKGROUND, FPS, WHITE, FONTS_PATH
 from .buttons import Button, Toggle
 from .players import Player
 
@@ -14,9 +13,9 @@ def _text(font, text_input, x_center, y_center, color=WHITE):
 def start_menu(game, display):
     clock = pygame.time.Clock()
     pygame.font.init()
-    DIMBO_L = pygame.font.Font("fonts/dimbo_regular.ttf", 20)
-    DIMBO_R = pygame.font.Font("fonts/dimbo_regular.ttf", 18)
-    UBUNTU_R = pygame.font.Font("fonts/ubuntu_regular.ttf", 10)
+    DIMBO_L = pygame.font.Font(FONTS_PATH + "dimbo_regular.ttf", 20)
+    DIMBO_R = pygame.font.Font(FONTS_PATH + "dimbo_regular.ttf", 18)
+    UBUNTU_R = pygame.font.Font(FONTS_PATH + "ubuntu_regular.ttf", 10)
 
     # BUTTONS
     solo = Button(50,60,40,40,
@@ -85,8 +84,8 @@ def end_screen(display, game):
     _end_screen = True
 
     pygame.font.init()
-    DIMBO_50 = pygame.font.Font("fonts/dimbo_regular.ttf", 50)
-    DIMBO_20 = pygame.font.Font("fonts/dimbo_regular.ttf", 20)
+    DIMBO_50 = pygame.font.Font(FONTS_PATH + "dimbo_regular.ttf", 50)
+    DIMBO_20 = pygame.font.Font(FONTS_PATH + "dimbo_regular.ttf", 20)
 
     if game._winner is not None:
         if Player.total == 2:
@@ -118,7 +117,7 @@ def end_screen(display, game):
                 display.window.blit(*t2)
                 try:
                     display.window.blit(*t3)
-                except Exception:
+                except UnboundLocalError:
                     pass
 
             pygame.display.update()

@@ -3,13 +3,8 @@ import pygame
 
 class Button:
     """
-    For a button to have an "action_func()" with several
-    arguments (action_arg), add them as a single tuple
-    (e.g. action_func((a, b, c, d))) and separate it in
-    the beginning of that function.
     I think I can clean this up a bit.
     """
-
     def __init__(
         self,
         center_x,

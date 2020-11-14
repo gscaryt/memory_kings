@@ -1,5 +1,4 @@
 import pygame
-import time
 from .constants import PLAYER_COLORS
 from .players import Player, CounterKing
 from .board import Board
@@ -21,11 +20,10 @@ class Game:
         self.ongoing_turn = 1
         self.end_turn = False
     
-    def _reset(self, main):
+    def _reset(self):
         self._init()
         Player.array = []
         Card.array = []
-        main()
 
     @property
     def counter(self):
@@ -88,8 +86,8 @@ class Game:
         Placement continues until the last player placed 2 pawns.
         """
         if Player.total == 2 and len(self.counter.pawn) != 1:
-            self.counter.place_pawn(0, 0)
-            time.sleep(0.8)
+            self.counter.place_pawn(3, 4)
+            pygame.time.wait(800)
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             position = self.board.get_click_to_pos()
@@ -150,7 +148,7 @@ class Game:
         if Player.total == 2 and self.ongoing_turn == 0:
             self.counter.pawn[0]._move(self.board)
             self.end_turn = True
-            time.sleep(0.6)
+            pygame.time.wait(600)
 
         else:
             if self.current.turn(display, self.board):
@@ -158,7 +156,7 @@ class Game:
 
             if Player.total == 2 and self.counter.recruit(self.board) == 0:
                 self.counter.pawn[0]._move(self.board)
-                time.sleep(0.6)
+                pygame.time.wait(600)
 
         self.recruit_check()
 

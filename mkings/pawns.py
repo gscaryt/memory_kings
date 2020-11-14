@@ -18,8 +18,8 @@ class Pawn:
         Used by move() on players.py.
         1) board: Board instance used by "check_move()"
         2) Player: Player object used by "check_move()"
-        3) row: Destination row.
-        4) col: Destination column.
+        3) col: Destination column.
+        4) row: Destination row.
         """
         if self.check_move(board, Player, col, row):
             self.col = col
@@ -32,8 +32,8 @@ class Pawn:
         """
         Private for use in check_move().
         Returns True if new position is adjacent to the Pawn.
-        1) row: Target row.
-        2) col: Target column.
+        1) col: Target column.
+        2) row: Target row.
         """
         return (
             (col, row) == (self.col + 1, self.row)
@@ -46,9 +46,9 @@ class Pawn:
         """
         Checks for the validity of a move.
         1) board: Board instance used by "get_card()"
-        2) player_array: Array with all Players used by "get_token()"
-        3) row: Destination row.
-        4) col: Destination column.
+        2) Player: Player object used by "get_token()"
+        3) col: Destination column.
+        4) row: Destination row.
         """
         if (col, row) == self.position: # Attempt to move to same position.
             return False

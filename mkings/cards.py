@@ -47,8 +47,8 @@ class Bishop(Card):
     def is_valid_escort(self, col, row):
         """
         Checks if the destination is on a diagonal from the card.
-        1) row: Destination row.
-        2) col: Destination column.
+        1) col: Destination column.
+        2) row: Destination row.
         """
         if abs(col - self.col) == abs(row - self.row):
             return True
@@ -59,8 +59,8 @@ class Rook(Card):
     def is_valid_escort(self, col, row):
         """
         Checks if the destination is orthogonal from the card.
-        1) row: Destination row.
-        2) col: Destination column.
+        1) col: Destination column.
+        2) row: Destination row.
         """
         if col == self.col or row == self.row:
             return True
@@ -71,8 +71,8 @@ class Knight(Card):
     def is_valid_escort(self, col, row):
         """
         Checks if the destination is on a "L" pattern from the card.
-        1) row: Destination row.
-        2) col: Destination column.
+        1) col: Destination column.
+        2) row: Destination row.
         """
         if (
             (abs(col - self.col) == 2 and abs(row - self.row) == 1) 
@@ -86,8 +86,8 @@ class Queen(Card):
     def is_valid_escort(self, col, row):
         """
         Checks if the destination is orthogonal or diagonal from the card.
-        1) row: Destination row.
-        2) col: Destination column.
+        1) col: Destination column.
+        2) row: Destination row.
         """
         if (
             (abs(col - self.col) == abs(row - self.row)) 

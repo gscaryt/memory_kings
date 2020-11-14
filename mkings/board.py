@@ -1,6 +1,6 @@
 import pygame
 import random
-from .constants import BACKS, RANKS, COLORS, CARD_SIZE, CORNER
+from .constants import BACKS, RANKS, CARD_COLORS, CARD_SIZE, CORNER
 from .cards import Card, Bishop, Rook, Knight, Queen
 
 class Board:
@@ -31,7 +31,7 @@ class Board:
         # GENERATE CARD_SUB_CLASSES BASED ON THEIR RANK
         for back in BACKS:
             for rank in RANKS:
-                for color in COLORS[:num_of_colors]:
+                for color in CARD_COLORS[:num_of_colors]:
                     if rank == "BISHOP":
                         Bishop(color, rank, back)
                     elif rank == "ROOK":
@@ -85,8 +85,8 @@ class Board:
     def get_card(self, col, row):
         """
         Finds the card on the given position.
-        1) row: Row of the card.
-        2) col: Column of the card.
+        1) col: Column of the card.
+        2) row: Row of the card.
         """
         try:
             return self.grid[row][col]
@@ -97,7 +97,7 @@ class Board:
         """
         Converts the pixel coordinates of a mouse click
         to card coordinates in the grid.
-        - Returns a (row, col) tuple.
+        - Returns a (col, row) tuple.
         """
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
@@ -110,13 +110,17 @@ class Board:
             ):
                 for i in range(self.cols):
                     if (
-                        (mouse[0] - CORNER[0] - CARD_SIZE) / CARD_SIZE <= i <= (mouse[0] - CORNER[0]) / CARD_SIZE
+                        (mouse[0] - CORNER[0] - CARD_SIZE) / CARD_SIZE 
+                        <= i <= 
+                        (mouse[0] - CORNER[0]) / CARD_SIZE
                     ):
                         col = i
                         break
                 for j in range(self.rows):
                     if (
-                        (mouse[1] - CORNER[1] - CARD_SIZE) / CARD_SIZE <= j <= (mouse[1] - CORNER[1]) / CARD_SIZE
+                        (mouse[1] - CORNER[1] - CARD_SIZE) / CARD_SIZE 
+                        <= j <= 
+                        (mouse[1] - CORNER[1]) / CARD_SIZE
                     ):
                         row = j
                         break
