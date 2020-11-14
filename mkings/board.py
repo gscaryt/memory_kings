@@ -1,15 +1,12 @@
 import pygame
 import random
-from .constants import BACKS, RANKS, CARD_COLORS, CARD_SIZE, CORNER
+from .constants import BACKS, RANKS, CARD_COLORS
 from .cards import Card, Bishop, Rook, Knight, Queen
 
 class Board:
     def __init__(self, cols, rows=None):
         self.cols = cols
         self.rows = rows if rows is not None else cols
-
-        self.width = self.cols * CARD_SIZE
-        self.height = self.rows * CARD_SIZE
 
         self.grid = []
 
@@ -93,7 +90,7 @@ class Board:
         except IndexError:
             return None
 
-    def get_click_to_pos(self):
+    def get_click_to_pos(self, display):
         """
         Converts the pixel coordinates of a mouse click
         to card coordinates in the grid.
@@ -103,24 +100,24 @@ class Board:
         click = pygame.mouse.get_pressed()
         if click[0] == 1:
             if not (
-                mouse[0] < CORNER[0]
-                or mouse[1] < CORNER[1]
-                or mouse[1] > CORNER[1] + self.rows * CARD_SIZE
-                or mouse[0] > CORNER[0] + self.cols * CARD_SIZE
+                mouse[0] < display.CORNER[0]
+                or mouse[1] < display.CORNER[1]
+                or mouse[1] > display.CORNER[1] + self.rows * display.CARD_SIZE
+                or mouse[0] > display.CORNER[0] + self.cols * display.CARD_SIZE
             ):
                 for i in range(self.cols):
                     if (
-                        (mouse[0] - CORNER[0] - CARD_SIZE) / CARD_SIZE 
+                        (mouse[0] - display.CORNER[0] - display.CARD_SIZE) / display.CARD_SIZE 
                         <= i <= 
-                        (mouse[0] - CORNER[0]) / CARD_SIZE
+                        (mouse[0] - display.CORNER[0]) / display.CARD_SIZE
                     ):
                         col = i
                         break
                 for j in range(self.rows):
                     if (
-                        (mouse[1] - CORNER[1] - CARD_SIZE) / CARD_SIZE 
+                        (mouse[1] - display.CORNER[1] - display.CARD_SIZE) / display.CARD_SIZE 
                         <= j <= 
-                        (mouse[1] - CORNER[1]) / CARD_SIZE
+                        (mouse[1] - display.CORNER[1]) / display.CARD_SIZE
                     ):
                         row = j
                         break

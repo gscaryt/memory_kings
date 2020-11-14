@@ -1,5 +1,4 @@
 import pygame
-from .constants import CORNER, CARD_SIZE, CARD_BORDER, PAWN_SIZE
 from .pawns import Pawn, Counter
 from .tokens import Token
 
@@ -75,7 +74,7 @@ class Player():
             for pawn in player.pawn:
                 pawn.previous = pawn.position
 
-    def _get_pawn_on_screen(self, _pawn):
+    def _get_pawn_on_screen(self, display, _pawn):
         """
         Get coordinates in pixels of the top left 
         of a pawn on the screen. Used by select() and 
@@ -84,27 +83,27 @@ class Player():
             so pawns don't print over each other.
         """
         screen_pos_x = (
-            (CORNER[0] + CARD_SIZE * (_pawn.col))
-            + (PAWN_SIZE * self.pawn.index(_pawn))
-            + CARD_BORDER
+            (display.CORNER[0] + display.CARD_SIZE * (_pawn.col))
+            + (display.PAWN_SIZE * self.pawn.index(_pawn))
+            + display.CARD_BORDER
         )
         screen_pos_y = (
-            (CORNER[1] + CARD_SIZE * (_pawn.row + 1))
-            - (PAWN_SIZE * (self.order))
-            - CARD_BORDER
+            (display.CORNER[1] + display.CARD_SIZE * (_pawn.row + 1))
+            - (display.PAWN_SIZE * (self.order))
+            - display.CARD_BORDER
             )
         return screen_pos_x, screen_pos_y
 
-    def select(self):
+    def select(self, display):
         """Selects a pawn with a click."""
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
         for pawn in self.pawn:
-            screen_pos = self._get_pawn_on_screen(pawn)
+            screen_pos = self._get_pawn_on_screen(display, pawn)
             if (
                 click[0] == 1
-                and screen_pos[0] <= mouse[0] <= screen_pos[0] + PAWN_SIZE
-                and screen_pos[1] <= mouse[1] <= screen_pos[1] + PAWN_SIZE
+                and screen_pos[0] <= mouse[0] <= screen_pos[0] + display.PAWN_SIZE
+                and screen_pos[1] <= mouse[1] <= screen_pos[1] + display.PAWN_SIZE
             ):
                 # Pawn Selected
                 Pawn.selected = pawn
@@ -117,7 +116,7 @@ class Player():
         Attempts to moves a selected pawn to the new position
         and calls the Card activate and Card special methods.
         """
-        position = board.get_click_to_pos()
+        position = board.get_click_to_pos(display)
         if position is not None:
             if not Pawn.selected._move(
                 board, self, position[0], position[1]
@@ -148,7 +147,7 @@ class Player():
                 else:
                     return False
             else:
-                self.select()
+                self.select(display)
                 return False
 
     def recruit(self, board):
@@ -179,14 +178,14 @@ class CounterKing(Player):
         """Places the Counter Pawn."""
         self.pawn.append(Counter(self.color, col, row))
 
-    def _get_pawn_on_screen(self, *args):
+    def _get_pawn_on_screen(self, display, *args):
         """
         Get pixel coordinates of the Counter Pawn on the
         screen (Top Left of the Cards).
         """
         return (
-            (CORNER[0] + CARD_SIZE * (self.pawn[0].col)) + CARD_BORDER,
-            (CORNER[1] + CARD_SIZE * (self.pawn[0].row)) + CARD_BORDER,
+            (display.CORNER[0] + display.CARD_SIZE * (self.pawn[0].col)) + display.CARD_BORDER,
+            (display.CORNER[1] + display.CARD_SIZE * (self.pawn[0].row)) + display.CARD_BORDER,
         )
 
     def recruit(self, board):

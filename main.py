@@ -8,20 +8,20 @@ from mkings.game import Game
 def main():
     game = Game()
     run = True
-    display = Display()
+    display = Display(100)
     clock = pygame.time.Clock()
 
     start_menu(game, display) # START MENU WINDOW
 
     game.create_board()
     game.create_players()
-    display.set_game_window(game.board)
+    display._set_corner(game.board)
 
     # GAME_LOOP
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
-            display.window.fill(BACKGROUND)
+            display.WINDOW.fill(BACKGROUND)
             display.print_all(game.board, game.current)
             if event.type == pygame.QUIT:
                 run = False
@@ -30,7 +30,7 @@ def main():
                 run = False
             else:
                 if game._all_pawns_set is not True:
-                    game.place_pawns(event)
+                    game.place_pawns(display, event)
                 if game._all_pawns_set is True:
                     game.round(display)
                 if game.end_turn is True:

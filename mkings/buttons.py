@@ -20,10 +20,10 @@ class Button:
         action_arg=None,
         path="images/",
     ):
-        self.center_x = center_x
-        self.center_y = center_y
-        self.width = width
-        self.height = height
+        self.center_x = int(center_x)
+        self.center_y = int(center_y)
+        self.width = int(width)
+        self.height = int(height)
         self.rest = rest_image
         self.hover = hover_image
         self.action_func = action_func
@@ -123,10 +123,10 @@ class Toggle:
         path = "images/",
     ):
 
-        self.center_x = center_x
-        self.center_y = center_y
-        self.width = width
-        self.height = height
+        self.center_x = int(center_x)
+        self.center_y = int(center_y)
+        self.width = int(width)
+        self.height = int(height)
         self.action_func = action_func
         self.togleft_image = togleft_image
         self.togright_image = togright_image

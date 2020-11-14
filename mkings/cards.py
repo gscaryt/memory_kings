@@ -105,7 +105,7 @@ class Queen(Card):
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    click_pos = board.get_click_to_pos()
+                    click_pos = board.get_click_to_pos(display)
                     if click_pos is not None:
                         if not display.print_card(board, click_pos[0], click_pos[1]):
                             continue

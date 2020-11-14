@@ -78,7 +78,7 @@ class Game:
 
     # PAWNS' SETUP
 
-    def place_pawns(self, event):
+    def place_pawns(self, display, event):
         """
         If this is a Multiplayer game, skips the turn 0, so the
         Counter Pawn is not placed.
@@ -90,7 +90,7 @@ class Game:
             pygame.time.wait(800)
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            position = self.board.get_click_to_pos()
+            position = self.board.get_click_to_pos(display)
             if position is None:
                 return
             if not self.place_pawns_check(position[0], position[1]):
@@ -193,7 +193,7 @@ class Game:
                 return True
             elif Player.array[1].score == 6:
                 # Player Wins
-                self._winner = self.Player.array[1]
+                self._winner = Player.array[1]
                 return True
         else:
             for player in Player.array:
