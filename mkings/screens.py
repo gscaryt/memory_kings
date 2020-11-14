@@ -1,4 +1,5 @@
 import pygame
+import sys
 from .constants import BACKGROUND, FPS, WHITE, FONTS_PATH
 from .buttons import Button, Toggle
 from .players import Player
@@ -51,7 +52,7 @@ def start_menu(game, display):
     t3 = _text(DIMBO_L, "Setup Variant", display.width // 2, 170)
     t31 = _text(DIMBO_R, "Standard", display.width // 2 - 70, 200)
     t32 = _text(DIMBO_R, "Alternate", display.width // 2 + 70, 200)
-    t4 = _text(UBUNTU_R, "v0.6 made by G. Scary T.", display.width - 5, display.height - 5)
+    t4 = _text(UBUNTU_R, "v0.6 made by G. Scary T.", display.width - 58, display.height - 10)
     start_menu_text = t1,t2,t21,t22,t3,t31,t32,t4
 
     while game._creating:
@@ -73,6 +74,8 @@ def start_menu(game, display):
 
             if event.type == pygame.QUIT:
                 pygame.quit()
+                sys.exit()
+
             pygame.display.update()
 
 
@@ -111,7 +114,7 @@ def end_screen(display, game):
         if game._winner is not None:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
+                    _end_screen=False
                 display.window.fill((BACKGROUND))
                 display.window.blit(*t1)
                 display.window.blit(*t2)
@@ -123,5 +126,4 @@ def end_screen(display, game):
             pygame.display.update()
 
         else:
-            pygame.quit()
-            quit()
+            return

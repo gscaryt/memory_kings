@@ -4,6 +4,9 @@ import pygame
 class Button:
     '''
     A Button is used to call a function/method when clicked.
+    - button(surface) method prints the Button as normal.
+    - lock_button(surface, condition) method prints the Button
+        that stays pressed while a "condition" is True.
     '''
     def __init__(
         self,
@@ -27,7 +30,7 @@ class Button:
         self.action_arg = action_arg
         self.path = path
 
-    def get_image(self, state="rest"):
+    def _get_image(self, state="rest"):
         if state == "hover" and self.hover is not None:
             image_path = self.path + self.hover
         else:
@@ -38,7 +41,7 @@ class Button:
         image_rect.center = (self.center_x, self.center_y)
         return scaled_image, image_rect
 
-    def call_function(self):
+    def _call_function(self):
         if self.action_func is not None:
             if self.action_arg is not None:
                 self.action_func(self.action_arg)
@@ -52,8 +55,8 @@ class Button:
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
 
-        rest = self.get_image()
-        hover = self.get_image("hover")
+        rest = self._get_image()
+        hover = self._get_image("hover")
 
         if rest[1].collidepoint(mouse):
             surface.blit(*hover)
@@ -62,7 +65,7 @@ class Button:
 
         if (rest[1].collidepoint(mouse) and click[0] == 1):
             surface.blit(*rest)
-            self.call_function()
+            self._call_function()
 
     def lock_button(self, surface, condition):
         """
@@ -72,8 +75,8 @@ class Button:
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
 
-        rest = self.get_image()
-        hover = self.get_image("hover")
+        rest = self._get_image()
+        hover = self._get_image("hover")
 
         if rest[1].collidepoint(mouse):
             surface.blit(*hover)
@@ -84,7 +87,8 @@ class Button:
 
         if (rest[1].collidepoint(mouse) and click[0] == 1):
             surface.blit(*rest)
-            self.call_function()
+            self._call_function()
+
 
 class Toggle:
     '''

@@ -1,9 +1,9 @@
 import pygame
+import sys
 from mkings.constants import FPS, BACKGROUND
 from mkings.screens import start_menu, end_screen
 from mkings.display import Display
 from mkings.game import Game
-
 
 def main():
     game = Game()
@@ -39,7 +39,7 @@ def main():
     end_screen(display, game) # END GAME WINDOW
 
     pygame.quit()
-    quit()
+    sys.exit()
 
 
 if __name__ == "__main__":
