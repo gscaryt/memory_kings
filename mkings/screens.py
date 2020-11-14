@@ -63,10 +63,10 @@ def start_menu(game, display):
             for text in start_menu_text:
                 display.window.blit(*text)
 
-            solo.button(display.window)
-            two.button(display.window)
-            three.button(display.window)
-            four.button(display.window)
+            solo.lock_button(display.window, (game._num_of_players == 2))
+            two.lock_button(display.window, (game._num_of_players == 3))
+            three.lock_button(display.window, (game._num_of_players == 4))
+            four.lock_button(display.window, (game._num_of_players == 5))
             grid.switch(display.window)
             setup.switch(display.window)
             logo.button(display.window)
