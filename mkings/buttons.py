@@ -16,7 +16,6 @@ class Button:
         action_func=None,
         action_arg=None,
         path="images/",
-        locked = False
     ):
         self.center_x = center_x
         self.center_y = center_y
@@ -27,7 +26,6 @@ class Button:
         self.action_func = action_func
         self.action_arg = action_arg
         self.path = path
-        self.locked = locked
 
     def get_image(self, state="rest"):
         if state == "hover" and self.hover is not None:
