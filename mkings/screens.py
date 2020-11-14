@@ -136,6 +136,10 @@ def start_menu(game, display):
                 pygame.quit()
                 sys.exit()
 
+            if event.type == pygame.VIDEORESIZE:
+                size = pygame.display.get_window_size()
+                display._resize(game.board, size)
+
             pygame.display.update()
 
 
@@ -196,6 +200,11 @@ def end_screen(display, game):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     _end_screen = False
+
+                if event.type == pygame.VIDEORESIZE:
+                    size = pygame.display.get_window_size()
+                    display._resize(game.board, size)
+                    
                 display.WINDOW.fill((BACKGROUND))
                 display.WINDOW.blit(*t1)
                 display.WINDOW.blit(*t2)

@@ -23,8 +23,14 @@ def main():
         for event in pygame.event.get():
             display.WINDOW.fill(BACKGROUND)
             display.print_all(game.board, game.current)
+            
             if event.type == pygame.QUIT:
                 run = False
+
+            if event.type == pygame.VIDEORESIZE:
+                size = pygame.display.get_window_size()
+                display._resize(game.board, size)
+
             if game.is_end_game():
                 pygame.time.wait(1000)
                 run = False

@@ -5,6 +5,10 @@ from .pawns import Pawn
 
 class Display:
     def __init__(self, HINT=100):
+        self._original_HINT=HINT
+        self._init(HINT)
+    
+    def _init(self, HINT):
         self.HINT = int(HINT)
         self.DISP_W = int(HINT*6.00)
         self.DISP_H = int(HINT*6.50)
@@ -13,14 +17,25 @@ class Display:
         self.TOKEN_SIZE = int(HINT*0.20)
         self.PAWN_SIZE = int(HINT*0.20)
         self.CORNER = int(0),int(0)
-        self.WINDOW = pygame.display.set_mode((self.DISP_W, self.DISP_H))
+        self.WINDOW = pygame.display.set_mode((self.DISP_W, self.DISP_H), pygame.RESIZABLE)
         pygame.display.set_caption("Memory Kings")
     
+    def _resize(self, board, size):
+        if size[0] != self.DISP_W:
+            NEW_HINT = self._original_HINT*size[0]/650
+        elif size[1] != self.DISP_H:
+            NEW_HINT = self._original_HINT*size[1]/600
+        self._init(NEW_HINT)
+        self._set_corner(board)
+
     def _set_corner(self,board):
-        self.CORNER = (
-            int((self.DISP_W - self.CARD_SIZE*board.cols)/2), 
-            int((self.DISP_W - self.CARD_SIZE*board.rows)/2),
-            )
+        try:
+            self.CORNER = (
+                int((self.DISP_W - self.CARD_SIZE*board.cols)/2), 
+                int((self.DISP_W - self.CARD_SIZE*board.rows)/2),
+                )
+        except Exception:
+            self.CORNER = (0,0)
 
     def get_image(self, image, width, height):
         """Loads and returns an image with the given size"""
