@@ -1,7 +1,7 @@
 import pygame
 import sys
 from .constants import BACKGROUND, FPS, WHITE, FONTS_PATH
-from .buttons import Button, Toggle
+from .buttons import Button
 from .players import Player
 
 
