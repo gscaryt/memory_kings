@@ -15,6 +15,8 @@ class Game:
         self._all_pawns_set = False
         self._num_of_players = 2
         self._winner = None
+        self._abandoned = False
+        self._turns = 0
 
         self.board = None
         self.ongoing_turn = 1

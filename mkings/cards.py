@@ -2,6 +2,7 @@ import pygame
 
 class Card:
     array = []
+    queen_uses = 0
 
     def __init__(self, color, rank, back):
         self.color = color
@@ -110,4 +111,5 @@ class Queen(Card):
                         if not display.print_card(board, click_pos[0], click_pos[1]):
                             continue
                         else:
+                            Card.queen_uses += 1
                             return True
