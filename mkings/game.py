@@ -181,8 +181,12 @@ class Game:
         if Player.total == 2:
             try:
                 if (
-                    self.counter.pawn[0].position
-                    == (self.board.cols-1, self.board.rows-1)
+                    (self.board.rows%2 == 1 
+                    and self.counter.pawn[0].position
+                    == (self.board.cols-1, self.board.rows-1))
+                    or (self.board.rows%2 == 0 
+                    and self.counter.pawn[0].position
+                    == (0, self.board.rows-1))
                 ):
                     # Player Loses
                     self._winner = self.counter

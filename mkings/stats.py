@@ -21,7 +21,6 @@ class Stats:
         self.abandoned = None
         self.queen_uses = None
         
-
     def collect_start_data(self,game):
         self.start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.num_of_players = game._num_of_players-1
@@ -33,8 +32,8 @@ class Stats:
         if game._winner is not None:
             self.winner = f'Player {game._winner.order}'
         if len(Player.array[0].pawn) != 0:
-            self.counter_position = Player.array[0].pawn[0].position
-        self.counter_score = Player.array[0].score
+            self.counter_position = (Player.array[0].pawn[0].col+1, Player.array[0].pawn[0].row+1)
+            self.counter_score = Player.array[0].score
         self.player1_score = Player.array[1].score
         if self.num_of_players > 1:
             self.player2_score = Player.array[2].score
@@ -67,6 +66,8 @@ class Stats:
 
     def write_data(self):
         game_stats = self.build_dict()
-        print(game_stats)
+        values = list(game_stats.values())
         with open('docs/mkings_data.txt', 'a') as data_file:
-            data_file.write(f'{list(game_stats.values())}\n')
+            for data in values:
+                data_file.write(f'{data}; ')
+            data_file.write('\n')
