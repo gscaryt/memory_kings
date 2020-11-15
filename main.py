@@ -11,13 +11,15 @@ def main():
     display = Display(100)
     clock = pygame.time.Clock()
 
-    start_menu(game, display) # START MENU WINDOW
+    # START MENU WINDOW
+    start_menu(game, display) 
 
+    # GENERATE BOARD AND PLAYERS
     game.create_board()
     game.create_players()
     display._set_corner(game.board)
 
-    # GAME_LOOP
+    # MAIN LOOP
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
@@ -41,8 +43,9 @@ def main():
                     game.round(display)
                 if game.end_turn is True:
                     game.change_turn()
-
-    end_screen(display, game) # END GAME WINDOW
+    
+    # END GAME WINDOW
+    end_screen(game, display)
 
     pygame.quit()
     sys.exit()
