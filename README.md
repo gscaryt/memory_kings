@@ -2,7 +2,7 @@
 
 ## TODO
 
-- Add an End Screen with the Winner and Restart or Quit option.
+- Tutorial
 
 ## REQUIREMENTS
 
