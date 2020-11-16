@@ -3,6 +3,7 @@ from .constants import PLAYER_COLORS
 from .players import Player, CounterKing
 from .board import Board
 from .cards import Card
+from .screens import start_menu
 
 class Game:
     def __init__(self):
@@ -17,6 +18,7 @@ class Game:
         self._winner = None
         self._abandoned = False
         self._turns = 0
+        self._reset_game = False
 
         self.board = None
         self.ongoing_turn = 1
@@ -26,6 +28,7 @@ class Game:
         self._init()
         Player.array = []
         Card.array = []
+        self._reset_game = True
 
     @property
     def counter(self):
@@ -38,21 +41,25 @@ class Game:
     # CREATING THE GAME
 
     def choose_players(self, number):
+        '''Function for Button on the Start Menu'''
         self._num_of_players = number + 1
 
     def choose_grid(self):
+        '''Function for Button on the Start Menu'''
         if self._grid_size == (5, 5):
             self._grid_size = (6, 6)
         else:
             self._grid_size = (5, 5)
 
     def choose_setup(self):
+        '''Function for Button on the Start Menu'''
         if self._setup_variant == "standard":
             self._setup_variant = "alternate"
         else:
             self._setup_variant = "standard"
 
     def play_game(self):
+        '''Function for Button on the Start Menu'''
         self._creating = False
 
     def create_board(self):
@@ -145,6 +152,11 @@ class Game:
         self.end_turn = False
 
     def round(self, display):
+        '''
+        Handles the change of players' turns.
+        If Solo game, also handles calling the counter's
+        turns and extra moves.
+        '''
         Player._get_all_pawns_positions()
 
         if Player.total == 2 and self.ongoing_turn == 0:

@@ -1,4 +1,4 @@
-FPS = 30
+FPS = 0
 
 IMAGES_PATH = "images/"
 FONTS_PATH = "fonts/"

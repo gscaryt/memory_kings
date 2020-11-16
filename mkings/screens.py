@@ -25,9 +25,10 @@ def _text(font, text_input, x, y, relative_to='center', color=WHITE):
 
 def start_menu(game, display):
     clock = pygame.time.Clock()
+    pygame.event.clear()
     pygame.font.init()
 
-    while game._creating:
+    while game._creating or game._reset_game:
         clock.tick(FPS)
         HINT = display.HINT * 1.5
         DISP_W = display.DISP_W
@@ -150,6 +151,7 @@ def start_menu(game, display):
 
 def end_screen(game, display):
     _end_screen = True
+    pygame.event.clear()
     pygame.font.init()
 
     while _end_screen:
@@ -207,6 +209,16 @@ def end_screen(game, display):
                     DISP_H * 0.5 + HINT * 0.3,
                 )
 
+        replay = Button(
+            DISP_W * 0.5,
+            DISP_H * 0.5 + HINT * 0.8,
+            HINT * 0.4,
+            HINT * 0.4,
+            "replay.png",
+            "replay_hover.png",
+            game._reset,
+        )
+
         # ACTUAL SCREEN
         if game._winner is not None:
             for event in pygame.event.get():
@@ -220,6 +232,8 @@ def end_screen(game, display):
                 display.WINDOW.fill((BACKGROUND))
                 display.WINDOW.blit(*t1)
                 display.WINDOW.blit(*t2)
+                replay.button(display.WINDOW)
             pygame.display.update()
         else:
             return
+    

@@ -69,6 +69,7 @@ class Button:
             surface.blit(*rest)
             self._call_function()
 
+
     def switch(self, surface, condition):
         """
         Prints on the Surface a button that stays pressed 

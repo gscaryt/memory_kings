@@ -10,7 +10,8 @@ def main():
     game = Game()
     stats = Stats()
     run = True
-    display = Display(100)
+    display = Display()
+    pygame.event.clear()
     clock = pygame.time.Clock()
 
     # START MENU WINDOW
@@ -53,6 +54,8 @@ def main():
     stats.collect_end_data(game)
     stats.write_data()
     end_screen(game, display)
+    if game._reset_game is True:
+        return main()
 
     pygame.quit()
     sys.exit()

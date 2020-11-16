@@ -1,3 +1,3 @@
-Start, Players, Grid, Setup, Turns, Winner, CounterPos, Counter, Player1, Player2, Player3, Player4, End, Abandoned, QueenUsed
+Start; Players; Grid; Setup; Turns; Winner; CounterPos; Counter; Player1; Player2; Player3; Player4; End; Abandoned; QueenUsed;
 
 

@@ -139,9 +139,26 @@ class Player():
             return False
 
     def turn(self, display, board):
+        '''
+        If there's a Pawn already selected, checks if the new clicked
+        location is not the other Pawn of the player and then attempts
+        to move.
+        If there's no Pawn selected, calls select().
+        '''
+        mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
         if click[0] == 1:
             if Pawn.selected:
+                for pawn in self.pawn:
+                    screen_pos = self._get_pawn_on_screen(display, pawn)
+                    if (
+                        click[0] == 1
+                        and screen_pos[0] <= mouse[0] <= screen_pos[0] + display.PAWN_SIZE
+                        and screen_pos[1] <= mouse[1] <= screen_pos[1] + display.PAWN_SIZE
+                    ):
+                        # Pawn Selected
+                        Pawn.selected = pawn
+                        return False
                 if self.move(display, board):
                     return True
                 else:
