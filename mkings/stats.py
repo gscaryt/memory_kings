@@ -1,3 +1,4 @@
+from os import path
 from datetime import datetime
 from .players import Player
 from .cards import Card
@@ -67,7 +68,26 @@ class Stats:
     def write_data(self):
         game_stats = self.build_dict()
         values = list(game_stats.values())
-        with open('docs/mkings_data.txt', 'a') as data_file:
+        if not path.isfile('docs/mkings_data.txt'):
+            with open ('docs/mkings_data.txt', 'w') as data_file:
+                data_file.write('Start;Players;Grid;Setup;Turns;Winner;CounterPos;Counter;Player1;Player2;Player3;Player4;End;Abandoned;QueenUsed;\n')
+        with open('docs/mkings_data.txt', 'a+') as data_file:
             for data in values:
-                data_file.write(f'{data}; ')
+                data_file.write(f'{data};')
             data_file.write('\n')
+
+def get_data_frame(self):
+    with open('docs/mkings_data.txt', 'r') as data_file:
+        all_data = data_file.readlines()
+        new_list = []
+        dictionary = {}
+        for line in all_data:
+            stripped_line = line.strip()
+            new_list.append(stripped_line.split(';'))
+        for column in new_list[0]:
+            dictionary[column] = []
+        for i, row in enumerate(new_list):
+            if i != 0:
+                for j, column in enumerate(row):
+                    dictionary[new_list[0][j]].append(column)
+        return dictionary

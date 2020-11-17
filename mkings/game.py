@@ -3,14 +3,12 @@ from .constants import PLAYER_COLORS
 from .players import Player, CounterKing
 from .board import Board
 from .cards import Card
-from .screens import start_menu
 
 class Game:
     def __init__(self):
         self._init()
 
     def _init(self):
-        self._creating = True
         self._grid_size = (5, 5)
         self._setup_variant = "standard"
         self._all_pawns_set = False
@@ -58,10 +56,6 @@ class Game:
         else:
             self._setup_variant = "standard"
 
-    def play_game(self):
-        '''Function for Button on the Start Menu'''
-        self._creating = False
-
     def create_board(self):
         """Creates the board with the chosen grid size and setup variant"""
         self.board = Board(self._grid_size[0], self._grid_size[1])
@@ -95,7 +89,7 @@ class Game:
         Placement continues until the last player placed 2 pawns.
         """
         if Player.total == 2 and len(self.counter.pawn) != 1:
-            self.counter.place_pawn(0,0)
+            self.counter.place_pawn(3,4)
             pygame.time.wait(800)
 
         if event.type == pygame.MOUSEBUTTONDOWN:
