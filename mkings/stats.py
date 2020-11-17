@@ -1,4 +1,4 @@
-from os import path
+from os import path, mkdir
 from datetime import datetime
 from .players import Player
 from .cards import Card
@@ -68,6 +68,8 @@ class Stats:
     def write_data(self):
         game_stats = self.build_dict()
         values = list(game_stats.values())
+        if not path.exists('docs'):
+            mkdir('docs')
         if not path.isfile('docs/mkings_data.txt'):
             with open ('docs/mkings_data.txt', 'w') as data_file:
                 data_file.write('Start;Players;Grid;Setup;Turns;Winner;CounterPos;Counter;Player1;Player2;Player3;Player4;End;Abandoned;QueenUsed;\n')
