@@ -16,13 +16,18 @@ class Player():
 
         Player.array.append(self)
 
-    def place_pawn(self, col, row):
+    def place_pawn(self, display, board, col, row):
         """
         Places one Pawn with the Player's color on the given position.
         1) col: Column of the position to place the Pawn.
         2) row: Row of the position to place the Pawn.
         """
         self.pawn.append(Pawn(self.color, col, row))
+        card = board.get_card(col, row)
+        if card.activate(Player.array, card.col, card.row):
+            display.print_all(board, self)
+            if card.rank == "QUEEN":
+                card.special(display, board)
 
     def place_token(self, col, row):
         """

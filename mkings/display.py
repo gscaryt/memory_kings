@@ -1,11 +1,13 @@
 import pygame
-from .constants import (IMAGES_PATH,PLAYER_COLOR_CODES)
+from .constants import IMAGES_PATH, PLAYER_COLOR_CODES, BACKGROUND
 from .players import Player
 from .pawns import Pawn
 
 class Display:
     def __init__(self, HINT=100):
-        self._original_HINT=HINT
+        self._original_HINT=int(HINT)
+        self._original_DISP_W=(int(HINT*6.00))
+        self._original_DISP_H=(int(HINT*6.50))
         self._init(HINT)
     
     def _init(self, HINT):
@@ -22,16 +24,15 @@ class Display:
     
     def _resize(self, board, size):
         if size[1] != self.DISP_H:
-            NEW_HINT = self._original_HINT*size[1]/600
+            NEW_HINT = self._original_HINT*size[1]/self._original_DISP_W
             self._init(NEW_HINT)
             self._set_corner(board)
             return
         if size[0] != self.DISP_W:
-            NEW_HINT = self._original_HINT*size[0]/650
+            NEW_HINT = self._original_HINT*size[0]/self._original_DISP_H
             self._init(NEW_HINT)
             self._set_corner(board)
             return
-
 
     def _set_corner(self,board):
         try:
@@ -123,19 +124,20 @@ class Display:
         """
         if Pawn.selected:
             for rows in board.grid:
-                for card in rows:
-                    pos_on_screen = (
-                        self.CORNER[0] + self.CARD_SIZE * card.col,
-                        self.CORNER[1] + self.CARD_SIZE * card.row,
-                    )
-                    if not Pawn.selected.check_move(
-                        board, Player, card.col, card.row
-                    ):
-                        if card.position == Pawn.selected.position:
-                            continue
-                        else:
-                            image = self.get_image("unavailable.png", self.CARD_SIZE, self.CARD_SIZE)
-                            self.WINDOW.blit(image, pos_on_screen)
+                if len(rows) == board.cols:
+                    for card in rows:
+                        pos_on_screen = (
+                            self.CORNER[0] + self.CARD_SIZE * card.col,
+                            self.CORNER[1] + self.CARD_SIZE * card.row,
+                        )
+                        if not Pawn.selected.check_move(
+                            board, Player, card.col, card.row
+                        ):
+                            if card.position == Pawn.selected.position:
+                                continue
+                            else:
+                                image = self.get_image("unavailable.png", self.CARD_SIZE, self.CARD_SIZE)
+                                self.WINDOW.blit(image, pos_on_screen)
 
     def print_score_board(self):
         pygame.font.init()
@@ -171,18 +173,23 @@ class Display:
                         self.WINDOW.blit(t1, t1_rect)
         pygame.display.update()
 
-    def print_all(self, board, current_player):
+    def print_all(self, board, current_player=None, update="on", invalid_moves="on"):
         """
         Print all layers of the game in the order:
         grid > select pawn highlight > valid_moves > pawns > tokens
+        invalid_moves and update can be set 'off'.
         """
+        self.WINDOW.fill((BACKGROUND))
         self.print_grid(board)
-        self.print_selected(current_player)
-        self.print_invalid_moves(board)
+        if current_player is not None:
+            self.print_selected(current_player)
+        if invalid_moves == "on":
+            self.print_invalid_moves(board)
         self.print_pawns()
         self.print_tokens()
         self.print_score_board()
-        pygame.display.update()
+        if update == "on":
+            pygame.display.update()
 
     def print_card(self, board, col, row):
         """Show one hidden card for 2 seconds and turns it back down."""
@@ -207,3 +214,13 @@ class Display:
             pygame.display.update()
             pygame.time.wait(2000)
             return True
+
+    def print_eye(self, board, col, row):
+        card = board.get_card(col,row)
+        pos_on_screen = (
+            self.CORNER[0] + self.CARD_SIZE * col,
+            self.CORNER[1] + self.CARD_SIZE * row,
+        )
+        queen_advice = self.get_image("queen_advice.png", self.CARD_SIZE, self.CARD_SIZE)
+        self.WINDOW.blit(queen_advice, pos_on_screen)
+        pygame.display.update()

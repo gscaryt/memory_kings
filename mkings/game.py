@@ -99,7 +99,7 @@ class Game:
             if not self.place_pawns_check(position[0], position[1]):
                 return
             else:
-                self.current.place_pawn(position[0], position[1])
+                self.current.place_pawn(display, self.board, position[0], position[1])
                 self.change_turn()
                 if self.ongoing_turn == 0:
                     self.ongoing_turn = 1

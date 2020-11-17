@@ -131,13 +131,13 @@ class ScreenManager:
 
     def game_screen(self, game, display):
         self._run = True
+        pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_HAND)
         clock = pygame.time.Clock()
         pygame.event.clear()
 
         while self._run:
             clock.tick(FPS)
             for event in pygame.event.get():
-                display.WINDOW.fill(BACKGROUND)
                 display.print_all(game.board, game.current)
                 
                 if event.type == pygame.QUIT:
@@ -178,7 +178,7 @@ class ScreenManager:
             # BUTTON
             replay = Button(
                 DISP_W * 0.5,
-                DISP_H * 0.5 + HINT * 0.8,
+                DISP_H * 0.5 + HINT * 0.7,
                 HINT * 0.4,
                 HINT * 0.4,
                 "replay.png",
