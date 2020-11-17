@@ -119,6 +119,11 @@ class Game:
         col: Column to place the pawn.
         """
         card = self.board.get_card(col, row)
+        for player in Player.array:
+            for pawn in player.pawn:
+                if len(player.pawn) != 0:
+                    if pawn.position == (col, row):
+                        return False
         if Player.total == 2:
             counter = self.counter.pawn[0]
             card_counter = self.board.get_card(counter.col, counter.row)
