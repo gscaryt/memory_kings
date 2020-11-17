@@ -38,7 +38,7 @@ class Button:
         else:
             image_path = self.path + self.rest
         button_image = pygame.image.load(image_path).convert_alpha()
-        scaled_image = pygame.transform.scale(button_image, (self.width, self.height))
+        scaled_image = pygame.transform.smoothscale(button_image, (self.width, self.height))
         image_rect = scaled_image.get_rect()
         image_rect.center = (self.center_x, self.center_y)
         return scaled_image, image_rect

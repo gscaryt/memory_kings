@@ -14,19 +14,24 @@ class Display:
         self.DISP_H = int(HINT*6.50)
         self.CARD_SIZE = int(HINT)
         self.CARD_BORDER = int(HINT*0.05)
-        self.TOKEN_SIZE = int(HINT*0.20)
-        self.PAWN_SIZE = int(HINT*0.20)
+        self.TOKEN_SIZE = int(HINT*0.19)
+        self.PAWN_SIZE = int(HINT*0.23)
         self.CORNER = int(0),int(0)
         self.WINDOW = pygame.display.set_mode((self.DISP_W, self.DISP_H), pygame.RESIZABLE)
         pygame.display.set_caption("Memory Kings")
     
     def _resize(self, board, size):
+        if size[1] != self.DISP_H:
+            NEW_HINT = self._original_HINT*size[1]/600
+            self._init(NEW_HINT)
+            self._set_corner(board)
+            return
         if size[0] != self.DISP_W:
             NEW_HINT = self._original_HINT*size[0]/650
-        elif size[1] != self.DISP_H:
-            NEW_HINT = self._original_HINT*size[1]/600
-        self._init(NEW_HINT)
-        self._set_corner(board)
+            self._init(NEW_HINT)
+            self._set_corner(board)
+            return
+
 
     def _set_corner(self,board):
         try:
@@ -39,7 +44,7 @@ class Display:
 
     def get_image(self, image, width, height):
         """Loads and returns an image with the given size"""
-        return pygame.transform.scale(
+        return pygame.transform.smoothscale(
             pygame.image.load(IMAGES_PATH + image).convert_alpha(), (width, height)
         )
 
@@ -94,8 +99,8 @@ class Display:
         for player in Player.array:
             for token in player.token:
                 pos_on_screen = (
-                    int((self.CORNER[0] + self.CARD_SIZE * (1 + token.col))-7*self.TOKEN_SIZE//6),
-                    int((self.CORNER[1] + self.CARD_SIZE * (token.row))+self.TOKEN_SIZE//5),
+                    int((self.CORNER[0] + self.CARD_SIZE * (1 + token.col))-self.TOKEN_SIZE*1.23),
+                    int((self.CORNER[1] + self.CARD_SIZE * (token.row))+self.TOKEN_SIZE*0.32),
                 )
                 token_image = self.get_image(token.image, self.TOKEN_SIZE, self.TOKEN_SIZE)
                 self.WINDOW.blit(token_image, pos_on_screen)

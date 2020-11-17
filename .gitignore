@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Data TXT
+docs/mkings_data.txt
+
 # C extensions
 *.so
 

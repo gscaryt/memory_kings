@@ -89,7 +89,7 @@ class Game:
         Placement continues until the last player placed 2 pawns.
         """
         if Player.total == 2 and len(self.counter.pawn) != 1:
-            self.counter.place_pawn(3,4)
+            self.counter.place_pawn(0,0)
             pygame.time.wait(800)
 
         if event.type == pygame.MOUSEBUTTONDOWN:
