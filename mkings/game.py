@@ -115,6 +115,7 @@ class Game:
         placing a pawn during setup.
         - Solo: Must start on cards with same Back as Counter.
         - Multiplayer: Must start on White Backs.
+        - Both: Multiple pawns cannot start on the same card.
         row: Row to place the pawn.
         col: Column to place the pawn.
         """
