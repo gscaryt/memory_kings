@@ -9,7 +9,7 @@ class Card:
         self.color = color
         self.rank = rank
         self.back = back
-        self.image = color + "_" + rank + ".png"
+        self.image = color.lower() + "_" + rank.lower() + ".png"
         
         self.col = 0 # Position col,row is redefined on Board Grid Setup
         self.row = 0 
