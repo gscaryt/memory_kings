@@ -50,12 +50,11 @@ class Button:
             else:
                 self.action_func()
 
-    def button(self, surface):
+    def button(self, surface, event):
         '''
         Prints on the Surface a normal button.
         '''
         mouse = pygame.mouse.get_pos()
-        click = pygame.mouse.get_pressed()
 
         rest = self._get_image()
         hover = self._get_image("hover")
@@ -65,12 +64,12 @@ class Button:
         else:
             surface.blit(*rest)
 
-        if (rest[1].collidepoint(mouse) and click[0]):
+        if rest[1].collidepoint(mouse) and event.type == pygame.MOUSEBUTTONDOWN:
             surface.blit(*rest)
             self._call_function()
 
 
-    def switch(self, surface, condition):
+    def switch(self, surface, event, condition):
         """
         Prints on the Surface a button that stays pressed 
         if a condition is True.
@@ -87,7 +86,6 @@ class Button:
         tog.switch(SURFACE, (attribute == "value"))
         """
         mouse = pygame.mouse.get_pos()
-        click = pygame.mouse.get_pressed()
 
         rest = self._get_image()
         hover = self._get_image("hover")
@@ -98,12 +96,12 @@ class Button:
             surface.blit(*hover)
         else:
             surface.blit(*rest)
-
-        if (rest[1].collidepoint(mouse) and click[0]):
+        
+        if rest[1].collidepoint(mouse) and event.type == pygame.MOUSEBUTTONDOWN:
             surface.blit(*rest)
             self._call_function()
 
-    def toggle(self, surface, condition):
+    def toggle(self, surface, event, condition):
         '''
         A Toggle is used to choose between two options.
         It should be linked to a function or method that changes 
@@ -124,7 +122,6 @@ class Button:
         tog.toggle(SURFACE, (attribute == "option 2"))
         '''
         mouse = pygame.mouse.get_pos()
-        click = pygame.mouse.get_pressed()
 
         left = self._get_image()
         right = self._get_image("hover")
@@ -134,5 +131,5 @@ class Button:
         else:
             surface.blit(*left)
 
-        if (left[1].collidepoint(mouse) and click[0]):
+        if left[1].collidepoint(mouse) and event.type == pygame.MOUSEBUTTONDOWN:
             self._call_function()

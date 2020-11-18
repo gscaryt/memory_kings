@@ -20,6 +20,7 @@ class Display:
         self.PAWN_SIZE = int(HINT*0.23)
         self.CORNER = int(0),int(0)
         self.WINDOW = pygame.display.set_mode((self.DISP_W, self.DISP_H), pygame.RESIZABLE)
+        pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_HAND)
         pygame.display.set_caption("Memory Kings")
     
     def _resize(self, board, size):

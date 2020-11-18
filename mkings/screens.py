@@ -8,19 +8,9 @@ from .players import Player
 class ScreenManager:
     def __init__(self):
         self._start_menu = False
-        self._run = False
+        self._game_run = False
         self._end_screen = False
         self._about_screen = False
-
-    def _start_game(self):
-        self._start_menu = False
-
-    def _call_about(self):
-        if self._about_screen is False:
-            self._about_screen = True
-        else:
-            self._about_screen = False
-
 
     def start_menu(self, game, display):
         self._start_menu = True
@@ -37,7 +27,7 @@ class ScreenManager:
             # BUTTONS
             solo = Button(
                 DISP_W * 0.5 - HINT * 0.75,
-                DISP_H * 0.5 - HINT * 1.3,
+                HINT * 0.7,
                 HINT * 0.4,
                 HINT * 0.4,
                 "players_one.png",
@@ -47,7 +37,7 @@ class ScreenManager:
             )
             two = Button(
                 DISP_W * 0.5 - HINT * 0.25,
-                DISP_H * 0.5 - HINT * 1.3,
+                HINT * 0.7,
                 HINT * 0.4,
                 HINT * 0.4,
                 "players_two.png",
@@ -57,7 +47,7 @@ class ScreenManager:
             )
             three = Button(
                 DISP_W * 0.5 + HINT * 0.25,
-                DISP_H * 0.5 - HINT * 1.3,
+                HINT * 0.7,
                 HINT * 0.4,
                 HINT * 0.4,
                 "players_three.png",
@@ -67,7 +57,7 @@ class ScreenManager:
             )
             four = Button(
                 DISP_W * 0.5 + HINT * 0.75,
-                DISP_H * 0.5 - HINT * 1.3,
+                HINT * 0.7,
                 HINT * 0.4,
                 HINT * 0.4,
                 "players_four.png",
@@ -77,7 +67,7 @@ class ScreenManager:
             )
             grid = Button(
                 DISP_W * 0.5,
-                DISP_H * 0.5 - HINT * 0.5,
+                HINT * 1.5,
                 HINT * 0.6,
                 HINT * 0.2,
                 "toggle_left.png",
@@ -86,7 +76,7 @@ class ScreenManager:
             )
             setup = Button(
                 DISP_W * 0.5,
-                DISP_H * 0.5 + HINT * 0.2,
+                HINT * 2.2,
                 HINT * 0.6,
                 HINT * 0.2,
                 "toggle_left.png",
@@ -95,12 +85,21 @@ class ScreenManager:
             )
             logo = Button(
                 DISP_W * 0.5,
-                DISP_H * 0.5 + HINT * 1.2,
+                HINT * 3.2,
                 HINT * 1.5,
                 HINT * 1.5,
                 "mk_logo.png",
                 "mk_logo_hover.png",
                 self._start_game,
+            )
+            about = Button(
+                DISP_W - HINT*0.2,
+                DISP_H - HINT*0.25,
+                HINT*0.2,
+                HINT*0.2,
+                "about.png",
+                "about_hover.png",
+                self._call_about,
             )
 
             for event in pygame.event.get():
@@ -109,22 +108,27 @@ class ScreenManager:
                 DIMBO_L = pygame.font.Font(FONTS_PATH + "dimbo_regular.ttf", int(HINT * 0.20))
                 DIMBO_R = pygame.font.Font(FONTS_PATH + "dimbo_regular.ttf", int(HINT * 0.18))
                 UBUNTU_R = pygame.font.Font(FONTS_PATH + "ubuntu_regular.ttf", int(HINT * 0.10))
-                blit_text(display.WINDOW, DIMBO_L, "Number of Players", DISP_W * 0.5, DISP_H * 0.5 - HINT * 1.7)
-                blit_text(display.WINDOW, DIMBO_L, "Grid Size", DISP_W * 0.5, DISP_H * 0.5 - HINT * 0.8)
-                blit_text(display.WINDOW, DIMBO_R, "5x5", DISP_W * 0.5 - HINT * 0.5, DISP_H * 0.5 - HINT * 0.5)
-                blit_text(display.WINDOW, DIMBO_R, "6x6", DISP_W * 0.5 + HINT * 0.5, DISP_H * 0.5 - HINT * 0.5)
-                blit_text(display.WINDOW, DIMBO_L, "Setup Variant", DISP_W * 0.5, DISP_H * 0.5 - HINT * 0.1)
-                blit_text(display.WINDOW, DIMBO_R, "Standard", DISP_W * 0.5 - HINT * 0.7, DISP_H * 0.5 + HINT * 0.2)
-                blit_text(display.WINDOW, DIMBO_R, "Alternate", DISP_W * 0.5 + HINT * 0.7, DISP_H * 0.5 + HINT * 0.2)
-                blit_text(display.WINDOW, UBUNTU_R, "v0.7 made by G. Scary T.", DISP_W * 0.99, DISP_H * 0.99, 'bottomright')
+                UBUNTU_S = pygame.font.Font(FONTS_PATH + "ubuntu_regular.ttf", int(HINT * 0.05))
+                blit_text(display.WINDOW, DIMBO_L, "Number of Players", DISP_W * 0.5, HINT * 0.3)
+                blit_text(display.WINDOW, DIMBO_L, "Grid Size", DISP_W * 0.5, HINT * 1.2)
+                blit_text(display.WINDOW, DIMBO_R, "5x5", DISP_W * 0.5 - HINT * 0.5, HINT * 1.5)
+                blit_text(display.WINDOW, DIMBO_R, "6x6", DISP_W * 0.5 + HINT * 0.5, HINT * 1.5)
+                blit_text(display.WINDOW, DIMBO_L, "Setup Variant", DISP_W * 0.5, HINT * 1.9)
+                blit_text(display.WINDOW, DIMBO_R, "Standard", DISP_W * 0.5 - HINT * 0.7, HINT * 2.2)
+                blit_text(display.WINDOW, DIMBO_R, "Alternate", DISP_W * 0.5 + HINT * 0.7, HINT * 2.2)
+                blit_text(display.WINDOW, UBUNTU_S, "Memory Kings v0.7 in Python 3.8", DISP_W * 0.99, DISP_H * 0.99, 'bottomright')
 
-                solo.switch(display.WINDOW, (game._num_of_players == 2))
-                two.switch(display.WINDOW, (game._num_of_players == 3))
-                three.switch(display.WINDOW, (game._num_of_players == 4))
-                four.switch(display.WINDOW, (game._num_of_players == 5))
-                grid.toggle(display.WINDOW, (game._grid_size == (6,6)))
-                setup.toggle(display.WINDOW, (game._setup_variant == "alternate"))
-                logo.button(display.WINDOW)
+                solo.switch(display.WINDOW, event, (game._num_of_players == 2))
+                two.switch(display.WINDOW, event, (game._num_of_players == 3))
+                three.switch(display.WINDOW, event, (game._num_of_players == 4))
+                four.switch(display.WINDOW, event, (game._num_of_players == 5))
+                grid.toggle(display.WINDOW, event, (game._grid_size == (6,6)))
+                setup.toggle(display.WINDOW, event, (game._setup_variant == "alternate"))
+                logo.button(display.WINDOW, event)
+                about.button(display.WINDOW, event)
+
+                if self._about_screen:
+                    self.about_screen(game,display)
 
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -138,19 +142,18 @@ class ScreenManager:
 
 
     def game_screen(self, game, display):
-        self._run = True
-        pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_HAND)
+        self._game_run = True
         clock = pygame.time.Clock()
         pygame.event.clear()
 
-        while self._run:
+        while self._game_run:
             clock.tick(FPS)
             for event in pygame.event.get():
                 display.print_all(game.board, game.current)
                 
                 if event.type == pygame.QUIT:
                     game._abandoned = True
-                    self._run = False
+                    self._game_run = False
 
                 if event.type == pygame.VIDEORESIZE:
                     size = pygame.display.get_window_size()
@@ -158,7 +161,7 @@ class ScreenManager:
 
                 if game.is_end_game():
                     pygame.time.wait(500)
-                    self._run = False
+                    self._game_run = False
                 else:
                     if game._all_pawns_set is not True:
                         game.place_pawns(display, event)
@@ -222,37 +225,82 @@ class ScreenManager:
                     blit_text(display.WINDOW,DIMBO_L,f"Player {game._winner.color} Won!",DISP_W * 0.5,DISP_H * 0.5 - HINT * 0.5)
                     blit_text(display.WINDOW,DIMBO_R,f"{game._winner.score} {'Pairs' if game._winner.score != 1 else 'Pair'} Recruited.",DISP_W * 0.5, DISP_H * 0.5 + HINT * 0.1)
 
-                replay.button(display.WINDOW)
+                replay.button(display.WINDOW, event)
                 pygame.display.update()
             else:
                 return
 
 
     def about_screen(self, game, display):
-        self._about_screen = True
+        clock = pygame.time.Clock()
+        pygame.event.clear()
+        pygame.font.init()
 
         while self._about_screen:
+            HINT = display.HINT * 1.5
+            DISP_W = display.DISP_W
+            DISP_H = display.DISP_H
+            clock.tick(FPS)
             for event in pygame.event.get():
                 display.WINDOW.fill((BACKGROUND))
 
                 DIMBO_L = pygame.font.Font(FONTS_PATH + "dimbo_regular.ttf", int(HINT * 0.20))
-                DIMBO_R = pygame.font.Font(FONTS_PATH + "dimbo_regular.ttf", int(HINT * 0.18))
+                DIMBO_R = pygame.font.Font(FONTS_PATH + "dimbo_regular.ttf", int(HINT * 0.12))
                 UBUNTU_R = pygame.font.Font(FONTS_PATH + "ubuntu_regular.ttf", int(HINT * 0.10))
-                blit_text(display.WINDOW, DIMBO_L, "About", DISP_W * 0.5, DISP_H * 0.5 - HINT * 1.7)
-                blit_long_text(display.WINDOW, "In Memory Kings, players challenge their memory in this mix of the classic games of Chess and Pairs (a.k.a. memory®). They move their pawns strategically across a grid of hidden cards, revealing them, and finding indentical pairs. The player that finds the most pairs wins!", (HINT*0.5, DISP_H*0.5-HINT*1.5), UBUNTU_R, HINT*0.5)
+                UBUNTU_S = pygame.font.Font(FONTS_PATH + "ubuntu_regular.ttf", int(HINT * 0.05))
+                blit_text(display.WINDOW, DIMBO_L, "About", DISP_W * 0.5, HINT * 0.3)
+                blit_long_text(display.WINDOW, "In Memory Kings, players challenge their memory in this mix of the classic games of Chess and Pairs (a.k.a. memory®). They move their pawns strategically across a grid of hidden cards, revealing them, and finding indentical pairs. The player that finds the most pairs wins!", (HINT*0.5, HINT*0.5), UBUNTU_R, HINT*0.5)
+                blit_text(display.WINDOW, DIMBO_R, "G. Scary T.  |  Letícia F. C.", DISP_W * 0.5, HINT * 1.7)
+                blit_text(display.WINDOW, DIMBO_R, "Johny G.", DISP_W * 0.5, HINT * 1.9)
+                blit_text(display.WINDOW, DIMBO_L, "How to Play", DISP_W * 0.5, HINT * 2.30)
+                blit_text(display.WINDOW, DIMBO_R, "Official Rulebook", DISP_W * 0.5 - HINT, HINT * 2.69)
+                blit_text(display.WINDOW, DIMBO_R, "Video Tutorial", DISP_W * 0.5 + HINT, HINT * 2.60)
+                blit_text(display.WINDOW, DIMBO_R, " (2-4 Players)", DISP_W * 0.5 + HINT, HINT * 2.75)
 
+                blit_text(display.WINDOW, UBUNTU_S, "Memory Kings v0.7 in Python 3.8", DISP_W * 0.99, DISP_H * 0.99, 'bottomright')
 
-                about = Button(
-                    DISP_W * 0.99,
-                    DISP_H * 0.99,
-                    HINT * 0.2,
-                    HINT * 0.2,
-                    "players_four.png",
-                    "players_four_hover.png",
-                    self._call_about(),
+                logo = Button(
+                    DISP_W * 0.5,
+                    DISP_H - HINT*0.3,
+                    HINT * 0.6,
+                    HINT * 0.6,
+                    "sneaky_pirates_logo.png",
                 )
 
-                logo.button(display.WINDOW)
+                pdf_logo = Button(
+                    DISP_W*0.5 - HINT,
+                    HINT*2.30,
+                    HINT*0.4,
+                    HINT*0.4,
+                    "pdf_logo.png",
+                    action_func=self._open_link,
+                    action_arg="https://drive.google.com/file/d/1be3mYSzGpOooiSTmYnRBguKZ-2J40ip9/view?usp=sharing",
+                )
+
+                youtube_logo = Button(
+                    DISP_W*0.5 + HINT,
+                    HINT*2.30,
+                    HINT*0.4,
+                    HINT*0.4,
+                    "youtube_logo.png",
+                    action_func=self._open_link,
+                    action_arg="https://youtu.be/snqjQtYmv_Q",
+                )
+
+                about = Button(
+                    DISP_W - HINT*0.2,
+                    DISP_H - HINT*0.25,
+                    HINT*0.2,
+                    HINT*0.2,
+                    "about.png",
+                    "about_hover.png",
+                    self._call_about,
+                )
+
+                about.button(display.WINDOW, event)
+                pdf_logo.button(display.WINDOW, event)
+                youtube_logo.button(display.WINDOW, event)
+                logo.button(display.WINDOW, event)
 
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -263,6 +311,21 @@ class ScreenManager:
                     display._resize(game.board, size)
 
                 pygame.display.update()
+
+    # TRANSITION METHODS
+
+    def _start_game(self):
+        self._start_menu = False
+
+    def _call_about(self):
+        if self._about_screen is False:
+            self._about_screen = True
+        else:
+            self._about_screen = False
+
+    def _open_link(self, link):
+        import webbrowser
+        webbrowser.open_new_tab(link)
 
 # UTILITARY FUNCTIONS
 
