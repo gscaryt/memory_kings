@@ -250,10 +250,12 @@ class ScreenManager:
                 UBUNTU_S = pygame.font.Font(FONTS_PATH + "ubuntu_regular.ttf", int(HINT * 0.05))
                 blit_text(display.WINDOW, DIMBO_L, "About", DISP_W * 0.5, HINT * 0.3)
                 blit_long_text(display.WINDOW, "In Memory Kings, players challenge their memory in this mix of the classic games of Chess and Pairs (a.k.a. memory®). They move their pawns strategically across a grid of hidden cards, revealing them, and finding indentical pairs. The player that finds the most pairs wins!", (HINT*0.5, HINT*0.5), UBUNTU_R, HINT*0.5)
-                blit_text(display.WINDOW, DIMBO_L, "How to Play", DISP_W * 0.5, HINT * 1.5)
+                blit_text(display.WINDOW, DIMBO_L, "How to Play", DISP_W * 0.5, HINT * 1.6)
                 blit_text(display.WINDOW, DIMBO_R, "Official Rulebook", DISP_W * 0.5 - HINT, HINT * 1.89)
                 blit_text(display.WINDOW, DIMBO_R, "Video Tutorial", DISP_W * 0.5 + HINT, HINT * 1.80)
                 blit_text(display.WINDOW, DIMBO_R, " (2-4 Players)", DISP_W * 0.5 + HINT, HINT * 1.95)
+
+                blit_text(display.WINDOW, DIMBO_L, "Links", DISP_W * 0.5, HINT * 2.4)
 
                 blit_text(display.WINDOW, DIMBO_R, "G. Scary T.  |  Letícia F. C. | Johny G.", DISP_W * 0.5, DISP_H - HINT*0.2)
 
@@ -279,6 +281,33 @@ class ScreenManager:
                     action_arg="https://youtu.be/snqjQtYmv_Q",
                 )
 
+                bgg_logo = Button(
+                    DISP_W*0.5,
+                    HINT*2.8,
+                    HINT*0.4,
+                    HINT*0.4,
+                    "bgg_logo.png",
+                    action_func=self._open_link,
+                    action_arg="https://boardgamegeek.com/boardgame/319384/memory-kings",
+                )
+                tgc_logo = Button(
+                    DISP_W*0.5 - HINT*0.8,
+                    HINT*2.6,
+                    HINT*0.4,
+                    HINT*0.4,
+                    "tgc_logo.png",
+                    action_func=self._open_link,
+                    action_arg="https://www.thegamecrafter.com/games/memory-kings",
+                )
+                facebook_logo = Button(
+                    DISP_W*0.5 + HINT*0.8,
+                    HINT*2.6,
+                    HINT*0.4,
+                    HINT*0.4,
+                    "facebook_logo.png",
+                    action_func=self._open_link,
+                    action_arg="https://www.facebook.com/memorykingsthegame",
+                )
                 sneaky_pirates_logo = Button(
                     DISP_W * 0.5,
                     DISP_H - HINT*0.6,
@@ -300,6 +329,9 @@ class ScreenManager:
                 about.button(display.WINDOW, event)
                 pdf_logo.button(display.WINDOW, event)
                 youtube_logo.button(display.WINDOW, event)
+                bgg_logo.button(display.WINDOW, event)
+                tgc_logo.button(display.WINDOW, event)
+                facebook_logo.button(display.WINDOW, event)
                 sneaky_pirates_logo.button(display.WINDOW, event)
 
                 if event.type == pygame.QUIT:
