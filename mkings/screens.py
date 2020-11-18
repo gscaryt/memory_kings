@@ -11,6 +11,8 @@ class ScreenManager:
         self._game_run = False
         self._end_screen = False
         self._about_screen = False
+        self._reveal_cards = False
+
 
     def start_menu(self, game, display):
         self._start_menu = True
@@ -94,7 +96,7 @@ class ScreenManager:
             )
             about = Button(
                 DISP_W - HINT*0.2,
-                DISP_H - HINT*0.25,
+                DISP_H - HINT*0.2,
                 HINT*0.2,
                 HINT*0.2,
                 "about.png",
@@ -116,7 +118,6 @@ class ScreenManager:
                 blit_text(display.WINDOW, DIMBO_L, "Setup Variant", DISP_W * 0.5, HINT * 1.9)
                 blit_text(display.WINDOW, DIMBO_R, "Standard", DISP_W * 0.5 - HINT * 0.7, HINT * 2.2)
                 blit_text(display.WINDOW, DIMBO_R, "Alternate", DISP_W * 0.5 + HINT * 0.7, HINT * 2.2)
-                blit_text(display.WINDOW, UBUNTU_S, "Memory Kings v0.7 in Python 3.8", DISP_W * 0.99, DISP_H * 0.99, 'bottomright')
 
                 solo.switch(display.WINDOW, event, (game._num_of_players == 2))
                 two.switch(display.WINDOW, event, (game._num_of_players == 3))
@@ -180,8 +181,6 @@ class ScreenManager:
 
         while self._end_screen:
             clock.tick(FPS)
-
-            # ABBREVIATIONS
             HINT = display.HINT * 1.5 # Magic number adjusts sizes without messing positions.
             DISP_W = display.DISP_W
             DISP_H = display.DISP_H
@@ -197,9 +196,51 @@ class ScreenManager:
                 game._reset,
             )
 
+            reveal = Button(
+                DISP_W - HINT*0.5,
+                DISP_H - HINT*0.2,
+                HINT*0.2,
+                HINT*0.2,
+                "reveal.png",
+                "reveal_hover.png",
+                self._call_reveal,
+            )
+
+            about = Button(
+                DISP_W - HINT*0.2,
+                DISP_H - HINT*0.2,
+                HINT*0.2,
+                HINT*0.2,
+                "about.png",
+                "about_hover.png",
+                self._call_about,
+            )
+
             # ACTUAL SCREEN
-            if game._winner is not None:
-                for event in pygame.event.get():
+            for event in pygame.event.get():
+                if game._winner is not None:
+                    display.WINDOW.fill((BACKGROUND))
+
+                    DIMBO_L = pygame.font.Font(FONTS_PATH + "dimbo_regular.ttf", int(HINT * 0.5))
+                    DIMBO_R = pygame.font.Font(FONTS_PATH + "dimbo_regular.ttf", int(HINT * 0.2))
+                    if Player.total == 2:
+                        if game._winner == game.counter:
+                            blit_text(display.WINDOW, DIMBO_L, "You Lost!", DISP_W * 0.5, DISP_H * 0.5 - HINT * 0.5)
+                            if game._winner.score >= 6:
+                                blit_text(display.WINDOW,DIMBO_R,f"The Counter King recruited {game._winner.score} {'Pairs' if game._winner.score != 1 else 'Pair.'}",DISP_W * 0.5,DISP_H * 0.5 + HINT * 0.1)
+                            else:
+                                blit_text(display.WINDOW,DIMBO_R,f"The Counter King reached the last card of the grid.",DISP_W * 0.5, DISP_H * 0.5 + HINT * 0.1)
+                        else:
+                            blit_text(display.WINDOW, DIMBO_L, "You Won!", DISP_W * 0.5, DISP_H * 0.5 - HINT * 0.5)
+                            blit_text(display.WINDOW,DIMBO_R,f"You recruited {game._winner.score} {'Pairs' if game._winner.score != 1 else 'Pair'}.",DISP_W * 0.5,DISP_H * 0.5 + HINT * 0.1)
+                    else:
+                        blit_text(display.WINDOW,DIMBO_L,f"Player {game._winner.color} Won!",DISP_W * 0.5,DISP_H * 0.5 - HINT * 0.5)
+                        blit_text(display.WINDOW,DIMBO_R,f"{game._winner.score} {'Pairs' if game._winner.score != 1 else 'Pair'} Recruited.",DISP_W * 0.5, DISP_H * 0.5 + HINT * 0.1)
+
+                    replay.button(display.WINDOW, event)
+                    reveal.button(display.WINDOW, event)
+                    about.button(display.WINDOW, event)
+
                     if event.type == pygame.QUIT:
                         self._end_screen = False
 
@@ -207,28 +248,68 @@ class ScreenManager:
                         size = pygame.display.get_window_size()
                         display._resize(game.board, size)
 
-                pygame.draw.rect(display.WINDOW, (20, 20, 20, 100), (0, DISP_H//4, DISP_W, DISP_H//2))
+                    if self._about_screen:
+                        self.about_screen(game,display)
 
-                DIMBO_L = pygame.font.Font(FONTS_PATH + "dimbo_regular.ttf", int(HINT * 0.5))
-                DIMBO_R = pygame.font.Font(FONTS_PATH + "dimbo_regular.ttf", int(HINT * 0.2))
-                if Player.total == 2:
-                    if game._winner == game.counter:
-                        blit_text(display.WINDOW, DIMBO_L, "You Lost!", DISP_W * 0.5, DISP_H * 0.5 - HINT * 0.5)
-                        if game._winner.score >= 6:
-                            blit_text(display.WINDOW,DIMBO_R,f"The Counter King recruited {game._winner.score} {'Pairs' if game._winner.score != 1 else 'Pair.'}",DISP_W * 0.5,DISP_H * 0.5 + HINT * 0.1)
-                        else:
-                            blit_text(display.WINDOW,DIMBO_R,f"The Counter King reached the last card of the grid.",DISP_W * 0.5, DISP_H * 0.5 + HINT * 0.1)
-                    else:
-                        blit_text(display.WINDOW, DIMBO_L, "You Won!", DISP_W * 0.5, DISP_H * 0.5 - HINT * 0.5)
-                        blit_text(display.WINDOW,DIMBO_R,f"You recruited {game._winner.score} {'Pairs' if game._winner.score != 1 else 'Pair'}.",DISP_W * 0.5,DISP_H * 0.5 + HINT * 0.1)
+                    if self._reveal_cards:
+                        self.reveal_cards(game,display)
+
+                    pygame.display.update()
                 else:
-                    blit_text(display.WINDOW,DIMBO_L,f"Player {game._winner.color} Won!",DISP_W * 0.5,DISP_H * 0.5 - HINT * 0.5)
-                    blit_text(display.WINDOW,DIMBO_R,f"{game._winner.score} {'Pairs' if game._winner.score != 1 else 'Pair'} Recruited.",DISP_W * 0.5, DISP_H * 0.5 + HINT * 0.1)
+                    return
 
-                replay.button(display.WINDOW, event)
+
+    def reveal_cards(self, game, display):
+        self._reveal_cards = True
+        clock = pygame.time.Clock()
+        pygame.event.clear()
+        pygame.font.init()
+
+        while self._reveal_cards:
+            HINT = display.HINT * 1.5
+            DISP_W = display.DISP_W
+            DISP_H = display.DISP_H
+            clock.tick(FPS)
+
+            about = Button(
+                DISP_W - HINT*0.2,
+                DISP_H - HINT*0.2,
+                HINT*0.2,
+                HINT*0.2,
+                "about.png",
+                "about_hover.png",
+                self._call_about,
+            )
+
+            reveal = Button(
+                DISP_W - HINT*0.5,
+                DISP_H - HINT*0.2,
+                HINT*0.2,
+                HINT*0.2,
+                "reveal.png",
+                "reveal_hover.png",
+                self._call_reveal,
+            )
+            
+            for event in pygame.event.get():
+                display.WINDOW.fill((BACKGROUND))
+                display.print_all(game.board, current_player=None, invalid_moves=False, grid_revealed=True, update=False)
+
+                about.button(display.WINDOW, event)
+                reveal.button(display.WINDOW, event)
+                
+                if self._about_screen:
+                    self.about_screen(game,display)
+
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+                if event.type == pygame.VIDEORESIZE:
+                    size = pygame.display.get_window_size()
+                    display._resize(game.board, size)
+
                 pygame.display.update()
-            else:
-                return
 
 
     def about_screen(self, game, display):
@@ -241,6 +322,72 @@ class ScreenManager:
             DISP_W = display.DISP_W
             DISP_H = display.DISP_H
             clock.tick(FPS)
+        
+            pdf_logo = Button(
+                DISP_W*0.5 - HINT,
+                HINT*1.5,
+                HINT*0.4,
+                HINT*0.4,
+                "pdf_logo.png",
+                action_func=self._open_link,
+                action_arg="https://drive.google.com/file/d/1be3mYSzGpOooiSTmYnRBguKZ-2J40ip9/view?usp=sharing",
+            )
+
+            youtube_logo = Button(
+                DISP_W*0.5 + HINT,
+                HINT*1.5,
+                HINT*0.4,
+                HINT*0.4,
+                "youtube_logo.png",
+                action_func=self._open_link,
+                action_arg="https://youtu.be/snqjQtYmv_Q",
+            )
+
+            bgg_logo = Button(
+                DISP_W*0.5,
+                HINT*2.8,
+                HINT*0.4,
+                HINT*0.4,
+                "bgg_logo.png",
+                action_func=self._open_link,
+                action_arg="https://boardgamegeek.com/boardgame/319384/memory-kings",
+            )
+            tgc_logo = Button(
+                DISP_W*0.5 - HINT*0.8,
+                HINT*2.6,
+                HINT*0.4,
+                HINT*0.4,
+                "tgc_logo.png",
+                action_func=self._open_link,
+                action_arg="https://www.thegamecrafter.com/games/memory-kings",
+            )
+            facebook_logo = Button(
+                DISP_W*0.5 + HINT*0.8,
+                HINT*2.6,
+                HINT*0.4,
+                HINT*0.4,
+                "facebook_logo.png",
+                action_func=self._open_link,
+                action_arg="https://www.facebook.com/memorykingsthegame",
+            )
+            sneaky_pirates_logo = Button(
+                DISP_W * 0.5,
+                DISP_H - HINT*0.6,
+                HINT * 0.6,
+                HINT * 0.6,
+                "sneaky_pirates_logo.png",
+            )
+
+            about = Button(
+                DISP_W - HINT*0.2,
+                DISP_H - HINT*0.2,
+                HINT*0.2,
+                HINT*0.2,
+                "about.png",
+                "about_hover.png",
+                self._call_about,
+            )
+
             for event in pygame.event.get():
                 display.WINDOW.fill((BACKGROUND))
 
@@ -254,77 +401,9 @@ class ScreenManager:
                 blit_text(display.WINDOW, DIMBO_R, "Official Rulebook", DISP_W * 0.5 - HINT, HINT * 1.89)
                 blit_text(display.WINDOW, DIMBO_R, "Video Tutorial", DISP_W * 0.5 + HINT, HINT * 1.80)
                 blit_text(display.WINDOW, DIMBO_R, " (2-4 Players)", DISP_W * 0.5 + HINT, HINT * 1.95)
-
                 blit_text(display.WINDOW, DIMBO_L, "Links", DISP_W * 0.5, HINT * 2.4)
-
                 blit_text(display.WINDOW, DIMBO_R, "G. Scary T.  |  Letícia F. C. | Johny G.", DISP_W * 0.5, DISP_H - HINT*0.2)
-
-                blit_text(display.WINDOW, UBUNTU_S, "Memory Kings v0.7 in Python 3.8", DISP_W * 0.99, DISP_H * 0.99, 'bottomright')
-
-                pdf_logo = Button(
-                    DISP_W*0.5 - HINT,
-                    HINT*1.5,
-                    HINT*0.4,
-                    HINT*0.4,
-                    "pdf_logo.png",
-                    action_func=self._open_link,
-                    action_arg="https://drive.google.com/file/d/1be3mYSzGpOooiSTmYnRBguKZ-2J40ip9/view?usp=sharing",
-                )
-
-                youtube_logo = Button(
-                    DISP_W*0.5 + HINT,
-                    HINT*1.5,
-                    HINT*0.4,
-                    HINT*0.4,
-                    "youtube_logo.png",
-                    action_func=self._open_link,
-                    action_arg="https://youtu.be/snqjQtYmv_Q",
-                )
-
-                bgg_logo = Button(
-                    DISP_W*0.5,
-                    HINT*2.8,
-                    HINT*0.4,
-                    HINT*0.4,
-                    "bgg_logo.png",
-                    action_func=self._open_link,
-                    action_arg="https://boardgamegeek.com/boardgame/319384/memory-kings",
-                )
-                tgc_logo = Button(
-                    DISP_W*0.5 - HINT*0.8,
-                    HINT*2.6,
-                    HINT*0.4,
-                    HINT*0.4,
-                    "tgc_logo.png",
-                    action_func=self._open_link,
-                    action_arg="https://www.thegamecrafter.com/games/memory-kings",
-                )
-                facebook_logo = Button(
-                    DISP_W*0.5 + HINT*0.8,
-                    HINT*2.6,
-                    HINT*0.4,
-                    HINT*0.4,
-                    "facebook_logo.png",
-                    action_func=self._open_link,
-                    action_arg="https://www.facebook.com/memorykingsthegame",
-                )
-                sneaky_pirates_logo = Button(
-                    DISP_W * 0.5,
-                    DISP_H - HINT*0.6,
-                    HINT * 0.6,
-                    HINT * 0.6,
-                    "sneaky_pirates_logo.png",
-                )
-
-                about = Button(
-                    DISP_W - HINT*0.2,
-                    DISP_H - HINT*0.25,
-                    HINT*0.2,
-                    HINT*0.2,
-                    "about.png",
-                    "about_hover.png",
-                    self._call_about,
-                )
+                blit_text(display.WINDOW, UBUNTU_S, "Memory Kings v0.7 in Python 3.8", DISP_W * 0.01, DISP_H * 0.99, 'bottomleft')
 
                 about.button(display.WINDOW, event)
                 pdf_logo.button(display.WINDOW, event)
@@ -358,6 +437,13 @@ class ScreenManager:
     def _open_link(self, link):
         import webbrowser
         webbrowser.open_new_tab(link)
+
+    def _call_reveal(self):
+        if self._reveal_cards is False:
+            self._reveal_cards = True
+        else:
+            self._reveal_cards = False
+
 
 # UTILITARY FUNCTIONS
 
