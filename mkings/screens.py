@@ -297,7 +297,7 @@ class ScreenManager:
 
                 about.button(display.WINDOW, event)
                 reveal.button(display.WINDOW, event)
-                
+
                 if self._about_screen:
                     self.about_screen(game,display)
 
@@ -403,7 +403,7 @@ class ScreenManager:
                 blit_text(display.WINDOW, DIMBO_R, " (2-4 Players)", DISP_W * 0.5 + HINT, HINT * 1.95)
                 blit_text(display.WINDOW, DIMBO_L, "Links", DISP_W * 0.5, HINT * 2.4)
                 blit_text(display.WINDOW, DIMBO_R, "G. Scary T.  |  Letícia F. C. | Johny G.", DISP_W * 0.5, DISP_H - HINT*0.2)
-                blit_text(display.WINDOW, UBUNTU_S, "Memory Kings v0.7 in Python 3.8", DISP_W * 0.01, DISP_H * 0.99, 'bottomleft')
+                blit_text(display.WINDOW, UBUNTU_S, "Memory Kings v0.7 in Python 3.8 (Alpha)", DISP_W * 0.01, DISP_H * 0.99, 'bottomleft')
 
                 about.button(display.WINDOW, event)
                 pdf_logo.button(display.WINDOW, event)
