@@ -98,7 +98,7 @@ class Board:
         """
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
-        if click[0] == 1:
+        if click[0]:
             if not (
                 mouse[0] < display.CORNER[0]
                 or mouse[1] < display.CORNER[1]

@@ -65,7 +65,7 @@ class Button:
         else:
             surface.blit(*rest)
 
-        if (rest[1].collidepoint(mouse) and click[0] == 1):
+        if (rest[1].collidepoint(mouse) and click[0]):
             surface.blit(*rest)
             self._call_function()
 
@@ -99,7 +99,7 @@ class Button:
         else:
             surface.blit(*rest)
 
-        if (rest[1].collidepoint(mouse) and click[0] == 1):
+        if (rest[1].collidepoint(mouse) and click[0]):
             surface.blit(*rest)
             self._call_function()
 
@@ -134,5 +134,5 @@ class Button:
         else:
             surface.blit(*left)
 
-        if (left[1].collidepoint(mouse) and click[0] == 1):
+        if (left[1].collidepoint(mouse) and click[0]):
             self._call_function()

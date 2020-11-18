@@ -106,7 +106,7 @@ class Player():
         for pawn in self.pawn:
             screen_pos = self._get_pawn_on_screen(display, pawn)
             if (
-                click[0] == 1
+                click[0]
                 and screen_pos[0] <= mouse[0] <= screen_pos[0] + display.PAWN_SIZE
                 and screen_pos[1] <= mouse[1] <= screen_pos[1] + display.PAWN_SIZE
             ):
@@ -152,12 +152,12 @@ class Player():
         '''
         mouse = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
-        if click[0] == 1:
+        if click[0]:
             if Pawn.selected:
                 for pawn in self.pawn:
                     screen_pos = self._get_pawn_on_screen(display, pawn)
                     if (
-                        click[0] == 1
+                        click[0]
                         and screen_pos[0] <= mouse[0] <= screen_pos[0] + display.PAWN_SIZE
                         and screen_pos[1] <= mouse[1] <= screen_pos[1] + display.PAWN_SIZE
                     ):

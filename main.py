@@ -7,11 +7,10 @@ from mkings.game import Game
 from mkings.stats import Stats
 
 def main():
-    screen_manager = ScreenManager()
     game = Game()
     stats = Stats()
     display = Display()
-    clock = pygame.time.Clock()
+    screen_manager = ScreenManager()
     pygame.event.clear()
 
     # START MENU LOOP
