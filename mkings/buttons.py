@@ -21,7 +21,6 @@ class Button:
         hover_image=None,
         action_func=None,
         action_arg=None,
-        path="images/",
     ):
         self.center_x = int(center_x)
         self.center_y = int(center_y)
@@ -31,7 +30,6 @@ class Button:
         self.hover = hover_image
         self.action_func = action_func
         self.action_arg = action_arg
-        self.path = path
 
     def _get_image(self, state="rest"):
         if state == "hover" and self.hover is not None:
@@ -50,6 +48,7 @@ class Button:
                 self.action_func(self.action_arg)
             else:
                 self.action_func()
+
 
     def button(self, surface, event):
         '''
