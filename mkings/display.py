@@ -1,7 +1,9 @@
 import pygame
+import timeit
 from .constants import IMAGES_PATH, PLAYER_COLOR_CODES, BACKGROUND
 from .players import Player
 from .pawns import Pawn
+from .assets import Asset
 
 class Display:
     def __init__(self, HINT=100):
@@ -46,9 +48,7 @@ class Display:
 
     def get_image(self, image, width, height):
         """Loads and returns an image with the given size"""
-        return pygame.transform.smoothscale(
-            pygame.image.load(IMAGES_PATH + image).convert_alpha(), (width, height)
-        )
+        return pygame.transform.smoothscale(Asset.image[image], (width, height))
 
     def print_grid(self, board):
         """

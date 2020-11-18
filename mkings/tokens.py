@@ -3,7 +3,7 @@ class Token:
         self.color = color
         self.col = col
         self.row = row
-        self.image = "token_" + color + ".png"
+        self.image = "token_" + color.lower() + ".png"
 
     @property
     def position(self):

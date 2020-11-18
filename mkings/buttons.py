@@ -1,4 +1,5 @@
 import pygame
+from .assets import Asset
 
 
 class Button:
@@ -34,10 +35,10 @@ class Button:
 
     def _get_image(self, state="rest"):
         if state == "hover" and self.hover is not None:
-            image_path = self.path + self.hover
+            image = self.hover
         else:
-            image_path = self.path + self.rest
-        button_image = pygame.image.load(image_path).convert_alpha()
+            image = self.rest
+        button_image = Asset.image[image].convert_alpha()
         scaled_image = pygame.transform.smoothscale(button_image, (self.width, self.height))
         image_rect = scaled_image.get_rect()
         image_rect.center = (self.center_x, self.center_y)
@@ -100,6 +101,7 @@ class Button:
         if rest[1].collidepoint(mouse) and event.type == pygame.MOUSEBUTTONDOWN:
             surface.blit(*rest)
             self._call_function()
+
 
     def toggle(self, surface, event, condition):
         '''

@@ -5,13 +5,15 @@ from mkings.screens import ScreenManager
 from mkings.display import Display
 from mkings.game import Game
 from mkings.stats import Stats
+from mkings.assets import Asset
 
 def main():
-    game = Game()
-    stats = Stats()
-    display = Display()
-    screen_manager = ScreenManager()
-    pygame.event.clear()
+    game = Game() # Init all main game variables.
+    stats = Stats() # Init all data collection variables.
+    display = Display() # Init the display.
+    asset = Asset() # Load all the images.
+    screen_manager = ScreenManager() # Init the Screen Manager.
+    pygame.event.clear() # Clear any lingering Event.
 
     # START MENU LOOP
     screen_manager.start_menu(game, display)

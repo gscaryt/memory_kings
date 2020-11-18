@@ -5,7 +5,7 @@ class Pawn:
         self.color = color
         self.col = col
         self.row = row
-        self.image = "pawn_" + color + ".png"
+        self.image = "pawn_" + color.lower() + ".png"
         self.previous = None
 
     @property
