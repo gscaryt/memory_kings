@@ -85,6 +85,20 @@ class Display:
                         black_back = self.get_image("black_back.png", self.CARD_SIZE, self.CARD_SIZE)
                         self.WINDOW.blit(black_back, pos_on_screen)
 
+    def print_grid_revealed(self, board):
+        """
+        Prints all the cards on the board revealed.
+        """
+        for row in range(board.rows):
+            for col in range(board.cols):
+                card = board.get_card(row, col)
+                pos_on_screen = (
+                    self.CORNER[0] + self.CARD_SIZE * card.col,
+                    self.CORNER[1] + self.CARD_SIZE * card.row,
+                )
+                card_image = self.get_image(card.image, self.CARD_SIZE, self.CARD_SIZE)
+                self.WINDOW.blit(card_image, pos_on_screen)
+
     def print_pawns(self):
         """Gets and prints all placed pawns of all players"""
         for player in Player.array:
@@ -173,22 +187,28 @@ class Display:
                         self.WINDOW.blit(t1, t1_rect)
         pygame.display.update()
 
-    def print_all(self, board, current_player=None, update="on", invalid_moves="on"):
+    def print_all(self, board, current_player=None, invalid_moves=True, grid_revealed=False, update=True):
         """
         Print all layers of the game in the order:
         grid > select pawn highlight > valid_moves > pawns > tokens
-        invalid_moves and update can be set 'off'.
+        - current_player = Player Instance (or None) - None will not print the selected pawn. 
+        - invalid_moves = bool - False will not print the invalid moves.
+        - revealed = bool - True will print all the cards facing up.
+        - update = bool - False makes this function not update the display.
         """
         self.WINDOW.fill((BACKGROUND))
-        self.print_grid(board)
+        if grid_revealed is False:
+            self.print_grid(board)
+        else:
+            self.print_grid_revealed(board)
         if current_player is not None:
             self.print_selected(current_player)
-        if invalid_moves == "on":
+        if invalid_moves is True:
             self.print_invalid_moves(board)
         self.print_pawns()
         self.print_tokens()
         self.print_score_board()
-        if update == "on":
+        if update is True:
             pygame.display.update()
 
     def print_card(self, board, col, row):
