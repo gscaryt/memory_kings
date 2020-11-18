@@ -250,26 +250,18 @@ class ScreenManager:
                 UBUNTU_S = pygame.font.Font(FONTS_PATH + "ubuntu_regular.ttf", int(HINT * 0.05))
                 blit_text(display.WINDOW, DIMBO_L, "About", DISP_W * 0.5, HINT * 0.3)
                 blit_long_text(display.WINDOW, "In Memory Kings, players challenge their memory in this mix of the classic games of Chess and Pairs (a.k.a. memory®). They move their pawns strategically across a grid of hidden cards, revealing them, and finding indentical pairs. The player that finds the most pairs wins!", (HINT*0.5, HINT*0.5), UBUNTU_R, HINT*0.5)
-                blit_text(display.WINDOW, DIMBO_R, "G. Scary T.  |  Letícia F. C.", DISP_W * 0.5, HINT * 1.7)
-                blit_text(display.WINDOW, DIMBO_R, "Johny G.", DISP_W * 0.5, HINT * 1.9)
-                blit_text(display.WINDOW, DIMBO_L, "How to Play", DISP_W * 0.5, HINT * 2.30)
-                blit_text(display.WINDOW, DIMBO_R, "Official Rulebook", DISP_W * 0.5 - HINT, HINT * 2.69)
-                blit_text(display.WINDOW, DIMBO_R, "Video Tutorial", DISP_W * 0.5 + HINT, HINT * 2.60)
-                blit_text(display.WINDOW, DIMBO_R, " (2-4 Players)", DISP_W * 0.5 + HINT, HINT * 2.75)
+                blit_text(display.WINDOW, DIMBO_L, "How to Play", DISP_W * 0.5, HINT * 1.5)
+                blit_text(display.WINDOW, DIMBO_R, "Official Rulebook", DISP_W * 0.5 - HINT, HINT * 1.89)
+                blit_text(display.WINDOW, DIMBO_R, "Video Tutorial", DISP_W * 0.5 + HINT, HINT * 1.80)
+                blit_text(display.WINDOW, DIMBO_R, " (2-4 Players)", DISP_W * 0.5 + HINT, HINT * 1.95)
+
+                blit_text(display.WINDOW, DIMBO_R, "G. Scary T.  |  Letícia F. C. | Johny G.", DISP_W * 0.5, DISP_H - HINT*0.2)
 
                 blit_text(display.WINDOW, UBUNTU_S, "Memory Kings v0.7 in Python 3.8", DISP_W * 0.99, DISP_H * 0.99, 'bottomright')
 
-                logo = Button(
-                    DISP_W * 0.5,
-                    DISP_H - HINT*0.3,
-                    HINT * 0.6,
-                    HINT * 0.6,
-                    "sneaky_pirates_logo.png",
-                )
-
                 pdf_logo = Button(
                     DISP_W*0.5 - HINT,
-                    HINT*2.30,
+                    HINT*1.5,
                     HINT*0.4,
                     HINT*0.4,
                     "pdf_logo.png",
@@ -279,12 +271,20 @@ class ScreenManager:
 
                 youtube_logo = Button(
                     DISP_W*0.5 + HINT,
-                    HINT*2.30,
+                    HINT*1.5,
                     HINT*0.4,
                     HINT*0.4,
                     "youtube_logo.png",
                     action_func=self._open_link,
                     action_arg="https://youtu.be/snqjQtYmv_Q",
+                )
+
+                sneaky_pirates_logo = Button(
+                    DISP_W * 0.5,
+                    DISP_H - HINT*0.6,
+                    HINT * 0.6,
+                    HINT * 0.6,
+                    "sneaky_pirates_logo.png",
                 )
 
                 about = Button(
@@ -300,7 +300,7 @@ class ScreenManager:
                 about.button(display.WINDOW, event)
                 pdf_logo.button(display.WINDOW, event)
                 youtube_logo.button(display.WINDOW, event)
-                logo.button(display.WINDOW, event)
+                sneaky_pirates_logo.button(display.WINDOW, event)
 
                 if event.type == pygame.QUIT:
                     pygame.quit()
