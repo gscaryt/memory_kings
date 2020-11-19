@@ -12,9 +12,9 @@ if sys.platform == "win32":
 
 setup(
     name="Memory Kings",
-    version="0.6",
+    version="0.7",
     author="G. Scary T.",
-    description="Memory Kings in Python",
+    description="Memory Kings in Python 3",
     options={"build_exe": build_exe_options},
     executables=[Executable("memorykings.py", base=base, icon="icon.ico")],
 )
