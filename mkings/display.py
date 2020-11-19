@@ -72,9 +72,7 @@ class Display:
                             is_open = True
                     for token in player.token:
                         if token.position == card.position:
-                            card_image = self.get_image(
-                                card.image, self.CARD_SIZE, self.CARD_SIZE
-                            )
+                            card_image = self.get_image(card.image, self.CARD_SIZE, self.CARD_SIZE)
                             self.WINDOW.blit(card_image, pos_on_screen)
                             is_open = True
 

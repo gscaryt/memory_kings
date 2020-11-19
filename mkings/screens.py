@@ -7,6 +7,7 @@ from .players import Player
 
 class ScreenManager:
     def __init__(self):
+        self.clock = pygame.time.Clock()
         self._start_menu = False
         self._game_run = False
         self._end_screen = False
@@ -16,13 +17,12 @@ class ScreenManager:
 
     def start_menu(self, game, display):
         self._start_menu = True
-        clock = pygame.time.Clock()
         pygame.event.clear()
         pygame.font.init()
 
         while self._start_menu:
-            clock.tick(FPS)
-            HINT = display.HINT * 1.5
+            self.clock.tick(FPS)
+            HINT = display.HINT * 1.5 # Magic number adjusts sizes without messing positions.
             DISP_W = display.DISP_W
             DISP_H = display.DISP_H
 
@@ -140,15 +140,14 @@ class ScreenManager:
                     display._resize(game.board, size)
 
             pygame.display.update()
+            self.clock.tick(FPS)
 
 
     def game_screen(self, game, display):
         self._game_run = True
-        clock = pygame.time.Clock()
         pygame.event.clear()
 
         while self._game_run:
-            clock.tick(FPS)
             for event in pygame.event.get():
                 display.print_all(game.board, game.current)
                 
@@ -171,16 +170,15 @@ class ScreenManager:
                     if game.end_turn is True:
                         game._turns += 1
                         game.change_turn()
+            self.clock.tick(FPS)
 
 
     def end_screen(self, game, display):
         self._end_screen = True
-        clock = pygame.time.Clock()
         pygame.event.clear()
         pygame.font.init()
 
         while self._end_screen:
-            clock.tick(FPS)
             HINT = display.HINT * 1.5 # Magic number adjusts sizes without messing positions.
             DISP_W = display.DISP_W
             DISP_H = display.DISP_H
@@ -257,19 +255,18 @@ class ScreenManager:
                     pygame.display.update()
                 else:
                     return
+            self.clock.tick(FPS)
 
 
     def reveal_cards(self, game, display):
         self._reveal_cards = True
-        clock = pygame.time.Clock()
         pygame.event.clear()
         pygame.font.init()
 
         while self._reveal_cards:
-            HINT = display.HINT * 1.5
+            HINT = display.HINT * 1.5 # Magic number adjusts sizes without messing positions.
             DISP_W = display.DISP_W
             DISP_H = display.DISP_H
-            clock.tick(FPS)
 
             about = Button(
                 DISP_W - HINT*0.2,
@@ -292,7 +289,6 @@ class ScreenManager:
             )
             
             for event in pygame.event.get():
-                display.WINDOW.fill((BACKGROUND))
                 display.print_all(game.board, current_player=None, invalid_moves=False, grid_revealed=True, update=False)
 
                 about.button(display.WINDOW, event)
@@ -310,18 +306,17 @@ class ScreenManager:
                     display._resize(game.board, size)
 
                 pygame.display.update()
+                self.clock.tick(FPS)
 
 
     def about_screen(self, game, display):
-        clock = pygame.time.Clock()
         pygame.event.clear()
         pygame.font.init()
 
         while self._about_screen:
-            HINT = display.HINT * 1.5
+            HINT = display.HINT * 1.5 # Magic number adjusts sizes without messing positions.
             DISP_W = display.DISP_W
             DISP_H = display.DISP_H
-            clock.tick(FPS)
         
             pdf_logo = Button(
                 DISP_W*0.5 - HINT,
@@ -377,7 +372,6 @@ class ScreenManager:
                 HINT * 0.6,
                 "sneaky_pirates_logo.png",
             )
-
             about = Button(
                 DISP_W - HINT*0.2,
                 DISP_H - HINT*0.2,
@@ -421,7 +415,8 @@ class ScreenManager:
                     size = pygame.display.get_window_size()
                     display._resize(game.board, size)
 
-                pygame.display.update()
+            pygame.display.update()
+            self.clock.tick(FPS)
 
     # TRANSITION METHODS
 

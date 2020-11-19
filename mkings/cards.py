@@ -1,5 +1,5 @@
 import pygame
-from .constants import BACKGROUND
+from .constants import BACKGROUND, FPS
 
 class Card:
     array = []
@@ -104,6 +104,7 @@ class Queen(Card):
         When the Queen is activated, the Player can
         peek any hidden card from the board.
         """
+        clock = pygame.time.Clock()
         while True:
             pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_CROSSHAIR)
             for event in pygame.event.get():
@@ -119,3 +120,4 @@ class Queen(Card):
             display.print_all(board, update="off", invalid_moves="off")
             display.print_eye(board, self.col, self.row)
             pygame.display.update()
+            clock.tick(FPS)

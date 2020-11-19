@@ -8,9 +8,12 @@ class Asset:
     
     def __init__(self):
         start=time.time()
-        for i, filename in enumerate(os.listdir(IMAGES_PATH)):
-            if filename.endswith(".png"):
-                Asset.image[filename] = pygame.image.load(IMAGES_PATH + filename).convert_alpha()
-                print(f"Loading Assets: {i+1}/{len(os.listdir(IMAGES_PATH))} - {filename}")
-        end=time.time()
-        print('All images loaded in: '+str(end-start)+'s')
+        if len(Asset.image) == len(os.listdir(IMAGES_PATH)):
+            print('Reseting the game. Images are already loaded.')
+        else:
+            for i, filename in enumerate(os.listdir(IMAGES_PATH)):
+                if filename.endswith(".png"):
+                    Asset.image[filename] = pygame.image.load(IMAGES_PATH + filename).convert_alpha()
+                    print(f"Loading Assets: {i+1}/{len(os.listdir(IMAGES_PATH))} - {filename}")
+            end=time.time()
+            print('All images loaded in: '+str(end-start)+'s')
