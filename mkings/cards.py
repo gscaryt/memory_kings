@@ -1,4 +1,5 @@
 import pygame
+import sys
 from .constants import BACKGROUND, FPS
 
 class Card:
@@ -108,7 +109,14 @@ class Queen(Card):
         while True:
             clock.tick(FPS)
             pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_CROSSHAIR)
+            display.WINDOW.fill((BACKGROUND))
+            display.print_all(board, update="off", invalid_moves="off")
+            display.print_eye(board, self.col, self.row)
+            pygame.display.update()
             for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     click_pos = board.get_click_to_pos(display, event)
                     if click_pos is not None:
@@ -118,8 +126,4 @@ class Queen(Card):
                             Card.queen_uses += 1
                             pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_HAND)
                             return True
-            display.WINDOW.fill((BACKGROUND))
-            display.print_all(board, update="off", invalid_moves="off")
-            display.print_eye(board, self.col, self.row)
-            pygame.display.update()
             

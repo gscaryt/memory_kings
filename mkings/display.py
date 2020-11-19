@@ -184,7 +184,6 @@ class Display:
                             self.DISP_H - self.HINT//4 - self.CORNER[1],
                         )
                         self.WINDOW.blit(t1, t1_rect)
-        pygame.display.update()
 
     def print_all(self, board, current_player=None, invalid_moves=True, grid_revealed=False, update=True):
         """
@@ -241,4 +240,3 @@ class Display:
         )
         queen_advice = self.get_image("queen_advice.png", self.CARD_SIZE, self.CARD_SIZE)
         self.WINDOW.blit(queen_advice, pos_on_screen)
-        pygame.display.update()
