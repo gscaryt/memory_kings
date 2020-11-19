@@ -16,5 +16,5 @@ setup(
     author="G. Scary T.",
     description="Memory Kings in Python",
     options={"build_exe": build_exe_options},
-    executables=[Executable("main.py", base=base, icon="icon.ico")],
+    executables=[Executable("memorykings.py", base=base, icon="icon.ico")],
 )
