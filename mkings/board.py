@@ -90,15 +90,14 @@ class Board:
         except IndexError:
             return None
 
-    def get_click_to_pos(self, display):
+    def get_click_to_pos(self, display, event):
         """
         Converts the pixel coordinates of a mouse click
         to card coordinates in the grid.
         - Returns a (col, row) tuple.
         """
         mouse = pygame.mouse.get_pos()
-        click = pygame.mouse.get_pressed()
-        if click[0]:
+        if event.type == pygame.MOUSEBUTTONDOWN:
             if not (
                 mouse[0] < display.CORNER[0]
                 or mouse[1] < display.CORNER[1]

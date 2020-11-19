@@ -93,7 +93,7 @@ class Game:
             pygame.time.wait(800)
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            position = self.board.get_click_to_pos(display)
+            position = self.board.get_click_to_pos(display, event)
             if position is None:
                 return
             if not self.place_pawns_check(position[0], position[1]):
@@ -151,7 +151,7 @@ class Game:
             self.ongoing_turn = 1
         self.end_turn = False
 
-    def round(self, display):
+    def round(self, display, event):
         '''
         Handles the change of players' turns.
         If Solo game, also handles calling the counter's
@@ -165,7 +165,7 @@ class Game:
             pygame.time.wait(600)
 
         else:
-            if self.current.turn(display, self.board):
+            if self.current.turn(display, self.board, event):
                 self.end_turn = True
 
             if Player.total == 2 and self.counter.recruit(self.board) == 0:

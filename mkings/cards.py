@@ -106,10 +106,11 @@ class Queen(Card):
         """
         clock = pygame.time.Clock()
         while True:
+            clock.tick(FPS)
             pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_CROSSHAIR)
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    click_pos = board.get_click_to_pos(display)
+                    click_pos = board.get_click_to_pos(display, event)
                     if click_pos is not None:
                         if not display.print_card(board, click_pos[0], click_pos[1]):
                             continue
@@ -120,4 +121,4 @@ class Queen(Card):
             display.print_all(board, update="off", invalid_moves="off")
             display.print_eye(board, self.col, self.row)
             pygame.display.update()
-            clock.tick(FPS)
+            

@@ -99,14 +99,15 @@ class Player():
             )
         return screen_pos_x, screen_pos_y
 
-    def select(self, display):
+    def select(self, display, event):
         """Selects a pawn with a click."""
         mouse = pygame.mouse.get_pos()
-        click = pygame.mouse.get_pressed()
+        print("select1 = " + str(event.type))
         for pawn in self.pawn:
             screen_pos = self._get_pawn_on_screen(display, pawn)
+            print("select2 = " + str(event.type))
             if (
-                click[0]
+                event.type == pygame.MOUSEBUTTONDOWN
                 and screen_pos[0] <= mouse[0] <= screen_pos[0] + display.PAWN_SIZE
                 and screen_pos[1] <= mouse[1] <= screen_pos[1] + display.PAWN_SIZE
             ):
@@ -116,12 +117,12 @@ class Player():
             else:
                 Pawn.selected = False
 
-    def move(self, display, board):
+    def move(self, display, board, event):
         """
         Attempts to moves a selected pawn to the new position
         and calls the Card activate and Card special methods.
         """
-        position = board.get_click_to_pos(display)
+        position = board.get_click_to_pos(display, event)
         if position is not None:
             if not Pawn.selected._move(
                 board, self, position[0], position[1]
@@ -143,7 +144,7 @@ class Player():
             Pawn.selected = False
             return False
 
-    def turn(self, display, board):
+    def turn(self, display, board, event):
         '''
         If there's a Pawn already selected, checks if the new clicked
         location is not the other Pawn of the player and then attempts
@@ -151,25 +152,23 @@ class Player():
         If there's no Pawn selected, calls select().
         '''
         mouse = pygame.mouse.get_pos()
-        click = pygame.mouse.get_pressed()
-        if click[0]:
+        if event.type == pygame.MOUSEBUTTONDOWN:
             if Pawn.selected:
                 for pawn in self.pawn:
                     screen_pos = self._get_pawn_on_screen(display, pawn)
                     if (
-                        click[0]
-                        and screen_pos[0] <= mouse[0] <= screen_pos[0] + display.PAWN_SIZE
+                        screen_pos[0] <= mouse[0] <= screen_pos[0] + display.PAWN_SIZE
                         and screen_pos[1] <= mouse[1] <= screen_pos[1] + display.PAWN_SIZE
                     ):
                         # Pawn Selected
                         Pawn.selected = pawn
                         return False
-                if self.move(display, board):
+                if self.move(display, board, event):
                     return True
                 else:
                     return False
             else:
-                self.select(display)
+                self.select(display, event)
                 return False
 
     def recruit(self, board):

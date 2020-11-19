@@ -140,7 +140,6 @@ class ScreenManager:
                     display._resize(game.board, size)
 
             pygame.display.update()
-            self.clock.tick(FPS)
 
 
     def game_screen(self, game, display):
@@ -148,6 +147,7 @@ class ScreenManager:
         pygame.event.clear()
 
         while self._game_run:
+            self.clock.tick(FPS)
             for event in pygame.event.get():
                 display.print_all(game.board, game.current)
                 
@@ -166,11 +166,10 @@ class ScreenManager:
                     if game._all_pawns_set is not True:
                         game.place_pawns(display, event)
                     if game._all_pawns_set is True:
-                        game.round(display)
+                        game.round(display, event)
                     if game.end_turn is True:
                         game._turns += 1
                         game.change_turn()
-            self.clock.tick(FPS)
 
 
     def end_screen(self, game, display):
@@ -179,6 +178,7 @@ class ScreenManager:
         pygame.font.init()
 
         while self._end_screen:
+            self.clock.tick(FPS)
             HINT = display.HINT * 1.5 # Magic number adjusts sizes without messing positions.
             DISP_W = display.DISP_W
             DISP_H = display.DISP_H
@@ -255,7 +255,6 @@ class ScreenManager:
                     pygame.display.update()
                 else:
                     return
-            self.clock.tick(FPS)
 
 
     def reveal_cards(self, game, display):
@@ -264,6 +263,7 @@ class ScreenManager:
         pygame.font.init()
 
         while self._reveal_cards:
+            self.clock.tick(FPS)
             HINT = display.HINT * 1.5 # Magic number adjusts sizes without messing positions.
             DISP_W = display.DISP_W
             DISP_H = display.DISP_H
@@ -306,7 +306,6 @@ class ScreenManager:
                     display._resize(game.board, size)
 
                 pygame.display.update()
-                self.clock.tick(FPS)
 
 
     def about_screen(self, game, display):
@@ -314,6 +313,7 @@ class ScreenManager:
         pygame.font.init()
 
         while self._about_screen:
+            self.clock.tick(FPS)
             HINT = display.HINT * 1.5 # Magic number adjusts sizes without messing positions.
             DISP_W = display.DISP_W
             DISP_H = display.DISP_H
@@ -416,7 +416,6 @@ class ScreenManager:
                     display._resize(game.board, size)
 
             pygame.display.update()
-            self.clock.tick(FPS)
 
     # TRANSITION METHODS
 
