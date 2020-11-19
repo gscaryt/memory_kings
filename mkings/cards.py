@@ -118,6 +118,7 @@ class Queen(Card):
                             Card.queen_uses += 1
                             pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_HAND)
                             return True
+            display.WINDOW.fill((BACKGROUND))
             display.print_all(board, update="off", invalid_moves="off")
             display.print_eye(board, self.col, self.row)
             pygame.display.update()

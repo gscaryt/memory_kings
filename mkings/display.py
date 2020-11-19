@@ -195,7 +195,6 @@ class Display:
         - revealed = bool - True will print all the cards facing up.
         - update = bool - False makes this function not update the display.
         """
-        self.WINDOW.fill((BACKGROUND))
         if grid_revealed is False:
             self.print_grid(board)
         else:

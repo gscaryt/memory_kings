@@ -102,10 +102,8 @@ class Player():
     def select(self, display, event):
         """Selects a pawn with a click."""
         mouse = pygame.mouse.get_pos()
-        print("select1 = " + str(event.type))
         for pawn in self.pawn:
             screen_pos = self._get_pawn_on_screen(display, pawn)
-            print("select2 = " + str(event.type))
             if (
                 event.type == pygame.MOUSEBUTTONDOWN
                 and screen_pos[0] <= mouse[0] <= screen_pos[0] + display.PAWN_SIZE

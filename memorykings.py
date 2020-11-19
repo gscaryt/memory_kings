@@ -11,9 +11,10 @@ def main():
     game = Game() # Init all main game variables.
     stats = Stats() # Init all data collection variables.
     display = Display() # Init the display.
-    asset = Asset() # Load all the images.
+    asset = Asset(display) # Load all the images.
     screen_manager = ScreenManager() # Init the Screen Manager.
     pygame.event.clear() # Clear any lingering Event.
+
 
     # START MENU LOOP
     screen_manager.start_menu(game, display)

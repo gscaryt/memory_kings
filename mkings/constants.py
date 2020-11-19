@@ -3,7 +3,7 @@ FPS = 60
 IMAGES_PATH = "images/"
 FONTS_PATH = "fonts/"
 
-# RGB
+# RGB - Most of these are not used. But I like having options.
 WHITE = 255, 255, 255
 DARK_GREY = 20, 20, 20
 GREY = 60, 60, 60

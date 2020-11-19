@@ -1,4 +1,5 @@
 # Memory Kings in Python 3 by G. Scary Tontini
+Alpha0.7
 
 ## TODO
 

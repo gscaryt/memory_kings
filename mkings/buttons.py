@@ -50,40 +50,63 @@ class Button:
                 self.action_func()
 
 
-    def button(self, surface, event):
+    def get_event(self, surface, event):
         '''
-        Prints on the Surface a normal button.
+        When adding a button, this method must be called
+        for each button instance within the "For event" 
+        loop to activate the button's functionality.
         '''
         mouse = pygame.mouse.get_pos()
+        rest = self._get_image()
+        if rest[1].collidepoint(mouse) and event.type == pygame.MOUSEBUTTONDOWN:
+            surface.blit(*rest)
+            self._call_function()
 
+    def button(self,surface):
+        '''
+        Prints on the Surface a normal button.
+
+        # EXAMPLE #
+        1) Create the Button:
+        button = Button(int,int,int,int,"rest.png","hover.png",choose_attribute,value))
+
+        2) Define the Function:
+        def choose_attribute(self, value):
+            attribute = value
+
+        3) Place the Button in the screen's "While" loop:
+        button.button(SURFACE)
+
+        4) Place the get_event(SURFACE, event) in the "For event" loop:
+        button.get_event(SURFACE, event)
+        """
+        '''
+        mouse = pygame.mouse.get_pos()
         rest = self._get_image()
         hover = self._get_image("hover")
-
         if rest[1].collidepoint(mouse):
             surface.blit(*hover)
         else:
             surface.blit(*rest)
 
-        if rest[1].collidepoint(mouse) and event.type == pygame.MOUSEBUTTONDOWN:
-            surface.blit(*rest)
-            self._call_function()
-
-
-    def switch(self, surface, event, condition):
+    def switch(self,surface,condition):
         """
         Prints on the Surface a button that stays pressed 
         if a condition is True.
 
         # EXAMPLE #
         1) Create the Switch:
-        button = Button(50,50,20,20,"rest.png","pressed.png",choose_attribute,value))
+        button = Button(int,int,int,int,"rest.png","pressed.png",choose_attribute,value))
 
         2) Define the Function:
         def choose_attribute(self, value):
             attribute = value
 
-        3) Place the Switch:
-        tog.switch(SURFACE, (attribute == "value"))
+        3) Place the Switch in the screen's "While" loop:
+        button.switch(SURFACE, (attribute == "value"))
+
+        4) Place the get_event(SURFACE, event) in the "For event" loop:
+        button.get_event(SURFACE, event)
         """
         mouse = pygame.mouse.get_pos()
 
@@ -96,13 +119,8 @@ class Button:
             surface.blit(*hover)
         else:
             surface.blit(*rest)
-        
-        if rest[1].collidepoint(mouse) and event.type == pygame.MOUSEBUTTONDOWN:
-            surface.blit(*rest)
-            self._call_function()
 
-
-    def toggle(self, surface, event, condition):
+    def toggle(self,surface,condition):
         '''
         A Toggle is used to choose between two options.
         It should be linked to a function or method that changes 
@@ -110,7 +128,7 @@ class Button:
 
         # EXAMPLE #
         1) Create the Toggle:
-        button = Button(50,50,20,20,"toggle_left.png","toggle_right.png",choose_attribute))
+        button = Button(int,int,int,int,"toggle_left.png","toggle_right.png",choose_attribute))
 
         2) Define the Function:
         def choose_attribute(self):
@@ -119,8 +137,11 @@ class Button:
             else:
                 attribute = option_1
 
-        3) Place the Toggle:
-        tog.toggle(SURFACE, (attribute == "option 2"))
+        3) Place the Toggle in the screen's "While" loop:
+        button.toggle(SURFACE, (attribute == "option 2"))
+
+        4) Place the get_event(SURFACE, event) in the "For event" loop:
+        button.get_event(SURFACE, event)
         '''
         mouse = pygame.mouse.get_pos()
 
@@ -131,6 +152,3 @@ class Button:
             surface.blit(*right)
         else:
             surface.blit(*left)
-
-        if left[1].collidepoint(mouse) and event.type == pygame.MOUSEBUTTONDOWN:
-            self._call_function()
