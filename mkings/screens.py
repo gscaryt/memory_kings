@@ -154,9 +154,9 @@ class ScreenManager:
             two.switch(display.WINDOW, (game._num_of_players == 3))
             three.switch(display.WINDOW, (game._num_of_players == 4))
             four.switch(display.WINDOW, (game._num_of_players == 5))
-            grid.toggle(display.WINDOW, (game._grid_size == (6, 6)))
-            setup.toggle(display.WINDOW, (game._setup_variant == "alternate"))
-            logo.button(display.WINDOW)
+            grid.toggle(display.WINDOW, (game._grid_size == (6, 6)), False)
+            setup.toggle(display.WINDOW, (game._setup_variant == "alternate"), False)
+            logo.button(display.WINDOW, False)
             about.button(display.WINDOW)
 
             pygame.display.update()
@@ -556,7 +556,7 @@ class ScreenManager:
             blit_text(display.WINDOW, DIMBO_L, "About", DISP_W * 0.5, HINT * 0.3)
             blit_long_text(
                 display.WINDOW,
-                "In Memory Kings, players challenge their memory in this mix of the classic games of Chess and Pairs (a.k.a. memory®). They move their pawns strategically across a grid of hidden cards, revealing them, and finding indentical pairs. The player that finds the most pairs wins!",
+                "In Memory Kings, players challenge their memory in a mix of the classic games of Chess and Pairs (a.k.a. memory®). They move their pawns strategically across a grid of hidden cards, revealing them, and finding indentical pairs. The player that finds the most pairs wins!",
                 (HINT * 0.5, HINT * 0.5),
                 UBUNTU_R,
                 HINT * 0.5,
@@ -574,14 +574,14 @@ class ScreenManager:
                 DIMBO_R,
                 "Video Tutorial",
                 DISP_W * 0.5 + HINT,
-                HINT * 1.80,
+                HINT * 1.81,
             )
             blit_text(
                 display.WINDOW,
                 DIMBO_R,
                 " (2-4 Players)",
                 DISP_W * 0.5 + HINT,
-                HINT * 1.95,
+                HINT * 1.97,
             )
             blit_text(display.WINDOW, DIMBO_L, "Links", DISP_W * 0.5, HINT * 2.4)
             blit_text(
@@ -606,7 +606,7 @@ class ScreenManager:
             bgg_logo.button(display.WINDOW)
             tgc_logo.button(display.WINDOW)
             facebook_logo.button(display.WINDOW)
-            sneaky_pirates_logo.button(display.WINDOW)
+            sneaky_pirates_logo.button(display.WINDOW, False)
 
             pygame.display.update()
 

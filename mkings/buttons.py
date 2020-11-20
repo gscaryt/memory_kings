@@ -32,13 +32,18 @@ class Button:
         self.action_func = action_func
         self.action_arg = action_arg
 
-    def _get_image(self, state="rest"):
+    def _get_image(self, state="rest", pop=False):
         if state == "hover" and self.hover is not None:
             image = self.hover
         else:
             image = self.rest
         button_image = Asset.image[image].convert_alpha()
-        scaled_image = pygame.transform.smoothscale(
+        if pop:
+            scaled_image = pygame.transform.smoothscale(
+            button_image, (int(self.width*1.1), int(self.height*1.1))
+            )
+        else:
+            scaled_image = pygame.transform.smoothscale(
             button_image, (self.width, self.height)
         )
         image_rect = scaled_image.get_rect()
@@ -64,7 +69,7 @@ class Button:
             surface.blit(*rest)
             self._call_function()
 
-    def button(self, surface):
+    def button(self, surface, pop=True):
         '''
         Prints on the Surface a normal button.
 
@@ -85,13 +90,13 @@ class Button:
         '''
         mouse = pygame.mouse.get_pos()
         rest = self._get_image()
-        hover = self._get_image("hover")
+        hover = self._get_image("hover", pop)
         if rest[1].collidepoint(mouse):
             surface.blit(*hover)
         else:
             surface.blit(*rest)
 
-    def switch(self, surface, condition):
+    def switch(self, surface, condition, pop=True):
         """
         Prints on the Surface a button that stays pressed
         if a condition is True.
@@ -113,16 +118,17 @@ class Button:
         mouse = pygame.mouse.get_pos()
 
         rest = self._get_image()
-        hover = self._get_image("hover")
-
+        
         if rest[1].collidepoint(mouse):
+            hover = self._get_image("hover", pop)
             surface.blit(*hover)
         elif condition is True:
+            hover = self._get_image("hover", False)
             surface.blit(*hover)
         else:
             surface.blit(*rest)
 
-    def toggle(self, surface, condition):
+    def toggle(self, surface, condition, pop=True):
         """
         A Toggle is used to choose between two options.
         It should be linked to a function or method that changes
@@ -150,7 +156,13 @@ class Button:
         left = self._get_image()
         right = self._get_image("hover")
 
-        if condition is True:
+        if left[1].collidepoint(mouse) and condition is True:
+            right = self._get_image("hover", pop)
+            surface.blit(*right)
+        elif right[1].collidepoint(mouse) and condition is False:
+            left = self._get_image("right", pop)
+            surface.blit(*left)
+        elif condition is True:
             surface.blit(*right)
         else:
             surface.blit(*left)
