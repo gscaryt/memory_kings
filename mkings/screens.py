@@ -100,7 +100,7 @@ class ScreenManager:
                 )
                 about = Button(
                     DISP_W - HINT*0.2,
-                    DISP_H - HINT*0.15,
+                    DISP_H - HINT*0.19,
                     HINT*0.2,
                     HINT*0.2,
                     "about.png",
@@ -171,7 +171,7 @@ class ScreenManager:
                 self._resizing_display = False
                 about = Button(
                     DISP_W - HINT*0.2,
-                    DISP_H - HINT*0.15,
+                    DISP_H - HINT*0.19,
                     HINT*0.2,
                     HINT*0.2,
                     "about.png",
@@ -229,7 +229,7 @@ class ScreenManager:
                 self._resizing_display = False
                 replay = Button(
                     HINT * 0.2,
-                    DISP_H - HINT*0.15,
+                    DISP_H - HINT*0.19,
                     HINT*0.2,
                     HINT*0.2,
                     "replay.png",
@@ -239,7 +239,7 @@ class ScreenManager:
 
                 reveal = Button(
                     HINT*0.5,
-                    DISP_H - HINT*0.15,
+                    DISP_H - HINT*0.19,
                     HINT*0.2,
                     HINT*0.2,
                     "reveal.png",
@@ -249,7 +249,7 @@ class ScreenManager:
 
                 about = Button(
                     DISP_W - HINT*0.2,
-                    DISP_H - HINT*0.15,
+                    DISP_H - HINT*0.19,
                     HINT*0.2,
                     HINT*0.2,
                     "about.png",
@@ -321,7 +321,7 @@ class ScreenManager:
                 self._resizing_display = False
                 replay = Button(
                     HINT * 0.2,
-                    DISP_H - HINT*0.15,
+                    DISP_H - HINT*0.19,
                     HINT*0.2,
                     HINT*0.2,
                     "replay.png",
@@ -331,7 +331,7 @@ class ScreenManager:
 
                 reveal = Button(
                     HINT*0.5,
-                    DISP_H - HINT*0.15,
+                    DISP_H - HINT*0.19,
                     HINT*0.2,
                     HINT*0.2,
                     "reveal.png",
@@ -341,7 +341,7 @@ class ScreenManager:
 
                 about = Button(
                     DISP_W - HINT*0.2,
-                    DISP_H - HINT*0.15,
+                    DISP_H - HINT*0.19,
                     HINT*0.2,
                     HINT*0.2,
                     "about.png",
@@ -447,7 +447,7 @@ class ScreenManager:
                 )
                 about = Button(
                     DISP_W - HINT*0.2,
-                    DISP_H - HINT*0.15,
+                    DISP_H - HINT*0.19,
                     HINT*0.2,
                     HINT*0.2,
                     "about.png",

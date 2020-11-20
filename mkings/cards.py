@@ -108,7 +108,7 @@ class Queen(Card):
         clock = pygame.time.Clock()
         while True:
             clock.tick(FPS)
-            pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_CROSSHAIR)
+            pygame.mouse.set_cursor((32,24), (15,11), *display.get_cursor_eye())
             display.WINDOW.fill((BACKGROUND))
             display.print_all(board, update="off", invalid_moves="off")
             display.print_eye(board, self.col, self.row)
@@ -126,4 +126,3 @@ class Queen(Card):
                             Card.queen_uses += 1
                             pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_HAND)
                             return True
-            

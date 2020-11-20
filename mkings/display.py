@@ -154,14 +154,14 @@ class Display:
 
     def print_score_board(self):
         pygame.font.init()
-        DIMBO_L = pygame.font.Font("fonts/dimbo_regular.ttf", self.CARD_SIZE//5)
+        DIMBO_L = pygame.font.Font("fonts/dimbo_regular.ttf", int(self.HINT*0.2))
         for i, player in enumerate(Player.array):
             t1 = DIMBO_L.render(f"{player.color}: {player.score}", True, PLAYER_COLOR_CODES[i])
             t1_rect = t1.get_rect()
             if Player.total == 2:
                 t1_rect.center = (
                     (self.DISP_W*0.5) - (self.CARD_SIZE*0.5) + (i * self.CARD_SIZE),
-                    self.DISP_H - self.HINT//4 - self.CORNER[1],
+                    self.DISP_H - self.HINT*0.25 - self.CORNER[1],
                 )
                 self.WINDOW.blit(t1, t1_rect)
             else:
@@ -169,19 +169,19 @@ class Display:
                     if Player.total == 3:
                         t1_rect.center = (
                             (self.DISP_W*0.5) - (self.CARD_SIZE*0.5) + ((i - 1) * self.CARD_SIZE),
-                            self.DISP_H - self.HINT//4 - self.CORNER[1],
+                            self.DISP_H - self.HINT*0.25 - self.CORNER[1],
                         )
                         self.WINDOW.blit(t1, t1_rect)
                     elif Player.total == 4:
                         t1_rect.center = (
                             (self.DISP_W*0.5) - (self.CARD_SIZE) + ((i - 1) * self.CARD_SIZE),
-                            self.DISP_H - self.HINT//4 - self.CORNER[1],
+                            self.DISP_H - self.HINT*0.25 - self.CORNER[1],
                         )
                         self.WINDOW.blit(t1, t1_rect)
                     else:
                         t1_rect.center = (
-                            (self.DISP_W*0.5) - (3 * self.CARD_SIZE*0.5) + ((i - 1) * self.CARD_SIZE),
-                            self.DISP_H - self.HINT//4 - self.CORNER[1],
+                            (self.DISP_W*0.5) - (self.CARD_SIZE*1.5) + ((i - 1) * self.CARD_SIZE),
+                            self.DISP_H - self.HINT*0.25 - self.CORNER[1],
                         )
                         self.WINDOW.blit(t1, t1_rect)
 
@@ -240,3 +240,32 @@ class Display:
         )
         queen_advice = self.get_image("queen_advice.png", self.CARD_SIZE, self.CARD_SIZE)
         self.WINDOW.blit(queen_advice, pos_on_screen)
+
+    def get_cursor_eye(self):
+        eye_cursor = (
+            "                                ",
+            "                                ",
+            "            XXXXXXX             ",
+            "           XXXXXXXXX            ",
+            "         XXXX.....XXXX          ",
+            "       XXXX.........XXXX        ",
+            "      XXX.....XXX.....XXX       ",
+            "     XXX....XXXXXXX....XXX      ",
+            "    XXX....XXXXXX.XX....XXX     ",
+            "   XXX....XXXXXX...XX....XXX    ",
+            "  XXX....XXXXXXX...XXX....XXX   ",
+            " XXX.....XXXXXXXX..XXX.....XXX  ",
+            "XXX......XXXXXXXXX.XXX......XXX ",
+            " XXX......XXXXXXXXXXX......XXX  ",
+            "  XXX......XXXXXXXXX......XXX   ",
+            "   XXX......XXXXXXX......XXX    ",
+            "    XXX.......XXX.......XXX     ",
+            "     XXX...............XXX      ",
+            "      XXXX...........XXXX       ",
+            "        XXXX.......XXXX         ",
+            "          XXXXXXXXXXX           ",
+            "            XXXXXXX             ",
+            "                                ",
+            "                                ",
+        )
+        return pygame.cursors.compile(eye_cursor)
