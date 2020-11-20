@@ -245,7 +245,7 @@ class Display:
         eye_cursor = (
             "                                ",
             "                                ",
-            "            XXXXXXX             ",
+            "             XXXXX              ",
             "           XXXXXXXXX            ",
             "         XXXX.....XXXX          ",
             "       XXXX.........XXXX        ",
