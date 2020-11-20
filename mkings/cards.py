@@ -125,7 +125,7 @@ class Queen(Card):
                 display.HINT * 0.3,
                 "button_locked.png",
             )
-            locked.button(display.WINDOW)
+            locked.button(display.WINDOW, False)
             pygame.display.update()
 
             for event in pygame.event.get():
