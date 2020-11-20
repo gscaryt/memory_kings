@@ -3,14 +3,15 @@ from .assets import Asset
 
 
 class Button:
-    '''
+    """
     A Button is used to call a function/method when clicked.
     - button(surface) method prints a normal Button.
     - switch(surface, condition) method prints a Switch
         that stays pressed while a "condition" is True.
     - toggle(surface, condition) method prints a Toggle
         that flips left and right depending of a "condition".
-    '''
+    """
+
     def __init__(
         self,
         center_x,
@@ -37,7 +38,9 @@ class Button:
         else:
             image = self.rest
         button_image = Asset.image[image].convert_alpha()
-        scaled_image = pygame.transform.smoothscale(button_image, (self.width, self.height))
+        scaled_image = pygame.transform.smoothscale(
+            button_image, (self.width, self.height)
+        )
         image_rect = scaled_image.get_rect()
         image_rect.center = (self.center_x, self.center_y)
         return scaled_image, image_rect
@@ -49,20 +52,19 @@ class Button:
             else:
                 self.action_func()
 
-
     def get_event(self, surface, event):
-        '''
+        """
         When adding a button, this method must be called
-        for each button instance within the "For event" 
+        for each button instance within the "For event"
         loop to activate the button's functionality.
-        '''
+        """
         mouse = pygame.mouse.get_pos()
         rest = self._get_image()
         if rest[1].collidepoint(mouse) and event.type == pygame.MOUSEBUTTONDOWN:
             surface.blit(*rest)
             self._call_function()
 
-    def button(self,surface):
+    def button(self, surface):
         '''
         Prints on the Surface a normal button.
 
@@ -89,9 +91,9 @@ class Button:
         else:
             surface.blit(*rest)
 
-    def switch(self,surface,condition):
+    def switch(self, surface, condition):
         """
-        Prints on the Surface a button that stays pressed 
+        Prints on the Surface a button that stays pressed
         if a condition is True.
 
         # EXAMPLE #
@@ -120,10 +122,10 @@ class Button:
         else:
             surface.blit(*rest)
 
-    def toggle(self,surface,condition):
-        '''
+    def toggle(self, surface, condition):
+        """
         A Toggle is used to choose between two options.
-        It should be linked to a function or method that changes 
+        It should be linked to a function or method that changes
         a given attribute (or global variable) value.
 
         # EXAMPLE #
@@ -142,7 +144,7 @@ class Button:
 
         4) Place the get_event(SURFACE, event) in the "For event" loop:
         button.get_event(SURFACE, event)
-        '''
+        """
         mouse = pygame.mouse.get_pos()
 
         left = self._get_image()

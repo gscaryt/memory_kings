@@ -4,6 +4,7 @@ from .players import Player, CounterKing
 from .board import Board
 from .cards import Card
 
+
 class Game:
     def __init__(self):
         self._init()
@@ -21,7 +22,7 @@ class Game:
         self.board = None
         self.ongoing_turn = 1
         self.end_turn = False
-    
+
     def _reset(self):
         self._init()
         Player.array = []
@@ -39,18 +40,18 @@ class Game:
     # CREATING THE GAME
 
     def choose_players(self, number):
-        '''Function for Button on the Start Menu'''
+        """Function for Button on the Start Menu"""
         self._num_of_players = number + 1
 
     def choose_grid(self):
-        '''Function for Button on the Start Menu'''
+        """Function for Button on the Start Menu"""
         if self._grid_size == (5, 5):
             self._grid_size = (6, 6)
         else:
             self._grid_size = (5, 5)
 
     def choose_setup(self):
-        '''Function for Button on the Start Menu'''
+        """Function for Button on the Start Menu"""
         if self._setup_variant == "standard":
             self._setup_variant = "alternate"
         else:
@@ -75,7 +76,7 @@ class Game:
 
         for i in range(1, self._num_of_players):
             player = Player(i, PLAYER_COLORS[i])
-        
+
         Player.total = self._num_of_players
         del self._num_of_players
 
@@ -89,7 +90,7 @@ class Game:
         Placement continues until the last player placed 2 pawns.
         """
         if Player.total == 2 and len(self.counter.pawn) != 1:
-            self.counter.place_pawn(0,0)
+            self.counter.place_pawn(0, 0)
             pygame.time.wait(800)
 
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -104,11 +105,11 @@ class Game:
                 if self.ongoing_turn == 0:
                     self.ongoing_turn = 1
 
-        last_player = Player.array[Player.total-1]
+        last_player = Player.array[Player.total - 1]
         self._all_pawns_set = bool(len(last_player.pawn) == 2)
         if self._all_pawns_set:
             self.ongoing_turn = 1
-        
+
     def place_pawns_check(self, col, row):
         """
         Checks if the coordinates are a valid position for
@@ -152,11 +153,11 @@ class Game:
         self.end_turn = False
 
     def round(self, display, event):
-        '''
+        """
         Handles the change of players' turns.
         If Solo game, also handles calling the counter's
         turns and extra moves.
-        '''
+        """
         Player._get_all_pawns_positions()
 
         if Player.total == 2 and self.ongoing_turn == 0:
@@ -193,12 +194,12 @@ class Game:
         if Player.total == 2:
             try:
                 if (
-                    (self.board.rows%2 == 1 
+                    self.board.rows % 2 == 1
                     and self.counter.pawn[0].position
-                    == (self.board.cols-1, self.board.rows-1))
-                    or (self.board.rows%2 == 0 
-                    and self.counter.pawn[0].position
-                    == (0, self.board.rows-1))
+                    == (self.board.cols - 1, self.board.rows - 1)
+                ) or (
+                    self.board.rows % 2 == 0
+                    and self.counter.pawn[0].position == (0, self.board.rows - 1)
                 ):
                     # Player Loses
                     self._winner = self.counter

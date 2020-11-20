@@ -21,19 +21,22 @@ class Stats:
         self.end_time = None
         self.abandoned = None
         self.queen_uses = None
-        
-    def collect_start_data(self,game):
+
+    def collect_start_data(self, game):
         self.start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.num_of_players = game._num_of_players-1
+        self.num_of_players = game._num_of_players - 1
         self.grid_size = game._grid_size
         self.setup_variant = game._setup_variant
 
-    def collect_end_data(self,game):
+    def collect_end_data(self, game):
         self.turns = game._turns
         if game._winner is not None:
-            self.winner = f'Player {game._winner.order}'
+            self.winner = f"Player {game._winner.order}"
         if len(Player.array[0].pawn) != 0:
-            self.counter_position = (Player.array[0].pawn[0].col+1, Player.array[0].pawn[0].row+1)
+            self.counter_position = (
+                Player.array[0].pawn[0].col + 1,
+                Player.array[0].pawn[0].row + 1,
+            )
             self.counter_score = Player.array[0].score
         self.player1_score = Player.array[1].score
         if self.num_of_players > 1:
@@ -63,29 +66,32 @@ class Stats:
             "End Time": self.end_time,
             "Abandoned": self.abandoned,
             "Queen Uses": self.queen_uses,
-            }
+        }
 
     def write_data(self):
         game_stats = self.build_dict()
         values = list(game_stats.values())
-        if not path.exists('docs'):
-            mkdir('docs')
-        if not path.isfile('docs/mkings_data.txt'):
-            with open ('docs/mkings_data.txt', 'w') as data_file:
-                data_file.write('Start;Players;Grid;Setup;Turns;Winner;CounterPos;Counter;Player1;Player2;Player3;Player4;End;Abandoned;QueenUsed;\n')
-        with open('docs/mkings_data.txt', 'a+') as data_file:
+        if not path.exists("docs"):
+            mkdir("docs")
+        if not path.isfile("docs/mkings_data.txt"):
+            with open("docs/mkings_data.txt", "w") as data_file:
+                data_file.write(
+                    "Start;Players;Grid;Setup;Turns;Winner;CounterPos;Counter;Player1;Player2;Player3;Player4;End;Abandoned;QueenUsed;\n"
+                )
+        with open("docs/mkings_data.txt", "a+") as data_file:
             for data in values:
-                data_file.write(f'{data};')
-            data_file.write('\n')
+                data_file.write(f"{data};")
+            data_file.write("\n")
+
 
 def get_data_frame(self):
-    with open('docs/mkings_data.txt', 'r') as data_file:
+    with open("docs/mkings_data.txt", "r") as data_file:
         all_data = data_file.readlines()
         new_list = []
         dictionary = {}
         for line in all_data:
             stripped_line = line.strip()
-            new_list.append(stripped_line.split(';'))
+            new_list.append(stripped_line.split(";"))
         for column in new_list[0]:
             dictionary[column] = []
         for i, row in enumerate(new_list):

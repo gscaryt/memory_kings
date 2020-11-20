@@ -50,7 +50,7 @@ class Pawn:
         3) col: Destination column.
         4) row: Destination row.
         """
-        if (col, row) == self.position: # Attempt to move to same position.
+        if (col, row) == self.position:  # Attempt to move to same position.
             return False
         elif self._is_to_adjacent(col, row):
             return True

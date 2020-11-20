@@ -2,6 +2,7 @@ import pygame
 import sys
 from .constants import BACKGROUND, FPS
 
+
 class Card:
     array = []
     queen_uses = 0
@@ -11,9 +12,9 @@ class Card:
         self.rank = rank
         self.back = back
         self.image = color.lower() + "_" + rank.lower() + ".png"
-        
-        self.col = 0 # Position col,row is redefined on Board Grid Setup
-        self.row = 0 
+
+        self.col = 0  # Position col,row is redefined on Board Grid Setup
+        self.row = 0
 
         Card.array.append(self)
 
@@ -46,6 +47,7 @@ class Card:
         """Standard Cards have no special effects."""
         pass
 
+
 class Bishop(Card):
     def is_valid_escort(self, col, row):
         """
@@ -57,6 +59,7 @@ class Bishop(Card):
             return True
         else:
             return False
+
 
 class Rook(Card):
     def is_valid_escort(self, col, row):
@@ -70,6 +73,7 @@ class Rook(Card):
         else:
             return False
 
+
 class Knight(Card):
     def is_valid_escort(self, col, row):
         """
@@ -77,13 +81,13 @@ class Knight(Card):
         1) col: Destination column.
         2) row: Destination row.
         """
-        if (
-            (abs(col - self.col) == 2 and abs(row - self.row) == 1) 
-            or (abs(col - self.col) == 1 and abs(row - self.row) == 2)
+        if (abs(col - self.col) == 2 and abs(row - self.row) == 1) or (
+            abs(col - self.col) == 1 and abs(row - self.row) == 2
         ):
             return True
         else:
             return False
+
 
 class Queen(Card):
     def is_valid_escort(self, col, row):
@@ -93,13 +97,14 @@ class Queen(Card):
         2) row: Destination row.
         """
         if (
-            (abs(col - self.col) == abs(row - self.row)) 
-            or (col == self.col) or (row == self.row)
+            (abs(col - self.col) == abs(row - self.row))
+            or (col == self.col)
+            or (row == self.row)
         ):
             return True
         else:
             return False
-    
+
     def special(self, display, board):
         """
         When the Queen is activated, the Player can
@@ -108,7 +113,7 @@ class Queen(Card):
         clock = pygame.time.Clock()
         while True:
             clock.tick(FPS)
-            pygame.mouse.set_cursor((32,24), (15,11), *display.get_cursor_eye())
+            display.get_cursor_eye()
             display.WINDOW.fill((BACKGROUND))
             display.print_all(board, update="off", invalid_moves="off")
             display.print_eye(board, self.col, self.row)

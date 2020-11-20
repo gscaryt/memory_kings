@@ -3,6 +3,7 @@ import random
 from .constants import BACKS, RANKS, CARD_COLORS
 from .cards import Card, Bishop, Rook, Knight, Queen
 
+
 class Board:
     def __init__(self, cols, rows=None):
         self.cols = cols
@@ -14,12 +15,13 @@ class Board:
         """
         Generates all the Cards that are appended to the
         card array.
-        Variable num_of_colors determines how many cards 
+        Variable num_of_colors determines how many cards
         need to be created based on the size of the board.
         """
 
         num_of_colors = int(
-            (self.cols*self.rows - 1 + (self.cols*self.rows + 1) % 2)/(len(BACKS)*len(RANKS))
+            (self.cols * self.rows - 1 + (self.cols * self.rows + 1) % 2)
+            / (len(BACKS) * len(RANKS))
         )
 
         # GENERATE SPECIAL CARDS OUTSIDE THE LOOP
@@ -35,11 +37,11 @@ class Board:
                         Rook(color, rank, back)
                     elif rank == "KNIGHT":
                         Knight(color, rank, back)
-        
+
     def gen_grid(self, setup_variant):
         """
         Forms a grid with randomly placed cards.
-        1) setup_variant: 
+        1) setup_variant:
             1.1) "standard" for random placement.
             1.2) "alternate" for alternate placement.
         """
@@ -50,7 +52,7 @@ class Board:
             card.row = i // self.cols
             card.col = i % self.cols
         for j in range(0, len(Card.array), self.cols):
-            grid_slice = Card.array[j: j + self.cols]
+            grid_slice = Card.array[j : j + self.cols]
             self.grid.append(grid_slice)
 
     def _alternate_backs(self):
@@ -106,17 +108,19 @@ class Board:
             ):
                 for i in range(self.cols):
                     if (
-                        (mouse[0] - display.CORNER[0] - display.CARD_SIZE) / display.CARD_SIZE 
-                        <= i <= 
-                        (mouse[0] - display.CORNER[0]) / display.CARD_SIZE
+                        (mouse[0] - display.CORNER[0] - display.CARD_SIZE)
+                        / display.CARD_SIZE
+                        <= i
+                        <= (mouse[0] - display.CORNER[0]) / display.CARD_SIZE
                     ):
                         col = i
                         break
                 for j in range(self.rows):
                     if (
-                        (mouse[1] - display.CORNER[1] - display.CARD_SIZE) / display.CARD_SIZE 
-                        <= j <= 
-                        (mouse[1] - display.CORNER[1]) / display.CARD_SIZE
+                        (mouse[1] - display.CORNER[1] - display.CARD_SIZE)
+                        / display.CARD_SIZE
+                        <= j
+                        <= (mouse[1] - display.CORNER[1]) / display.CARD_SIZE
                     ):
                         row = j
                         break
