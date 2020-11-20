@@ -1,5 +1,6 @@
 import pygame
 import sys
+from .buttons import Button
 from .constants import BACKGROUND, FPS
 
 
@@ -117,8 +118,20 @@ class Queen(Card):
             display.WINDOW.fill((BACKGROUND))
             display.print_all(board, update="off", invalid_moves="off")
             display.print_eye(board, self.col, self.row)
+            locked = Button(
+                display.DISP_W - display.HINT * 0.3,
+                display.DISP_H - display.HINT * 0.285,
+                display.HINT * 0.3,
+                display.HINT * 0.3,
+                "button_locked.png",
+            )
+            locked.button(display.WINDOW)
             pygame.display.update()
+
             for event in pygame.event.get():
+                if event.type == pygame.VIDEORESIZE:
+                    size = pygame.display.get_window_size()
+                    display._resize(board, size)
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
