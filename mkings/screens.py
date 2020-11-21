@@ -212,8 +212,7 @@ class ScreenManager:
 
             display.WINDOW.fill((BACKGROUND))
             about.button(display.WINDOW)
-            display.print_all(game.board, game.current, update=False)
-            pygame.display.update()
+            display.print_all(game.board, game.current)
 
             for event in pygame.event.get():
 
@@ -232,6 +231,9 @@ class ScreenManager:
 
                 if game.is_end_game():
                     self._game_run = False
+                    display.WINDOW.fill((BACKGROUND))
+                    about.button(display.WINDOW)
+                    display.print_all(game.board, game.current)
                     pygame.time.wait(600)
                 else:
                     if game._all_pawns_set is not True:

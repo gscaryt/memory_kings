@@ -203,21 +203,25 @@ class Game:
                 ):
                     # Player Loses
                     self._winner = self.counter
+                    pygame.display.update()
                     return True
             except IndexError:
                 pass
             if self.counter.score == 6:
                 # Player Loses
                 self._winner = self.counter
+                pygame.display.update()
                 return True
             elif Player.array[1].score == 6:
                 # Player Wins
                 self._winner = Player.array[1]
+                pygame.display.update()
                 return True
         else:
             for player in Player.array:
                 if player.score == 12 // (Player.total - 1):
                     # That Player Wins
                     self._winner = player
+                    pygame.display.update()
                     return True
         return False
