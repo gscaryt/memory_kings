@@ -1,5 +1,5 @@
 import pygame
-from .assets import Asset
+from .assets import Asset, sound
 
 
 class Button:
@@ -68,6 +68,7 @@ class Button:
         if rest[1].collidepoint(mouse) and event.type == pygame.MOUSEBUTTONDOWN:
             surface.blit(*rest)
             self._call_function()
+            sound("click3.wav")
 
     def button(self, surface, pop=True):
         '''

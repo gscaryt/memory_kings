@@ -1,3 +1,6 @@
+import pygame
+from .assets import sound
+
 class Pawn:
     selected = None
 
@@ -24,6 +27,7 @@ class Pawn:
         if self.check_move(board, Player, col, row):
             self.col = col
             self.row = row
+            sound("click2.wav")
             return True
         else:
             return False
@@ -75,3 +79,4 @@ class Counter(Pawn):
             self.col = self.col - 1
         else:
             self.row = self.row + 1
+        sound("click2.wav")

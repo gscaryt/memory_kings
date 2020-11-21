@@ -15,7 +15,6 @@ def main():
     screen_manager = ScreenManager() # Init the Screen Manager.
     pygame.event.clear() # Clear any lingering Event.
 
-
     # START MENU LOOP
     screen_manager.start_menu(game, display)
 

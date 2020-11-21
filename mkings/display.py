@@ -3,7 +3,7 @@ import timeit
 from .constants import IMAGES_PATH, PLAYER_COLOR_CODES, BACKGROUND
 from .players import Player
 from .pawns import Pawn
-from .assets import Asset
+from .assets import Asset, sound
 
 
 class Display:
@@ -264,8 +264,10 @@ class Display:
         if not is_open:
             card_image = self.get_image(card.image, self.CARD_SIZE, self.CARD_SIZE)
             self.WINDOW.blit(card_image, pos_on_screen)
+            sound("flip.wav")
             pygame.display.update()
             pygame.time.wait(2000)
+            sound("flip.wav")
             return True
 
     def print_eye(self, board, col, row):

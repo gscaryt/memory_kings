@@ -3,6 +3,7 @@ import sys
 from .constants import BACKGROUND, FPS, WHITE, FONTS_PATH
 from .buttons import Button
 from .players import Player
+from .assets import Asset
 
 
 class ScreenManager:
@@ -230,7 +231,7 @@ class ScreenManager:
                     self._resizing_display = True
 
                 if game.is_end_game():
-                    pygame.time.wait(500)
+                    pygame.time.wait(1000)
                     self._game_run = False
                 else:
                     if game._all_pawns_set is not True:
@@ -530,6 +531,15 @@ class ScreenManager:
                     HINT * 0.6,
                     "sneaky_pirates_logo.png",
                 )
+                mute = Button(
+                    DISP_W - HINT * 0.2,
+                    DISP_H - HINT * 0.49,
+                    HINT * 0.2,
+                    HINT * 0.2,
+                    "sound_on.png",
+                    "sound_off.png",
+                    self._mute,
+                )
                 about = Button(
                     DISP_W - HINT * 0.2,
                     DISP_H - HINT * 0.19,
@@ -587,7 +597,7 @@ class ScreenManager:
             blit_text(
                 display.WINDOW,
                 DIMBO_R,
-                "G. Scary T.  |  Letícia F. C. | Johny G.",
+                "Digital Version by G. Scary T.",
                 DISP_W * 0.5,
                 DISP_H - HINT * 0.2,
             )
@@ -600,6 +610,7 @@ class ScreenManager:
                 "bottomleft",
             )
 
+            mute.toggle(display.WINDOW, (Asset._mute_sounds == True))
             about.button(display.WINDOW)
             pdf_logo.button(display.WINDOW)
             youtube_logo.button(display.WINDOW)
@@ -612,6 +623,7 @@ class ScreenManager:
 
             for event in pygame.event.get():
 
+                mute.get_event(display.WINDOW, event)
                 about.get_event(display.WINDOW, event)
                 pdf_logo.get_event(display.WINDOW, event)
                 youtube_logo.get_event(display.WINDOW, event)
@@ -651,6 +663,11 @@ class ScreenManager:
         else:
             self._reveal_cards = False
 
+    def _mute(self):
+        if Asset._mute_sounds is False:
+            Asset._mute_sounds = True
+        else:
+            Asset._mute_sounds = False
 
 # UTILITARY FUNCTIONS
 

@@ -3,7 +3,7 @@ from cx_Freeze import setup, Executable
 
 build_exe_options = {
     "packages": ["pygame", "random", "sys"],
-    "include_files": ["icon.ico", "fonts/", "images/", "docs/"],
+    "include_files": ["icon.ico", "fonts/", "images/", "docs/", "sounds/"],
     "excludes": ["tkinter"]
 }
 

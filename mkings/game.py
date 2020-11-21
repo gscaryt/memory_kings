@@ -90,8 +90,8 @@ class Game:
         Placement continues until the last player placed 2 pawns.
         """
         if Player.total == 2 and len(self.counter.pawn) != 1:
-            self.counter.place_pawn(0, 0)
             pygame.time.wait(800)
+            self.counter.place_pawn(0, 0)
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             position = self.board.get_click_to_pos(display, event)
@@ -161,17 +161,17 @@ class Game:
         Player._get_all_pawns_positions()
 
         if Player.total == 2 and self.ongoing_turn == 0:
+            pygame.time.wait(600)
             self.counter.pawn[0]._move(self.board)
             self.end_turn = True
-            pygame.time.wait(600)
 
         else:
             if self.current.turn(display, self.board, event):
                 self.end_turn = True
 
             if Player.total == 2 and self.counter.recruit(self.board) == 0:
-                self.counter.pawn[0]._move(self.board)
                 pygame.time.wait(600)
+                self.counter.pawn[0]._move(self.board)
 
         self.recruit_check()
 

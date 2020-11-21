@@ -1,6 +1,7 @@
 import pygame
 from .pawns import Pawn, Counter
 from .tokens import Token
+from .assets import sound
 
 
 class Player:
@@ -24,6 +25,7 @@ class Player:
         2) row: Row of the position to place the Pawn.
         """
         self.pawn.append(Pawn(self.color, col, row))
+        sound("click2.wav")
         card = board.get_card(col, row)
         if card.activate(Player.array, card.col, card.row):
             display.print_all(board, self)
@@ -36,6 +38,7 @@ class Player:
         1) col: Column of the position to place the Token.
         2) row: Row of the position to place the Token.
         """
+        sound("click2.wav")
         self.token.append(Token(self.color, col, row))
 
     @classmethod
@@ -112,6 +115,7 @@ class Player:
             ):
                 # Pawn Selected
                 Pawn.selected = pawn
+                sound("click1.wav")
                 break
             else:
                 Pawn.selected = False
@@ -161,6 +165,7 @@ class Player:
                     ):
                         # Pawn Selected
                         Pawn.selected = pawn
+                        sound("click1.wav")
                         return False
                 if self.move(display, board, event):
                     return True
@@ -196,6 +201,7 @@ class Player:
 class CounterKing(Player):
     def place_pawn(self, col, row):
         """Places the Counter Pawn."""
+        sound("click2.wav")
         self.pawn.append(Counter(self.color, col, row))
 
     def _get_pawn_on_screen(self, display, *args):
