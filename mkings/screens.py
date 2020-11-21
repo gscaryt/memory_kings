@@ -633,8 +633,13 @@ class ScreenManager:
                 sneaky_pirates_logo.get_event(display.WINDOW, event)
 
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
+                    if self._game_run == True:
+                        game._abandoned = True
+                        self._game_run = False
+                        self._about_screen = False
+                    else:
+                        pygame.quit()
+                        sys.exit()
 
                 if event.type == pygame.VIDEORESIZE:
                     size = pygame.display.get_window_size()
