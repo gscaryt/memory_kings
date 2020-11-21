@@ -1,6 +1,6 @@
 import pygame
 import sys
-from .constants import BACKGROUND, FPS, WHITE, FONTS_PATH
+from .constants import BACKGROUND, FPS, WHITE, FONTS_PATH, VERSION
 from .buttons import Button
 from .players import Player
 from .assets import Asset
@@ -231,8 +231,8 @@ class ScreenManager:
                     self._resizing_display = True
 
                 if game.is_end_game():
-                    pygame.time.wait(1000)
                     self._game_run = False
+                    pygame.time.wait(600)
                 else:
                     if game._all_pawns_set is not True:
                         game.place_pawns(display, event)
@@ -604,7 +604,7 @@ class ScreenManager:
             blit_text(
                 display.WINDOW,
                 UBUNTU_S,
-                "Memory Kings v0.7 in Python 3.8 (Alpha)",
+                f"Memory Kings v{VERSION[0]} in Python 3.8 ({VERSION[1]})",
                 DISP_W * 0.01,
                 DISP_H * 0.99,
                 "bottomleft",

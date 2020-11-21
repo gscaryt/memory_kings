@@ -1,9 +1,10 @@
 import sys
 from cx_Freeze import setup, Executable
+from mkings.constants import VERSION
 
 build_exe_options = {
     "packages": ["pygame", "random", "sys"],
-    "include_files": ["icon.ico", "fonts/", "images/", "docs/", "sounds/"],
+    "include_files": ["icon.ico", "fonts/", "images/", "sounds/"],
     "excludes": ["tkinter"]
 }
 
@@ -13,7 +14,7 @@ if sys.platform == "win32":
 
 setup(
     name="Memory Kings",
-    version="0.7",
+    version=f"v{VERSION[0]} ({VERSION[1]})",
     author="G. Scary T.",
     description="Memory Kings in Python 3",
     options={"build_exe": build_exe_options},
