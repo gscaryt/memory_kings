@@ -1,6 +1,6 @@
 import pygame
 import timeit
-from .constants import IMAGES_PATH, PLAYER_COLOR_CODES, BACKGROUND
+from .constants import IMAGES_PATH, PLAYER_COLOR_CODES, BACKGROUND, FONTS_PATH
 from .players import Player
 from .pawns import Pawn
 from .assets import Asset, sound
@@ -149,6 +149,26 @@ class Display:
             )
             self.WINDOW.blit(pawn_image, pos_on_screen)
 
+    def print_invalid_placement(self, game):
+        """
+        Prints a "deny" sign over any card that can't be reached
+        by the selected pawn
+        """
+        for rows in game.board.grid:
+            if len(rows) == game.board.cols:
+                for card in rows:
+                    pos_on_screen = (
+                        self.CORNER[0] + self.CARD_SIZE * card.col,
+                        self.CORNER[1] + self.CARD_SIZE * card.row,
+                    )
+                    if game.place_pawns_check(card.col, card.row):
+                            continue
+                    else:
+                        image = self.get_image(
+                            "unavailable.png", self.CARD_SIZE, self.CARD_SIZE
+                        )
+                        self.WINDOW.blit(image, pos_on_screen)
+
     def print_invalid_moves(self, board):
         """
         Prints a "deny" sign over any card that can't be reached
@@ -173,7 +193,7 @@ class Display:
                                 )
                                 self.WINDOW.blit(image, pos_on_screen)
 
-    def print_score_board(self):
+    def print_score_board(self, current_player):
         pygame.font.init()
         DIMBO_L = pygame.font.Font("fonts/dimbo_regular.ttf", int(self.HINT * 0.2))
         for i, player in enumerate(Player.array):
@@ -181,12 +201,20 @@ class Display:
                 f"{player.color}: {player.score}", True, PLAYER_COLOR_CODES[i]
             )
             t1_rect = t1.get_rect()
+            crown = self.get_image("crown.png", int(self.HINT*0.15), int(self.HINT*0.15))
+            crown_rect = crown.get_rect()
             if Player.total == 2:
                 t1_rect.center = (
                     (self.DISP_W * 0.5) - (self.CARD_SIZE * 0.5) + (i * self.CARD_SIZE),
-                    self.DISP_H - self.HINT * 0.25 - self.CORNER[1],
+                    self.DISP_H - self.HINT * 0.20 - self.CORNER[1],
                 )
                 self.WINDOW.blit(t1, t1_rect)
+                if current_player == player:
+                    crown_rect.center = (
+                        (self.DISP_W * 0.5) - (self.CARD_SIZE * 0.5) + (i * self.CARD_SIZE),
+                        self.DISP_H - self.HINT * 0.40 - self.CORNER[1],
+                    )
+                    self.WINDOW.blit(crown, crown_rect)
             else:
                 if i != 0:
                     if Player.total == 3:
@@ -194,25 +222,49 @@ class Display:
                             (self.DISP_W * 0.5)
                             - (self.CARD_SIZE * 0.5)
                             + ((i - 1) * self.CARD_SIZE),
-                            self.DISP_H - self.HINT * 0.25 - self.CORNER[1],
+                            self.DISP_H - self.HINT * 0.20 - self.CORNER[1],
                         )
                         self.WINDOW.blit(t1, t1_rect)
+                        if current_player == player:
+                            crown_rect.center = (
+                                (self.DISP_W * 0.5)
+                                - (self.CARD_SIZE * 0.5)
+                                + ((i - 1) * self.CARD_SIZE),
+                                self.DISP_H - self.HINT * 0.40 - self.CORNER[1],
+                            )
+                            self.WINDOW.blit(crown, crown_rect)
                     elif Player.total == 4:
                         t1_rect.center = (
                             (self.DISP_W * 0.5)
                             - (self.CARD_SIZE)
                             + ((i - 1) * self.CARD_SIZE),
-                            self.DISP_H - self.HINT * 0.25 - self.CORNER[1],
+                            self.DISP_H - self.HINT * 0.20 - self.CORNER[1],
                         )
                         self.WINDOW.blit(t1, t1_rect)
+                        if current_player == player:
+                            crown_rect.center = (
+                                (self.DISP_W * 0.5)
+                                - (self.CARD_SIZE)
+                                + ((i - 1) * self.CARD_SIZE),
+                                self.DISP_H - self.HINT * 0.40 - self.CORNER[1],
+                            )
+                            self.WINDOW.blit(crown, crown_rect)
                     else:
                         t1_rect.center = (
                             (self.DISP_W * 0.5)
                             - (self.CARD_SIZE * 1.5)
                             + ((i - 1) * self.CARD_SIZE),
-                            self.DISP_H - self.HINT * 0.25 - self.CORNER[1],
+                            self.DISP_H - self.HINT * 0.20 - self.CORNER[1],
                         )
                         self.WINDOW.blit(t1, t1_rect)
+                        if current_player == player:
+                            crown_rect.center = (
+                                (self.DISP_W * 0.5)
+                                - (self.CARD_SIZE * 1.5)
+                                + ((i - 1) * self.CARD_SIZE),
+                                self.DISP_H - self.HINT * 0.40 - self.CORNER[1],
+                            )
+                            self.WINDOW.blit(crown, crown_rect)
 
     def print_all(
         self,
@@ -240,7 +292,7 @@ class Display:
             self.print_invalid_moves(board)
         self.print_pawns()
         self.print_tokens()
-        self.print_score_board()
+        self.print_score_board(current_player)
         if update is True:
             pygame.display.update()
 

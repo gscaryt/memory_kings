@@ -212,7 +212,10 @@ class ScreenManager:
 
             display.WINDOW.fill((BACKGROUND))
             about.button(display.WINDOW)
-            display.print_all(game.board, game.current)
+            display.print_all(game.board, game.current, update=False)
+            if not game._all_pawns_set and (len(game.counter.pawn) != 0 or Player.total != 2):
+                display.print_invalid_placement(game)
+            pygame.display.update()
 
             for event in pygame.event.get():
 
