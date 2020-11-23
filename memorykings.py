@@ -14,6 +14,7 @@ def main():
     asset = Asset(display) # Load all the images.
     screen_manager = ScreenManager() # Init the Screen Manager.
     pygame.event.clear() # Clear any lingering Event.
+    pygame.display.set_icon(Asset.image["icon.png"])
 
     # START MENU LOOP
     screen_manager.start_menu(game, display)
