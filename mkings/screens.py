@@ -570,7 +570,7 @@ class ScreenManager:
             )
             blit_text(display.WINDOW, DIMBO_L, "About", DISP_W * 0.5, HINT * 0.3)
             blit_long_text(
-                display.WINDOW,
+                display,
                 "In Memory Kings, players challenge their memory in a mix of the classic games of Chess and Pairs (a.k.a. memory®). They move their pawns strategically across a grid of hidden cards, revealing them, and finding indentical pairs. The player that finds the most pairs wins!",
                 (HINT * 0.5, HINT * 0.5),
                 UBUNTU_R,
@@ -609,7 +609,7 @@ class ScreenManager:
             blit_text(
                 display.WINDOW,
                 UBUNTU_S,
-                f"Memory Kings v{VERSION[0]} in Python 3.8 ({VERSION[1]})",
+                f"Memory Kings v{VERSION[0]} in Python3.8/Pygame2.0 ({VERSION[1]})",
                 DISP_W * 0.01,
                 DISP_H * 0.99,
                 "bottomleft",
@@ -709,7 +709,7 @@ def blit_image(surface, image, pos, width, height):
     surface.blit(scaled, rect)
 
 
-def blit_long_text(surface, text, pos, font, x_padding=0, color=WHITE):
+def blit_long_text(display, text, pos, font, x_padding=0, color=WHITE):
     """
     Adapted from Ted Klein Bergman on StackOverflow.
     """
@@ -717,7 +717,7 @@ def blit_long_text(surface, text, pos, font, x_padding=0, color=WHITE):
         word.split(" ") for word in text.splitlines()
     ]  # 2D array where each row is a list of words.
     space = font.size(" ")[0]  # The width of a space.
-    max_width, max_height = surface.get_size()
+    max_width, max_height = display.DISP_W, display.DISP_H
     x, y = pos
     for line in words:
         for word in line:
@@ -726,7 +726,7 @@ def blit_long_text(surface, text, pos, font, x_padding=0, color=WHITE):
             if x + word_width >= max_width - x_padding:
                 x = pos[0]  # Reset the x.
                 y += word_height  # Start on new row.
-            surface.blit(word_surface, (x, y))
+            display.WINDOW.blit(word_surface, (x, y))
             x += word_width + space
         x = pos[0]  # Reset the x.
         y += word_height

@@ -84,7 +84,7 @@ class Stats:
             data_file.write("\n")
 
 
-def get_data_frame(self):
+def get_data_frame():
     with open("docs/mkings_data.txt", "r") as data_file:
         all_data = data_file.readlines()
         new_list = []
@@ -98,4 +98,5 @@ def get_data_frame(self):
             if i != 0:
                 for j, column in enumerate(row):
                     dictionary[new_list[0][j]].append(column)
+        del dictionary[''] # Delete the last blank key.
         return dictionary
