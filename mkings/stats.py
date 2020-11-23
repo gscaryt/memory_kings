@@ -85,6 +85,10 @@ class Stats:
 
 
 def get_data_frame():
+    if not path.exists("docs"):
+        return False
+    if not path.isfile("docs/mkings_data.txt"):
+        return False
     with open("docs/mkings_data.txt", "r") as data_file:
         all_data = data_file.readlines()
         new_list = []
@@ -100,3 +104,37 @@ def get_data_frame():
                     dictionary[new_list[0][j]].append(column)
         del dictionary[''] # Delete the last blank key.
         return dictionary
+
+def get_solo_numbers():
+    DF = get_data_frame()
+    if not DF:
+        return False
+    games = []
+    wins = 0
+    defeats = 0
+    abandoned = 0
+    average_turns = 0
+    average_queen = 0
+    average_counter_score = 0
+    average_player_score = 0
+    for i, players in enumerate(DF["Players"]):
+        if players == "1":
+            if DF["Abandoned"][i] != "True":
+                games.append(i)
+            else:
+                abandoned += 1
+    for i in games:
+        if DF["Winner"][i] == "Player 1":
+            wins += 1
+        else:
+            defeats += 1
+        average_turns += int(DF["Turns"][i])
+        average_queen += int(DF["QueenUsed"][i])
+        average_counter_score += int(DF["Counter"][i])
+        average_player_score += int(DF["Player1"][i])
+    if len(games) != 0:
+        average_turns = average_turns/len(games)
+        average_queen = average_queen/len(games)
+        average_counter_score = average_counter_score/len(games)
+        average_player_score = average_player_score/len(games)
+    return {"Games": len(games), "Wins": wins, "Defeats": defeats, "Turns": average_turns, "Queen": average_queen, "Abandoned": abandoned, "Counter": average_counter_score, "Player": average_player_score}

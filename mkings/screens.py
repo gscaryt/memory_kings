@@ -4,6 +4,7 @@ from .constants import BACKGROUND, FPS, WHITE, FONTS_PATH, VERSION
 from .buttons import Button
 from .players import Player
 from .assets import Asset
+from .stats import get_solo_numbers
 
 
 class ScreenManager:
@@ -15,6 +16,7 @@ class ScreenManager:
         self._end_screen = False
         self._about_screen = False
         self._reveal_cards = False
+        self._stats_screen = False
 
     def start_menu(self, game, display):
         self._start_menu = True
@@ -536,6 +538,15 @@ class ScreenManager:
                     HINT * 0.6,
                     "sneaky_pirates_logo.png",
                 )
+                stats = Button(
+                    DISP_W - HINT * 0.2,
+                    DISP_H - HINT * 0.79,
+                    HINT * 0.2,
+                    HINT * 0.2,
+                    "stats.png",
+                    "stats_hover.png",
+                    self._call_stats,
+                )
                 mute = Button(
                     DISP_W - HINT * 0.2,
                     DISP_H - HINT * 0.49,
@@ -615,6 +626,7 @@ class ScreenManager:
                 "bottomleft",
             )
 
+            stats.button(display.WINDOW)
             mute.toggle(display.WINDOW, (Asset._mute_sounds == True))
             about.button(display.WINDOW)
             pdf_logo.button(display.WINDOW)
@@ -628,6 +640,7 @@ class ScreenManager:
 
             for event in pygame.event.get():
 
+                stats.get_event(display.WINDOW, event)
                 mute.get_event(display.WINDOW, event)
                 about.get_event(display.WINDOW, event)
                 pdf_logo.get_event(display.WINDOW, event)
@@ -646,6 +659,106 @@ class ScreenManager:
                         pygame.quit()
                         sys.exit()
 
+                if self._stats_screen:
+                    self.stats_screen(game, display)
+
+                if event.type == pygame.VIDEORESIZE:
+                    size = pygame.display.get_window_size()
+                    display._resize(game.board, size)
+                    self._resizing_display = True
+
+    def stats_screen(self, game, display):
+        self._stats_screen = True
+        pygame.event.clear()
+        pygame.font.init()
+
+        while self._stats_screen:
+            self.clock.tick(FPS)
+            self._resizing_display = True
+            HINT = (
+                display.HINT * 1.5
+            )  # Magic number adjusts sizes without messing positions.
+            DISP_W = display.DISP_W
+            DISP_H = display.DISP_H
+
+            if self._resizing_display:
+                self._reisizing_display = False
+                stats = Button(
+                    DISP_W - HINT * 0.2,
+                    DISP_H - HINT * 0.79,
+                    HINT * 0.2,
+                    HINT * 0.2,
+                    "stats.png",
+                    "stats_hover.png",
+                    self._call_stats,
+                )
+                mute = Button(
+                    DISP_W - HINT * 0.2,
+                    DISP_H - HINT * 0.49,
+                    HINT * 0.2,
+                    HINT * 0.2,
+                    "sound_on.png",
+                    "sound_off.png",
+                    self._mute,
+                )
+                about = Button(
+                    DISP_W - HINT * 0.2,
+                    DISP_H - HINT * 0.19,
+                    HINT * 0.2,
+                    HINT * 0.2,
+                    "about.png",
+                    "about_hover.png",
+                    self._call_about,
+                )
+
+            display.WINDOW.fill((BACKGROUND))
+            DIMBO_L = pygame.font.Font(
+                FONTS_PATH + "dimbo_regular.ttf", int(HINT * 0.20)
+            )
+            UBUNTU_R = pygame.font.Font(
+                FONTS_PATH + "ubuntu_regular.ttf", int(HINT * 0.10)
+            )
+            DF = get_solo_numbers()
+            blit_text(display.WINDOW, DIMBO_L, "Solo Games:", DISP_W * 0.5, HINT * 0.3)
+            if DF:
+                blit_text(display.WINDOW, UBUNTU_R, f"Completed Games:    {DF['Games']}", DISP_W*0.5, HINT * 0.6)
+                blit_text(display.WINDOW, UBUNTU_R, f"Victories:    {DF['Wins']}", DISP_W*0.5, HINT * 0.75)
+                blit_text(display.WINDOW, UBUNTU_R, f"Defeats:    {DF['Defeats']}", DISP_W*0.5, HINT * 0.90)
+                blit_text(display.WINDOW, UBUNTU_R, f"Average Number of Turns:    {round(DF['Turns'], 2)}", DISP_W*0.5, HINT * 1.05)
+                blit_text(display.WINDOW, UBUNTU_R, f"Average Counter Score:    {round(DF['Counter'], 2)}", DISP_W*0.5, HINT * 1.20)
+                blit_text(display.WINDOW, UBUNTU_R, f"Average Player Score:    {round(DF['Player'], 2)}", DISP_W*0.5, HINT * 1.35)
+                blit_text(display.WINDOW, UBUNTU_R, f"Average Queen Uses:    {round(DF['Queen'], 2)}", DISP_W*0.5, HINT * 1.50)
+                blit_text(display.WINDOW, UBUNTU_R, f"Abandoned Games:    {DF['Abandoned']}", DISP_W*0.5, HINT * 1.65)
+            else:
+                blit_text(display.WINDOW, UBUNTU_R, f"There are is no data for Solo Games yet.", DISP_W*0.5, HINT * 1.0)
+
+            blit_text(display.WINDOW, DIMBO_L, "Multiplayer Games:", DISP_W * 0.5, DISP_H * 0.5)
+            blit_text(display.WINDOW, UBUNTU_R, f"Statistics for Multiplayer Games are not available yet.", DISP_W*0.5, DISP_H * 0.5 + HINT * 0.7)
+
+            stats.button(display.WINDOW)
+            mute.toggle(display.WINDOW, (Asset._mute_sounds == True))
+            about.button(display.WINDOW)
+
+            pygame.display.update()
+
+            for event in pygame.event.get():
+
+                stats.get_event(display.WINDOW, event)
+                mute.get_event(display.WINDOW, event)
+                about.get_event(display.WINDOW, event)
+
+                if event.type == pygame.QUIT:
+                    if self._game_run == True:
+                        game._abandoned = True
+                        self._game_run = False
+                        self._about_screen = False
+                    else:
+                        pygame.quit()
+                        sys.exit()
+
+                if self._about_screen is False:
+                    self._stats_screen = False
+
                 if event.type == pygame.VIDEORESIZE:
                     size = pygame.display.get_window_size()
                     display._resize(game.board, size)
@@ -661,6 +774,12 @@ class ScreenManager:
             self._about_screen = True
         else:
             self._about_screen = False
+
+    def _call_stats(self):
+        if self._stats_screen is False:
+            self._stats_screen = True
+        else:
+            self._stats_screen = False
 
     def _open_link(self, link):
         import webbrowser
