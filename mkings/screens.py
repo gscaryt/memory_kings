@@ -730,7 +730,7 @@ class ScreenManager:
                 blit_text(display.WINDOW, UBUNTU_R, f"Average Queen Uses:    {round(DF['Queen'], 2)}", DISP_W*0.5, HINT * 1.50)
                 blit_text(display.WINDOW, UBUNTU_R, f"Abandoned Games:    {DF['Abandoned']}", DISP_W*0.5, HINT * 1.65)
             else:
-                blit_text(display.WINDOW, UBUNTU_R, f"There are is no data for Solo Games yet.", DISP_W*0.5, HINT * 1.0)
+                blit_text(display.WINDOW, UBUNTU_R, f"There is no data for Solo Games yet.", DISP_W*0.5, HINT * 1.0)
 
             blit_text(display.WINDOW, DIMBO_L, "Multiplayer Games:", DISP_W * 0.5, DISP_H * 0.5)
             blit_text(display.WINDOW, UBUNTU_R, f"Statistics for Multiplayer Games are not available yet.", DISP_W*0.5, DISP_H * 0.5 + HINT * 0.7)

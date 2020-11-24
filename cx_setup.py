@@ -14,7 +14,7 @@ if sys.platform == "win32":
 
 setup(
     name="Memory Kings",
-    version=f"v{VERSION[0]} ({VERSION[1]})",
+    version=f"{VERSION[0]}",
     author="G. Scary T.",
     description="Memory Kings in Python 3",
     options={"build_exe": build_exe_options},
