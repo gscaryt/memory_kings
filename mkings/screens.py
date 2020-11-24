@@ -160,7 +160,7 @@ class ScreenManager:
             grid.toggle(display.WINDOW, (game._grid_size == (6, 6)), False)
             setup.toggle(display.WINDOW, (game._setup_variant == "alternate"), False)
             logo.button(display.WINDOW, False)
-            about.button(display.WINDOW)
+            about.toggle(display.WINDOW, (self._about_screen == True))
 
             pygame.display.update()
 
@@ -212,8 +212,9 @@ class ScreenManager:
                     self._call_about,
                 )
 
+
             display.WINDOW.fill((BACKGROUND))
-            about.button(display.WINDOW)
+            about.toggle(display.WINDOW, (self._about_screen == True))
             display.print_all(game.board, game.current, update=False)
             if not game._all_pawns_set and (len(game.counter.pawn) != 0 or Player.total != 2):
                 display.print_invalid_placement(game)
@@ -237,7 +238,7 @@ class ScreenManager:
                 if game.is_end_game():
                     self._game_run = False
                     display.WINDOW.fill((BACKGROUND))
-                    about.button(display.WINDOW)
+                    about.toggle(display.WINDOW, (self._about_screen == True))
                     display.print_all(game.board, game.current)
                     pygame.time.wait(600)
                 else:
@@ -364,8 +365,8 @@ class ScreenManager:
                     )
 
                 replay.button(display.WINDOW)
-                reveal.button(display.WINDOW)
-                about.button(display.WINDOW)
+                reveal.toggle(display.WINDOW, (self._reveal_cards == True))
+                about.toggle(display.WINDOW, (self._about_screen == True))
 
                 pygame.display.update()
 
@@ -436,9 +437,9 @@ class ScreenManager:
                 )
 
             display.WINDOW.fill((BACKGROUND))
-            about.button(display.WINDOW)
+            about.toggle(display.WINDOW, (self._about_screen == True))
             replay.button(display.WINDOW)
-            reveal.button(display.WINDOW)
+            reveal.toggle(display.WINDOW, (self._reveal_cards == True))
             display.print_all(
                 game.board,
                 current_player=None,
@@ -556,6 +557,15 @@ class ScreenManager:
                     "sound_off.png",
                     self._mute,
                 )
+                overlay = Button(
+                    DISP_W - HINT * 0.5,
+                    DISP_H - HINT * 0.19,
+                    HINT * 0.2,
+                    HINT * 0.2,
+                    "help.png",
+                    "help_hover.png",
+                    self._show_game_overlay,
+                )
                 about = Button(
                     DISP_W - HINT * 0.2,
                     DISP_H - HINT * 0.19,
@@ -626,9 +636,9 @@ class ScreenManager:
                 "bottomleft",
             )
 
-            stats.button(display.WINDOW)
+            stats.toggle(display.WINDOW, (self._stats_screen == True))
             mute.toggle(display.WINDOW, (Asset._mute_sounds == True))
-            about.button(display.WINDOW)
+            about.toggle(display.WINDOW, (self._about_screen == True))
             pdf_logo.button(display.WINDOW)
             youtube_logo.button(display.WINDOW)
             bgg_logo.button(display.WINDOW)
@@ -735,9 +745,9 @@ class ScreenManager:
             blit_text(display.WINDOW, DIMBO_L, "Multiplayer Games:", DISP_W * 0.5, DISP_H * 0.5)
             blit_text(display.WINDOW, UBUNTU_R, f"Statistics for Multiplayer Games are not available yet.", DISP_W*0.5, DISP_H * 0.5 + HINT * 0.7)
 
-            stats.button(display.WINDOW)
+            stats.toggle(display.WINDOW, (self._stats_screen == True))
             mute.toggle(display.WINDOW, (Asset._mute_sounds == True))
-            about.button(display.WINDOW)
+            about.button(display.WINDOW, (self._about_screen == True))
 
             pygame.display.update()
 
@@ -798,8 +808,20 @@ class ScreenManager:
         else:
             Asset._mute_sounds = False
 
-# UTILITARY FUNCTIONS
+    def _show_start_overlay(self):
+        if self._start_overlay is False:
+            self._start_overlay = True
+        else:
+            self._start_overlay = False
 
+    def _show_game_overlay(self):
+        if self._game_overlay is False:
+                self._game_overlay = True
+        else:
+                self._game_overlay = False
+        
+
+# UTILITARY FUNCTIONS
 
 def blit_text(surface, font, text_input, x, y, relative_to="center", color=WHITE):
     text = font.render(text_input, True, color)
@@ -820,11 +842,8 @@ def blit_text(surface, font, text_input, x, y, relative_to="center", color=WHITE
 
 
 def blit_image(surface, image, pos, width, height):
-    loaded = pygame.image.load(IMAGES_PATH + image).convert_alpha()
-    scaled = pygame.transform.scale(loaded, (int(width), int(height)))
+    scaled = pygame.transform.smoothscale(image, (int(width), int(height)))
     rect = scaled.get_rect()
-    x, y = pos
-    rect.center = (x, y)
     surface.blit(scaled, rect)
 
 
