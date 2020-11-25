@@ -769,7 +769,8 @@ class ScreenManager:
                 blit_text(display.WINDOW, UBUNTU_R, f"There is no data for Solo Games yet.", DISP_W*0.5, HINT * 1.0)
 
             blit_text(display.WINDOW, DIMBO_L, "Multiplayer Games:", DISP_W * 0.5, DISP_H * 0.5)
-            blit_text(display.WINDOW, UBUNTU_R, f"Statistics for Multiplayer Games are not available yet.", DISP_W*0.5, DISP_H * 0.5 + HINT * 0.7)
+            blit_text(display.WINDOW, UBUNTU_R, f"Sorry!", DISP_W*0.5, DISP_H * 0.5 + HINT * 0.7)
+            blit_text(display.WINDOW, UBUNTU_R, f"Stats for Multiplayer Games are not available in this version.", DISP_W*0.5, DISP_H * 0.5 + HINT * 0.85)
 
             stats.toggle(display.WINDOW, (self._stats_screen == True))
             mute.toggle(display.WINDOW, (Asset._mute_sounds == True))
