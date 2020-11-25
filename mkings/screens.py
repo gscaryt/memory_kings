@@ -17,6 +17,8 @@ class ScreenManager:
         self._about_screen = False
         self._reveal_cards = False
         self._stats_screen = False
+        self._rulebook = False
+        self._current_page = 0
 
     def start_menu(self, game, display):
         self._start_menu = True
@@ -557,14 +559,14 @@ class ScreenManager:
                     "sound_off.png",
                     self._mute,
                 )
-                overlay = Button(
+                rules = Button(
                     DISP_W - HINT * 0.5,
                     DISP_H - HINT * 0.19,
                     HINT * 0.2,
                     HINT * 0.2,
                     "help.png",
                     "help_hover.png",
-                    self._show_game_overlay,
+                    self._call_rulebook,
                 )
                 about = Button(
                     DISP_W - HINT * 0.2,
@@ -639,6 +641,7 @@ class ScreenManager:
             stats.toggle(display.WINDOW, (self._stats_screen == True))
             mute.toggle(display.WINDOW, (Asset._mute_sounds == True))
             about.toggle(display.WINDOW, (self._about_screen == True))
+            rules.toggle(display.WINDOW, (bool(self._rulebook) is True))
             pdf_logo.button(display.WINDOW)
             youtube_logo.button(display.WINDOW)
             bgg_logo.button(display.WINDOW)
@@ -653,6 +656,7 @@ class ScreenManager:
                 stats.get_event(display.WINDOW, event)
                 mute.get_event(display.WINDOW, event)
                 about.get_event(display.WINDOW, event)
+                rules.get_event(display.WINDOW, event)
                 pdf_logo.get_event(display.WINDOW, event)
                 youtube_logo.get_event(display.WINDOW, event)
                 bgg_logo.get_event(display.WINDOW, event)
@@ -668,6 +672,9 @@ class ScreenManager:
                     else:
                         pygame.quit()
                         sys.exit()
+
+                if bool(self._rulebook):
+                    self.rulebook_screen(game,display)
 
                 if self._stats_screen:
                     self.stats_screen(game, display)
@@ -747,7 +754,7 @@ class ScreenManager:
 
             stats.toggle(display.WINDOW, (self._stats_screen == True))
             mute.toggle(display.WINDOW, (Asset._mute_sounds == True))
-            about.button(display.WINDOW, (self._about_screen == True))
+            about.toggle(display.WINDOW, (self._about_screen == True))
 
             pygame.display.update()
 
@@ -768,6 +775,95 @@ class ScreenManager:
 
                 if self._about_screen is False:
                     self._stats_screen = False
+
+                if event.type == pygame.VIDEORESIZE:
+                    size = pygame.display.get_window_size()
+                    display._resize(game.board, size)
+                    self._resizing_display = True
+
+    def rulebook_screen(self, game, display):
+        pygame.event.clear()
+        while bool(self._rulebook):
+            self.clock.tick(FPS)
+            self._resizing_display = True
+            HINT = (
+                display.HINT * 1.5
+            )  # Magic number adjusts sizes without messing positions.
+            DISP_W = display.DISP_W
+            DISP_H = display.DISP_H
+
+            if self._resizing_display:
+                self._reisizing_display = False
+                back = Button(
+                    HINT * 0.2,
+                    DISP_H - HINT * 0.19,
+                    HINT * 0.2,
+                    HINT * 0.2,
+                    "back.png",
+                    "back_hover.png",
+                    self._flip_back,
+                )
+                forward = Button(
+                    HINT * 0.5,
+                    DISP_H - HINT * 0.19,
+                    HINT * 0.2,
+                    HINT * 0.2,
+                    "forward.png",
+                    "forward_hover.png",
+                    self._flip_forward,
+                )
+                rules = Button(
+                    DISP_W - HINT * 0.5,
+                    DISP_H - HINT * 0.19,
+                    HINT * 0.2,
+                    HINT * 0.2,
+                    "help.png",
+                    "help_hover.png",
+                    self._call_rulebook,
+                )
+                about = Button(
+                    DISP_W - HINT * 0.2,
+                    DISP_H - HINT * 0.19,
+                    HINT * 0.2,
+                    HINT * 0.2,
+                    "about.png",
+                    "about_hover.png",
+                    self._call_about,
+                )
+
+            display.WINDOW.fill((BACKGROUND))
+            blit_image(display.WINDOW,self._rulebook[self._current_page], (DISP_W*0.5,DISP_H*0.5), HINT*3, HINT*4.2)
+            forward.button(display.WINDOW)
+            back.button(display.WINDOW)
+            rules.toggle(display.WINDOW, (bool(self._rulebook) is True))
+            about.toggle(display.WINDOW, (self._about_screen is True))
+
+            pygame.display.update()
+
+            for event in pygame.event.get():
+
+                forward.get_event(display.WINDOW, event)
+                back.get_event(display.WINDOW, event)
+                rules.get_event(display.WINDOW, event)
+                about.get_event(display.WINDOW, event)
+
+                if event.type == pygame.QUIT:
+                    if self._game_run == True:
+                        game._abandoned = True
+                        self._game_run = False
+                        self._about_screen = False
+                    else:
+                        pygame.quit()
+                        sys.exit()
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RIGHT and self._current_page < 7:
+                        self._current_page += 1
+                    elif event.key == pygame.K_LEFT and self._current_page > 0:
+                        self._current_page -= 1
+
+                if self._about_screen is False:
+                    self._rulebook = False
 
                 if event.type == pygame.VIDEORESIZE:
                     size = pygame.display.get_window_size()
@@ -808,18 +904,28 @@ class ScreenManager:
         else:
             Asset._mute_sounds = False
 
-    def _show_start_overlay(self):
-        if self._start_overlay is False:
-            self._start_overlay = True
+    def _call_rulebook(self):
+        if bool(self._rulebook) is False:
+            self._rulebook = {
+                0:Asset.image["rule0.png"],
+                1:Asset.image["rule1.png"],
+                2:Asset.image["rule2.png"],
+                3:Asset.image["rule3.png"],
+                4:Asset.image["rule4.png"],
+                5:Asset.image["rule5.png"],
+                6:Asset.image["rule6.png"],
+                7:Asset.image["rule7.png"],
+            }
         else:
-            self._start_overlay = False
+            self._rulebook = False
 
-    def _show_game_overlay(self):
-        if self._game_overlay is False:
-                self._game_overlay = True
-        else:
-                self._game_overlay = False
-        
+    def _flip_forward(self):
+        if self._current_page < 7:
+            self._current_page += 1
+
+    def _flip_back(self):
+        if self._current_page > 0:
+            self._current_page -= 1
 
 # UTILITARY FUNCTIONS
 
@@ -844,6 +950,7 @@ def blit_text(surface, font, text_input, x, y, relative_to="center", color=WHITE
 def blit_image(surface, image, pos, width, height):
     scaled = pygame.transform.smoothscale(image, (int(width), int(height)))
     rect = scaled.get_rect()
+    rect.center = pos
     surface.blit(scaled, rect)
 
 
