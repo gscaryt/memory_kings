@@ -53,7 +53,7 @@ class Button:
     def _call_function(self):
         if self.action_func is not None:
             if self.action_arg is not None:
-                self.action_func(self.action_arg)
+                self.action_func(*self.action_arg)
             else:
                 self.action_func()
 
@@ -65,10 +65,10 @@ class Button:
         """
         mouse = pygame.mouse.get_pos()
         rest = self._get_image()
-        if rest[1].collidepoint(mouse) and event.type == pygame.MOUSEBUTTONDOWN:
+        if rest[1].collidepoint(mouse) and event.type == pygame.MOUSEBUTTONUP:
             surface.blit(*rest)
-            self._call_function()
             sound("click3.wav")
+            self._call_function()
 
     def button(self, surface, pop=True):
         '''

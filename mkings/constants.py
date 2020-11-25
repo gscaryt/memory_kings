@@ -1,6 +1,6 @@
 FPS = 60
 
-VERSION = ("0.8", "Alpha")
+VERSION = ("0.9", "Alpha")
 IMAGES_PATH = "images/"
 FONTS_PATH = "fonts/"
 SOUNDS_PATH = "sounds/"

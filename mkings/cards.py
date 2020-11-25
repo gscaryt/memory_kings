@@ -118,14 +118,22 @@ class Queen(Card):
             display.WINDOW.fill((BACKGROUND))
             display.print_all(board, update="off", invalid_moves="off")
             display.print_eye(board, self.col, self.row)
-            locked = Button(
+            locked1 = Button(
+                display.HINT * 0.3,
+                display.DISP_H - display.HINT * 0.285,
+                display.HINT * 0.3,
+                display.HINT * 0.3,
+                "button_locked.png",
+            )
+            locked2 = Button(
                 display.DISP_W - display.HINT * 0.3,
                 display.DISP_H - display.HINT * 0.285,
                 display.HINT * 0.3,
                 display.HINT * 0.3,
                 "button_locked.png",
             )
-            locked.button(display.WINDOW, False)
+            locked1.button(display.WINDOW, False)
+            locked2.button(display.WINDOW, False)
             pygame.display.update()
 
             for event in pygame.event.get():

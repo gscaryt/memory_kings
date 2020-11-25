@@ -33,6 +33,9 @@ def main():
     # DATA COLLECTION END
     stats.collect_end_data(game)
     stats.write_data()
+    if screen_manager._interrupt is True:
+        game._reset()
+        return main()
 
     # END SCREEN LOOP
     screen_manager.end_screen(game, display)

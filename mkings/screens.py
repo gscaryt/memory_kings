@@ -18,6 +18,8 @@ class ScreenManager:
         self._reveal_cards = False
         self._stats_screen = False
         self._rulebook = False
+        self._interrupt = False
+        self._confirmed = False
         self._current_page = 0
 
     def start_menu(self, game, display):
@@ -45,7 +47,7 @@ class ScreenManager:
                     "players_one.png",
                     "players_one_hover.png",
                     game.choose_players,
-                    1,
+                    (1,),
                 )
                 two = Button(
                     DISP_W * 0.5 - HINT * 0.25,
@@ -55,7 +57,7 @@ class ScreenManager:
                     "players_two.png",
                     "players_two_hover.png",
                     game.choose_players,
-                    2,
+                    (2,),
                 )
                 three = Button(
                     DISP_W * 0.5 + HINT * 0.25,
@@ -65,7 +67,7 @@ class ScreenManager:
                     "players_three.png",
                     "players_three_hover.png",
                     game.choose_players,
-                    3,
+                    (3,),
                 )
                 four = Button(
                     DISP_W * 0.5 + HINT * 0.75,
@@ -75,7 +77,7 @@ class ScreenManager:
                     "players_four.png",
                     "players_four_hover.png",
                     game.choose_players,
-                    4,
+                    (4,),
                 )
                 grid = Button(
                     DISP_W * 0.5,
@@ -192,7 +194,7 @@ class ScreenManager:
     def game_screen(self, game, display):
         self._game_run = True
         self._resizing_display = True
-        pygame.event.clear()
+        event = pygame.event.clear()
 
         while self._game_run:
             self.clock.tick(FPS)
@@ -204,6 +206,16 @@ class ScreenManager:
 
             if self._resizing_display:
                 self._resizing_display = False
+                replay = Button(
+                    HINT * 0.2,
+                    DISP_H - HINT * 0.19,
+                    HINT * 0.2,
+                    HINT * 0.2,
+                    "replay.png",
+                    "replay_hover.png",
+                    self.interrupt_game,
+                    (game, display),
+                )
                 about = Button(
                     DISP_W - HINT * 0.2,
                     DISP_H - HINT * 0.19,
@@ -216,6 +228,7 @@ class ScreenManager:
 
 
             display.WINDOW.fill((BACKGROUND))
+            replay.button(display.WINDOW)
             about.toggle(display.WINDOW, (self._about_screen == True))
             display.print_all(game.board, game.current, update=False)
             if not game._all_pawns_set and (len(game.counter.pawn) != 0 or Player.total != 2):
@@ -237,9 +250,14 @@ class ScreenManager:
                     display._resize(game.board, size)
                     self._resizing_display = True
 
-                if game.is_end_game():
+                replay.get_event(display.WINDOW, event)
+                if self._interrupt:
+                    game._abandoned = True
+                    self._game_run = False
+                elif game.is_end_game():
                     self._game_run = False
                     display.WINDOW.fill((BACKGROUND))
+                    replay.button(display.WINDOW)
                     about.toggle(display.WINDOW, (self._about_screen == True))
                     display.print_all(game.board, game.current)
                     pygame.time.wait(600)
@@ -603,7 +621,7 @@ class ScreenManager:
             blit_text(
                 display.WINDOW,
                 DIMBO_R,
-                "Official Rulebook",
+                "Download Rulebook",
                 DISP_W * 0.5 - HINT,
                 HINT * 1.89,
             )
@@ -637,11 +655,12 @@ class ScreenManager:
                 DISP_H * 0.99,
                 "bottomleft",
             )
+            blit_image(display.WINDOW, Asset.image["rules_notice.png"],(DISP_W*0.80,DISP_H*0.87),HINT*0.6,HINT*0.6)
 
-            stats.toggle(display.WINDOW, (self._stats_screen == True))
-            mute.toggle(display.WINDOW, (Asset._mute_sounds == True))
-            about.toggle(display.WINDOW, (self._about_screen == True))
-            rules.toggle(display.WINDOW, (bool(self._rulebook) is True))
+            stats.switch(display.WINDOW, (self._stats_screen == True))
+            mute.switch(display.WINDOW, (Asset._mute_sounds == True))
+            about.switch(display.WINDOW, (self._about_screen == True))
+            rules.switch(display.WINDOW, (bool(self._rulebook) is True))
             pdf_logo.button(display.WINDOW)
             youtube_logo.button(display.WINDOW)
             bgg_logo.button(display.WINDOW)
@@ -870,6 +889,93 @@ class ScreenManager:
                     display._resize(game.board, size)
                     self._resizing_display = True
 
+    def interrupt_game(self, game, display):
+        pygame.font.init()
+        while True:
+            self.clock.tick(FPS)
+            self._resizing_display = True
+            HINT = (
+                display.HINT * 1.5
+            )  # Magic number adjusts sizes without messing positions.
+            DISP_W = display.DISP_W
+            DISP_H = display.DISP_H
+            if self._resizing_display:
+                self._reisizing_display = False
+                locked1 = Button(
+                    HINT * 0.2,
+                    DISP_H - HINT * 0.19,
+                    HINT * 0.2,
+                    HINT * 0.2,
+                    "button_locked.png",
+                )
+                locked2 = Button(
+                    DISP_W - HINT * 0.2,
+                    DISP_H - HINT * 0.19,
+                    HINT * 0.2,
+                    HINT * 0.2,
+                    "button_locked.png",
+                )
+                yes = Button(
+                    DISP_W * 0.5 - HINT * 0.3,
+                    DISP_H * 0.5 + HINT * 0.2,
+                    HINT * 0.3,
+                    HINT * 0.3,
+                    "yes.png",
+                    "yes_hover.png",
+                    self._yes_no,
+                    (True,),
+                )
+                no = Button(
+                    DISP_W * 0.5 + HINT * 0.3,
+                    DISP_H * 0.5 + HINT * 0.2,
+                    HINT * 0.3,
+                    HINT * 0.3,
+                    "no.png",
+                    "no_hover.png",
+                    self._yes_no,
+                    (False,),
+                )
+            display.WINDOW.fill((BACKGROUND))
+            display.print_all(game.board, game.current, update="off", invalid_moves="off")
+            border = pygame.rect.Rect(0,0,HINT*3.02, HINT*1.22)
+            border.center = (DISP_W*0.5, DISP_H*0.5)
+            pygame.draw.rect(display.WINDOW, (WHITE), border)
+            rect = pygame.rect.Rect(0,0,HINT*3, HINT*1.2)
+            rect.center = (DISP_W*0.5, DISP_H*0.5)
+            pygame.draw.rect(display.WINDOW, (BACKGROUND), rect)
+            locked1.button(display.WINDOW, False)
+            locked2.button(display.WINDOW, False)
+            yes.button(display.WINDOW)
+            no.button(display.WINDOW)
+            DIMBO_L = pygame.font.Font(
+                FONTS_PATH + "dimbo_regular.ttf", int(HINT * 0.20)
+            )
+            blit_text(display.WINDOW, DIMBO_L, "Do you really wish to abandon the game?", DISP_W * 0.5, DISP_H * 0.5 - HINT*0.25)
+            pygame.display.update()
+            for event in pygame.event.get():
+                yes.get_event(display.WINDOW, event)
+                no.get_event(display.WINDOW, event)
+                if self._confirmed == "no":
+                    self._confirmed = False
+                    event = pygame.event.clear()
+                    return
+                elif self._confirmed == "yes":
+                    self._interrupt = True
+                    return
+                if event.type == pygame.QUIT:
+                    if self._game_run == True:
+                        game._abandoned = True
+                        self._game_run = False
+                        return
+                    else:
+                        pygame.quit()
+                        sys.exit()
+                if event.type == pygame.VIDEORESIZE:
+                    size = pygame.display.get_window_size()
+                    display._resize(game.board, size)
+                    self._resizing_display = True
+
+
     # TRANSITION METHODS
 
     def _start_game(self):
@@ -926,6 +1032,12 @@ class ScreenManager:
     def _flip_back(self):
         if self._current_page > 0:
             self._current_page -= 1
+
+    def _yes_no(self, answer):
+        if answer is True:
+            self._confirmed = "yes"
+        else:
+            self._confirmed = "no"
 
 # UTILITARY FUNCTIONS
 
