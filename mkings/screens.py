@@ -612,7 +612,7 @@ class ScreenManager:
             blit_text(display.WINDOW, DIMBO_L, "About", DISP_W * 0.5, HINT * 0.3)
             blit_long_text(
                 display,
-                "In Memory Kings, players challenge their memory in a mix of the classic games of Chess and Pairs (a.k.a. memory®). They move their pawns strategically across a grid of hidden cards, revealing them, and finding indentical pairs. The player that finds the most pairs wins!",
+                "In Memory Kings, players challenge their memory in a mix of the classic games of Chess and Pairs (a.k.a. Match Up). They move their pawns strategically across a grid of hidden cards, revealing them, and finding indentical pairs. The player that finds the most pairs wins!",
                 (HINT * 0.5, HINT * 0.5),
                 UBUNTU_R,
                 HINT * 0.5,
