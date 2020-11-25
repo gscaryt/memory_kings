@@ -3,7 +3,7 @@ Alpha0.8
 
 ## TODO
 
-- Tutorial
+- 
 
 ## REQUIREMENTS
 
