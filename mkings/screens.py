@@ -512,7 +512,7 @@ class ScreenManager:
                     HINT * 0.4,
                     "pdf_logo.png",
                     action_func=self._open_link,
-                    action_arg="https://drive.google.com/file/d/1be3mYSzGpOooiSTmYnRBguKZ-2J40ip9/view?usp=sharing",
+                    action_arg=("https://drive.google.com/file/d/1be3mYSzGpOooiSTmYnRBguKZ-2J40ip9/view?usp=sharing",),
                 )
 
                 youtube_logo = Button(
@@ -522,7 +522,7 @@ class ScreenManager:
                     HINT * 0.4,
                     "youtube_logo.png",
                     action_func=self._open_link,
-                    action_arg="https://youtu.be/snqjQtYmv_Q",
+                    action_arg=("https://youtu.be/snqjQtYmv_Q",),
                 )
 
                 bgg_logo = Button(
@@ -532,7 +532,7 @@ class ScreenManager:
                     HINT * 0.4,
                     "bgg_logo.png",
                     action_func=self._open_link,
-                    action_arg="https://boardgamegeek.com/boardgame/319384/memory-kings",
+                    action_arg=("https://boardgamegeek.com/boardgame/319384/memory-kings",),
                 )
                 tgc_logo = Button(
                     DISP_W * 0.5 - HINT * 0.8,
@@ -541,7 +541,7 @@ class ScreenManager:
                     HINT * 0.4,
                     "tgc_logo.png",
                     action_func=self._open_link,
-                    action_arg="https://www.thegamecrafter.com/games/memory-kings",
+                    action_arg=("https://www.thegamecrafter.com/games/memory-kings",),
                 )
                 facebook_logo = Button(
                     DISP_W * 0.5 + HINT * 0.8,
@@ -550,7 +550,7 @@ class ScreenManager:
                     HINT * 0.4,
                     "facebook_logo.png",
                     action_func=self._open_link,
-                    action_arg="https://www.facebook.com/memorykingsthegame",
+                    action_arg=("https://www.facebook.com/memorykingsthegame",),
                 )
                 sneaky_pirates_logo = Button(
                     DISP_W * 0.5,
