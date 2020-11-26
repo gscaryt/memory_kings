@@ -25,8 +25,6 @@ class ScreenManager:
     def start_menu(self, game, display):
         self._start_menu = True
         self._resizing_display = True
-        pygame.event.clear()
-        pygame.font.init()
 
         while self._start_menu:
             self.clock.tick(FPS)
@@ -194,7 +192,6 @@ class ScreenManager:
     def game_screen(self, game, display):
         self._game_run = True
         self._resizing_display = True
-        event = pygame.event.clear()
 
         while self._game_run:
             self.clock.tick(FPS)
@@ -273,8 +270,6 @@ class ScreenManager:
     def end_screen(self, game, display):
         self._end_screen = True
         self._resizing_display = True
-        pygame.event.clear()
-        pygame.font.init()
 
         while self._end_screen:
             self.clock.tick(FPS)
@@ -411,10 +406,7 @@ class ScreenManager:
                         self.reveal_cards(game, display)
 
     def reveal_cards(self, game, display):
-        self._reveal_cards = True
         self._resizing_display = True
-        pygame.event.clear()
-        pygame.font.init()
 
         while self._reveal_cards:
             self.clock.tick(FPS)
@@ -491,12 +483,9 @@ class ScreenManager:
                     self._resizing_display = True
 
     def about_screen(self, game, display):
-        pygame.event.clear()
-        pygame.font.init()
-
+        self._resizing_display = True
         while self._about_screen:
             self.clock.tick(FPS)
-            self._resizing_display = True
             HINT = (
                 display.HINT * 1.5
             )  # Magic number adjusts sizes without messing positions.
@@ -705,8 +694,6 @@ class ScreenManager:
 
     def stats_screen(self, game, display):
         self._stats_screen = True
-        pygame.event.clear()
-        pygame.font.init()
 
         while self._stats_screen:
             self.clock.tick(FPS)
@@ -802,7 +789,6 @@ class ScreenManager:
                     self._resizing_display = True
 
     def rulebook_screen(self, game, display):
-        pygame.event.clear()
         while bool(self._rulebook):
             self.clock.tick(FPS)
             self._resizing_display = True
@@ -891,7 +877,6 @@ class ScreenManager:
                     self._resizing_display = True
 
     def interrupt_game(self, game, display):
-        pygame.font.init()
         while True:
             self.clock.tick(FPS)
             self._resizing_display = True
@@ -938,16 +923,19 @@ class ScreenManager:
                 )
             display.WINDOW.fill((BACKGROUND))
             display.print_all(game.board, game.current, update="off", invalid_moves="off")
+
             border = pygame.rect.Rect(0,0,HINT*3.02, HINT*1.22)
             border.center = (DISP_W*0.5, DISP_H*0.5)
             pygame.draw.rect(display.WINDOW, (WHITE), border)
             rect = pygame.rect.Rect(0,0,HINT*3, HINT*1.2)
             rect.center = (DISP_W*0.5, DISP_H*0.5)
             pygame.draw.rect(display.WINDOW, (BACKGROUND), rect)
+
             locked1.button(display.WINDOW, False)
             locked2.button(display.WINDOW, False)
             yes.button(display.WINDOW)
             no.button(display.WINDOW)
+
             DIMBO_L = pygame.font.Font(
                 FONTS_PATH + "dimbo_regular.ttf", int(HINT * 0.20)
             )
@@ -975,7 +963,6 @@ class ScreenManager:
                     size = pygame.display.get_window_size()
                     display._resize(game.board, size)
                     self._resizing_display = True
-
 
     # TRANSITION METHODS
 

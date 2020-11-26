@@ -8,6 +8,7 @@ from mkings.stats import Stats
 from mkings.assets import Asset
 
 def main():
+    pygame.init()
     game = Game() # Init all main game variables.
     stats = Stats() # Init all data collection variables.
     display = Display() # Init the display.

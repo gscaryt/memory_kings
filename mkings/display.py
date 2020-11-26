@@ -7,11 +7,12 @@ from .assets import Asset, sound
 
 
 class Display:
-    def __init__(self, HINT=100):
-        self._original_HINT = int(HINT)
-        self._original_DISP_W = int(HINT * 6.00)
-        self._original_DISP_H = int(HINT * 6.50)
-        self._init(HINT)
+    def __init__(self):
+        self.MONITOR = pygame.display.Info() # gets monitor info
+        self._original_HINT = int(self.MONITOR.current_h/7)
+        self._original_DISP_W = int(self._original_HINT * 6.00)
+        self._original_DISP_H = int(self._original_HINT * 6.50)
+        self._init(self._original_HINT)
 
     def _init(self, HINT):
         self.HINT = int(HINT)
