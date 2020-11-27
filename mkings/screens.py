@@ -639,7 +639,7 @@ class ScreenManager:
             blit_text(
                 display.WINDOW,
                 UBUNTU_S,
-                f"Memory Kings v{VERSION[0]} in Python3.8/Pygame2.0 ({VERSION[1]})",
+                f"Memory Kings v{VERSION} in Python3.85/Pygame2.0",
                 DISP_W * 0.01,
                 DISP_H * 0.99,
                 "bottomleft",

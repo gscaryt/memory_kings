@@ -36,11 +36,13 @@ def main():
     stats.write_data()
     if screen_manager._interrupt is True:
         game._reset()
+        pygame.display.quit()
         return main()
 
     # END SCREEN LOOP
     screen_manager.end_screen(game, display)
     if game._reset_game is True:
+        pygame.display.quit()
         return main()
 
     pygame.quit()
