@@ -5,8 +5,6 @@ __pycache__/
 
 # Data TXT
 mkings_data.txt
-cx_setup.py
-py2app_setup.py
 
 # C extensions
 *.so
