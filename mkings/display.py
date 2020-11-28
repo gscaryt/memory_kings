@@ -7,12 +7,18 @@ from .assets import Asset, sound
 
 
 class Display:
-    def __init__(self):
-        self.MONITOR = pygame.display.Info() # gets monitor info
+    def __init__(self, HINT, MONITOR):
+        if MONITOR is None:
+            self.MONITOR = pygame.display.Info() # gets monitor info
+        else:
+            self.MONITOR = MONITOR
         self._original_HINT = int(self.MONITOR.current_h/7)
         self._original_DISP_W = int(self._original_HINT * 6.00)
         self._original_DISP_H = int(self._original_HINT * 6.50)
-        self._init(self._original_HINT)
+        if HINT is None:
+            self._init(self._original_HINT)
+        else:
+            self._init(HINT)
 
     def _init(self, HINT):
         self.HINT = int(HINT)
@@ -33,11 +39,17 @@ class Display:
         if size[1] != self.DISP_H:
             NEW_HINT = self._original_HINT * size[1] / self._original_DISP_W
             self._init(NEW_HINT)
+            if self.DISP_H > self.MONITOR.current_h:
+                NEW_HINT = int(self.MONITOR.current_h/7)
+                self._init(NEW_HINT)
             self._set_corner(board)
             return
         if size[0] != self.DISP_W:
             NEW_HINT = self._original_HINT * size[0] / self._original_DISP_H
             self._init(NEW_HINT)
+            if self.DISP_H > self.MONITOR.current_h:
+                NEW_HINT = int(self.MONITOR.current_h/7)
+                self._init(NEW_HINT)
             self._set_corner(board)
             return
 
@@ -195,7 +207,14 @@ class Display:
                                 self.WINDOW.blit(image, pos_on_screen)
 
     def print_score_board(self, current_player):
-        pygame.font.init()
+        '''
+        Prints the Colors and Scores of the Players under the board
+        and the little crown over the current player.
+
+        Looks a bit messy but it's intended for the players to be
+        centered under the board, independent of the number of 
+        players.
+        ''' 
         DIMBO_L = pygame.font.Font("fonts/dimbo_regular.ttf", int(self.HINT * 0.2))
         for i, player in enumerate(Player.array):
             t1 = DIMBO_L.render(
@@ -282,6 +301,9 @@ class Display:
         - invalid_moves = bool - False will not print the invalid moves.
         - revealed = bool - True will print all the cards facing up.
         - update = bool - False makes this function not update the display.
+        Reminder: Avoid having 2 updates in a same loop. So if you need to use this
+        but print some extra stuff over (or under) some layers, make update=False and add
+        pygame.display.update() at the end of the specific block.
         """
         if grid_revealed is False:
             self.print_grid(board)
@@ -298,7 +320,10 @@ class Display:
             pygame.display.update()
 
     def print_card(self, board, col, row):
-        """Show one hidden card for 2 seconds and turns it back down."""
+        """
+        Show one hidden card for 2 seconds and turns it back down.
+        Used by the Queen's Special.
+        """
         card = board.get_card(col, row)
         pos_on_screen = (
             self.CORNER[0] + self.CARD_SIZE * col,
@@ -324,6 +349,7 @@ class Display:
             return True
 
     def print_eye(self, board, col, row):
+        '''Prints the large eye over the Queen's Card'''
         card = board.get_card(col, row)
         pos_on_screen = (
             self.CORNER[0] + self.CARD_SIZE * col,
@@ -335,6 +361,7 @@ class Display:
         self.WINDOW.blit(queen_advice, pos_on_screen)
 
     def get_cursor_eye(self):
+        '''Cursor during Queen's Power'''
         eye_cursor = (  # 32x24
             "                                ",
             "                                ",

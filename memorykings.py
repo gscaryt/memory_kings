@@ -7,11 +7,11 @@ from mkings.game import Game
 from mkings.stats import Stats
 from mkings.assets import Asset
 
-def main():
+def main(HINT=None, MONITOR=None):
     pygame.init()
     game = Game() # Init all main game variables.
     stats = Stats() # Init all data collection variables.
-    display = Display() # Init the display.
+    display = Display(HINT, MONITOR) # Init the display.
     asset = Asset(display) # Load all the images.
     pygame.display.set_icon(Asset.image["icon.png"])
     screen_manager = ScreenManager() # Init the Screen Manager.
@@ -36,14 +36,12 @@ def main():
     stats.write_data()
     if screen_manager._interrupt is True:
         game._reset()
-        pygame.display.quit()
-        return main()
+        return main(display.HINT, display.MONITOR)
 
     # END SCREEN LOOP
     screen_manager.end_screen(game, display)
     if game._reset_game is True:
-        pygame.display.quit()
-        return main()
+        return main(display.HINT, display.MONITOR)
 
     pygame.quit()
     sys.exit()

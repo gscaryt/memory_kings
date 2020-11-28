@@ -981,22 +981,11 @@ class ScreenManager:
         else:
             self._stats_screen = False
 
-    def _open_link(self, link):
-        import webbrowser
-
-        webbrowser.open_new_tab(link)
-
     def _call_reveal(self):
         if self._reveal_cards is False:
             self._reveal_cards = True
         else:
             self._reveal_cards = False
-
-    def _mute(self):
-        if Asset._mute_sounds is False:
-            Asset._mute_sounds = True
-        else:
-            Asset._mute_sounds = False
 
     def _call_rulebook(self):
         if bool(self._rulebook) is False:
@@ -1021,11 +1010,25 @@ class ScreenManager:
         if self._current_page > 0:
             self._current_page -= 1
 
+    # STATES AND UTILITY
+
+    def _open_link(self, link):
+        import webbrowser
+
+        webbrowser.open_new_tab(link)
+
+    def _mute(self):
+        if Asset._mute_sounds is False:
+            Asset._mute_sounds = True
+        else:
+            Asset._mute_sounds = False
+
     def _yes_no(self, answer):
         if answer is True:
             self._confirmed = "yes"
         else:
             self._confirmed = "no"
+
 
 # UTILITARY FUNCTIONS
 
