@@ -1,6 +1,5 @@
 import pygame
 import os
-import time
 from .constants import IMAGES_PATH, FONTS_PATH, SOUNDS_PATH
 
 
@@ -10,9 +9,6 @@ class Asset:
     _mute_sounds = False
 
     def __init__(self, display):
-        start = time.time()
-        pygame.font.init()
-        pygame.mixer.init()
         DIMBO_L = pygame.font.Font(FONTS_PATH + "dimbo_regular.ttf", int(15))
         if len(Asset.image) == len(os.listdir(IMAGES_PATH)):
             print("Reseting the game. Images are already loaded.")
@@ -53,8 +49,6 @@ class Asset:
                     )
                     display.WINDOW.blit(text, (20, 20))
                     pygame.display.update()
-            end = time.time()
-            print(f"All assets loaded in: {str(end-start)}s")
             display.WINDOW.fill((0, 0, 0))
             text = DIMBO_L.render(
                 f"All {len(os.listdir(IMAGES_PATH)) + len(os.listdir(SOUNDS_PATH))} Assets ready.",
