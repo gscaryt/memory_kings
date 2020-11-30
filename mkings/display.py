@@ -1,5 +1,4 @@
 import pygame
-import timeit
 from .constants import IMAGES_PATH, PLAYER_COLOR_CODES, BACKGROUND, FONTS_PATH
 from .players import Player
 from .pawns import Pawn

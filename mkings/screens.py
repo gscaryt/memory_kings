@@ -924,7 +924,7 @@ class ScreenManager:
             display.WINDOW.fill((BACKGROUND))
             display.print_all(game.board, game.current, update="off", invalid_moves="off")
 
-            border = pygame.rect.Rect(0,0,HINT*3.02, HINT*1.22)
+            border = pygame.rect.Rect(0,0,HINT*3.05, HINT*1.25)
             border.center = (DISP_W*0.5, DISP_H*0.5)
             pygame.draw.rect(display.WINDOW, (WHITE), border)
             rect = pygame.rect.Rect(0,0,HINT*3, HINT*1.2)

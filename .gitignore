@@ -5,6 +5,7 @@ __pycache__/
 
 # Data TXT
 mkings_data.txt
+p2e_setup.py
 
 # C extensions
 *.so
