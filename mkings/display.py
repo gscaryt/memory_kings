@@ -214,7 +214,7 @@ class Display:
         centered under the board, independent of the number of 
         players.
         ''' 
-        DIMBO_L = pygame.font.Font("fonts/dimbo_regular.ttf", int(self.HINT * 0.2))
+        DIMBO_L = pygame.font.Font("fonts/dimbo_regular.otf", int(self.HINT * 0.2))
         for i, player in enumerate(Player.array):
             t1 = DIMBO_L.render(
                 f"{player.color}: {player.score}", True, PLAYER_COLOR_CODES[i]

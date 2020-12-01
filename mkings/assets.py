@@ -9,7 +9,7 @@ class Asset:
     _mute_sounds = False
 
     def __init__(self, display):
-        DIMBO_L = pygame.font.Font(FONTS_PATH + "dimbo_regular.ttf", int(15))
+        DIMBO_L = pygame.font.Font(FONTS_PATH + "dimbo_regular.otf", int(15))
         if len(Asset.image) == len(os.listdir(IMAGES_PATH)):
             print("Reseting the game. Images are already loaded.")
             text = DIMBO_L.render(

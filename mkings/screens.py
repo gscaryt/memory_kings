@@ -115,16 +115,16 @@ class ScreenManager:
                 )
 
             DIMBO_L = pygame.font.Font(
-                FONTS_PATH + "dimbo_regular.ttf", int(HINT * 0.20)
+                FONTS_PATH + "dimbo_regular.otf", int(HINT * 0.20)
             )
             DIMBO_R = pygame.font.Font(
-                FONTS_PATH + "dimbo_regular.ttf", int(HINT * 0.18)
+                FONTS_PATH + "dimbo_regular.otf", int(HINT * 0.18)
             )
             UBUNTU_R = pygame.font.Font(
-                FONTS_PATH + "ubuntu_regular.ttf", int(HINT * 0.10)
+                FONTS_PATH + "ubuntu_regular.otf", int(HINT * 0.10)
             )
             UBUNTU_S = pygame.font.Font(
-                FONTS_PATH + "ubuntu_regular.ttf", int(HINT * 0.05)
+                FONTS_PATH + "ubuntu_regular.otf", int(HINT * 0.05)
             )
             display.WINDOW.fill((BACKGROUND))
             blit_text(
@@ -318,10 +318,10 @@ class ScreenManager:
                 display.WINDOW.fill((BACKGROUND))
 
                 DIMBO_L = pygame.font.Font(
-                    FONTS_PATH + "dimbo_regular.ttf", int(HINT * 0.5)
+                    FONTS_PATH + "dimbo_regular.otf", int(HINT * 0.5)
                 )
                 DIMBO_R = pygame.font.Font(
-                    FONTS_PATH + "dimbo_regular.ttf", int(HINT * 0.2)
+                    FONTS_PATH + "dimbo_regular.otf", int(HINT * 0.2)
                 )
                 if Player.total == 2:
                     if game._winner == game.counter:
@@ -587,16 +587,16 @@ class ScreenManager:
 
             display.WINDOW.fill((BACKGROUND))
             DIMBO_L = pygame.font.Font(
-                FONTS_PATH + "dimbo_regular.ttf", int(HINT * 0.20)
+                FONTS_PATH + "dimbo_regular.otf", int(HINT * 0.20)
             )
             DIMBO_R = pygame.font.Font(
-                FONTS_PATH + "dimbo_regular.ttf", int(HINT * 0.12)
+                FONTS_PATH + "dimbo_regular.otf", int(HINT * 0.12)
             )
             UBUNTU_R = pygame.font.Font(
-                FONTS_PATH + "ubuntu_regular.ttf", int(HINT * 0.10)
+                FONTS_PATH + "ubuntu_regular.otf", int(HINT * 0.10)
             )
             UBUNTU_S = pygame.font.Font(
-                FONTS_PATH + "ubuntu_regular.ttf", int(HINT * 0.05)
+                FONTS_PATH + "ubuntu_regular.otf", int(HINT * 0.05)
             )
             blit_text(display.WINDOW, DIMBO_L, "About", DISP_W * 0.5, HINT * 0.3)
             blit_long_text(
@@ -736,10 +736,10 @@ class ScreenManager:
 
             display.WINDOW.fill((BACKGROUND))
             DIMBO_L = pygame.font.Font(
-                FONTS_PATH + "dimbo_regular.ttf", int(HINT * 0.20)
+                FONTS_PATH + "dimbo_regular.otf", int(HINT * 0.20)
             )
             UBUNTU_R = pygame.font.Font(
-                FONTS_PATH + "ubuntu_regular.ttf", int(HINT * 0.10)
+                FONTS_PATH + "ubuntu_regular.otf", int(HINT * 0.10)
             )
             DF = get_solo_numbers()
             blit_text(display.WINDOW, DIMBO_L, "Solo Games:", DISP_W * 0.5, HINT * 0.3)
@@ -937,7 +937,7 @@ class ScreenManager:
             no.button(display.WINDOW)
 
             DIMBO_L = pygame.font.Font(
-                FONTS_PATH + "dimbo_regular.ttf", int(HINT * 0.20)
+                FONTS_PATH + "dimbo_regular.otf", int(HINT * 0.20)
             )
             blit_text(display.WINDOW, DIMBO_L, "Do you really wish to abandon the game?", DISP_W * 0.5, DISP_H * 0.5 - HINT*0.25)
             pygame.display.update()
@@ -1084,7 +1084,7 @@ def blit_FPS(clock, display):
     HINT = display.HINT * 1.5  # Magic number adjusts sizes without messing positions.
     DISP_W = display.DISP_W
     DISP_H = display.DISP_H
-    UBUNTU_S = pygame.font.Font(FONTS_PATH + "ubuntu_regular.ttf", int(HINT * 0.05))
+    UBUNTU_S = pygame.font.Font(FONTS_PATH + "ubuntu_regular.otf", int(HINT * 0.05))
     blit_text(
         display.WINDOW,
         UBUNTU_S,
