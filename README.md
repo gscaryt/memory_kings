@@ -1,9 +1,9 @@
 # Memory Kings in Python 3 by G. Scary Tontini
-Alpha0.8
+Alpha0.9
 
 ## TODO
 
-- 
+- Compile dists for Linux and MacOS. Still failing at that.
 
 ## REQUIREMENTS
 
