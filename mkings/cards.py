@@ -16,6 +16,7 @@ class Card:
 
         self.col = 0  # Position col,row is redefined on Board Grid Setup
         self.row = 0
+        self.remember = False
 
         Card.array.append(self)
 

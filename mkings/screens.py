@@ -167,7 +167,7 @@ class ScreenManager:
             pygame.display.update()
 
             for event in pygame.event.get():
-
+                display.knmcd.code(display, event)
                 solo.get_event(display.WINDOW, event)
                 two.get_event(display.WINDOW, event)
                 three.get_event(display.WINDOW, event)
@@ -233,7 +233,7 @@ class ScreenManager:
             pygame.display.update()
 
             for event in pygame.event.get():
-
+                display.knmcd.code(display, event)
                 if event.type == pygame.QUIT:
                     game._abandoned = True
                     self._game_run = False
@@ -386,7 +386,7 @@ class ScreenManager:
                 pygame.display.update()
 
                 for event in pygame.event.get():
-
+                    display.knmcd.code(display, event)
                     replay.get_event(display.WINDOW, event)
                     reveal.get_event(display.WINDOW, event)
                     about.get_event(display.WINDOW, event)
@@ -660,7 +660,7 @@ class ScreenManager:
             pygame.display.update()
 
             for event in pygame.event.get():
-
+                display.knmcd.code(display, event)
                 stats.get_event(display.WINDOW, event)
                 mute.get_event(display.WINDOW, event)
                 about.get_event(display.WINDOW, event)
@@ -766,7 +766,7 @@ class ScreenManager:
             pygame.display.update()
 
             for event in pygame.event.get():
-
+                display.knmcd.code(display, event)
                 stats.get_event(display.WINDOW, event)
                 mute.get_event(display.WINDOW, event)
                 about.get_event(display.WINDOW, event)
@@ -847,7 +847,7 @@ class ScreenManager:
             pygame.display.update()
 
             for event in pygame.event.get():
-
+                display.knmcd.code(display, event)
                 forward.get_event(display.WINDOW, event)
                 back.get_event(display.WINDOW, event)
                 rules.get_event(display.WINDOW, event)
@@ -942,6 +942,7 @@ class ScreenManager:
             blit_text(display.WINDOW, DIMBO_L, "Do you really wish to abandon the game?", DISP_W * 0.5, DISP_H * 0.5 - HINT*0.25)
             pygame.display.update()
             for event in pygame.event.get():
+                display.knmcd.code(display, event)
                 yes.get_event(display.WINDOW, event)
                 no.get_event(display.WINDOW, event)
                 if self._confirmed == "no":

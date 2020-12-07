@@ -3,6 +3,7 @@ from .constants import IMAGES_PATH, PLAYER_COLOR_CODES, BACKGROUND, FONTS_PATH
 from .players import Player
 from .pawns import Pawn
 from .assets import Asset, sound
+from .knmcd import Knmcd
 
 
 class Display:
@@ -31,6 +32,7 @@ class Display:
         self.WINDOW = pygame.display.set_mode(
             (self.DISP_W, self.DISP_H), pygame.RESIZABLE
         )
+        self.knmcd = Knmcd()
         pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_HAND)
         pygame.display.set_caption("Memory Kings")
 
@@ -86,6 +88,7 @@ class Display:
                                 card.image, self.CARD_SIZE, self.CARD_SIZE
                             )
                             self.WINDOW.blit(card_image, pos_on_screen)
+                            card.remember = True
                             is_open = True
                     for token in player.token:
                         if token.position == card.position:
@@ -93,8 +96,14 @@ class Display:
                                 card.image, self.CARD_SIZE, self.CARD_SIZE
                             )
                             self.WINDOW.blit(card_image, pos_on_screen)
+                            card.remember = True
                             is_open = True
-
+                if card.remember and self.knmcd.active:
+                    card_image = self.get_image(
+                        card.image, self.CARD_SIZE, self.CARD_SIZE
+                    )
+                    self.WINDOW.blit(card_image, pos_on_screen)
+                    is_open = True
                 if not is_open:
                     if card.back == "WHITE":
                         white_back = self.get_image(
@@ -345,6 +354,7 @@ class Display:
             pygame.display.update()
             pygame.time.wait(2000)
             sound("flip.wav")
+            card.remember = True
             return True
 
     def print_eye(self, board, col, row):
