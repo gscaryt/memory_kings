@@ -37,6 +37,8 @@ def main(HINT=None, MONITOR=None):
     # DATA COLLECTION END
     stats.collect_end_data(game)
     stats.write_data()
+
+    # RESET BUTTON CLICKED DURING A GAME
     if screen_manager._interrupt is True:
         game._reset()
         return main(display.HINT, display.MONITOR)

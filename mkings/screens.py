@@ -983,7 +983,7 @@ class ScreenManager:
                     display._resize(game.board, size)
                     self._resizing_display = True
 
-    # TRANSITION METHODS
+    # TRANSITION METHODS (Called by Buttons to switch screens)
 
     def _start_game(self):
         self._start_menu = False
