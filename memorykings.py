@@ -11,26 +11,11 @@ from mkings.assets import Asset
 logging.basicConfig(filename='memorykings.log', encoding='utf-8', level=logging.DEBUG)
 
 def main(HINT=None, MONITOR=None):
-    try:
-        pygame.init()
-    except:
-        logging.exception('Exception raised initialising pygame.')
-        raise
-    
-    try:
-        game = Game() # Init all main game variables.
-        stats = Stats() # Init all data collection variables.
-        display = Display(HINT, MONITOR) # Init the display.
-    except:
-        logging.exception('Exception raised in Game(), Stats() or Display() initialisers.')
-        raise
-
-    try:
-        asset = Asset(display) # Load all the images.
-    except:
-        logging.exception('Exception raised loading Assets.')
-        raise
-
+    pygame.init()
+    game = Game() # Init all main game variables.
+    stats = Stats() # Init all data collection variables.
+    display = Display(HINT, MONITOR) # Init the display.
+    asset = Asset(display) # Load all the images.
     pygame.display.set_icon(Asset.image["icon.png"])
     screen_manager = ScreenManager() # Init the Screen Manager.
     pygame.event.clear() # Clear any lingering Event.
