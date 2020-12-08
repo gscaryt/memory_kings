@@ -22,6 +22,24 @@ class ScreenManager:
         self._confirmed = False
         self._current_page = 0
 
+    '''
+    Structure of a Screen:
+    1) pre-loop definitions
+    2) while loop
+    2.1) set clock.tick and set local relative HINT and DISP_W and DISP_H
+    2.2) (re)create buttons only at start and when resizing display
+    2.3) set fonts
+    2.4) blit things independent of player input 
+    2.5) call the button.type methods (independent of event)
+    2.6) update display
+    2.7) events loop
+    2.7.1) call button.get_event methods for all buttons
+    2.7.2) call any other input dependent function
+    2.7.3) transition to other screens conditional
+    2.7.4) resize screen conditional
+    2.7.5) quit conditional
+    '''
+
     def start_menu(self, game, display):
         self._start_menu = True
         self._resizing_display = True
