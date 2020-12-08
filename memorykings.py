@@ -1,5 +1,6 @@
 import pygame
 import sys
+import logging
 from mkings.constants import FPS, BACKGROUND
 from mkings.screens import ScreenManager
 from mkings.display import Display
@@ -7,12 +8,29 @@ from mkings.game import Game
 from mkings.stats import Stats
 from mkings.assets import Asset
 
+logging.basicConfig(filename='memorykings.log', encoding='utf-8', level=logging.DEBUG)
+
 def main(HINT=None, MONITOR=None):
-    pygame.init()
-    game = Game() # Init all main game variables.
-    stats = Stats() # Init all data collection variables.
-    display = Display(HINT, MONITOR) # Init the display.
-    asset = Asset(display) # Load all the images.
+    try:
+        pygame.init()
+    except:
+        logging.exception('Exception raised initialising pygame.')
+        raise
+    
+    try:
+        game = Game() # Init all main game variables.
+        stats = Stats() # Init all data collection variables.
+        display = Display(HINT, MONITOR) # Init the display.
+    except:
+        logging.exception('Exception raised in Game(), Stats() or Display() initialisers.')
+        raise
+
+    try:
+        asset = Asset(display) # Load all the images.
+    except:
+        logging.exception('Exception raised loading Assets.')
+        raise
+
     pygame.display.set_icon(Asset.image["icon.png"])
     screen_manager = ScreenManager() # Init the Screen Manager.
     pygame.event.clear() # Clear any lingering Event.
@@ -48,4 +66,8 @@ def main(HINT=None, MONITOR=None):
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except:
+        logging.exception('Exception raised in main() handler')
+        raise
