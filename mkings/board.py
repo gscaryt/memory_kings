@@ -106,24 +106,8 @@ class Board:
                 or mouse[1] > display.CORNER[1] + self.rows * display.CARD_SIZE
                 or mouse[0] > display.CORNER[0] + self.cols * display.CARD_SIZE
             ):
-                for i in range(self.cols):
-                    if (
-                        (mouse[0] - display.CORNER[0] - display.CARD_SIZE)
-                        / display.CARD_SIZE
-                        <= i
-                        <= (mouse[0] - display.CORNER[0]) / display.CARD_SIZE
-                    ):
-                        col = i
-                        break
-                for j in range(self.rows):
-                    if (
-                        (mouse[1] - display.CORNER[1] - display.CARD_SIZE)
-                        / display.CARD_SIZE
-                        <= j
-                        <= (mouse[1] - display.CORNER[1]) / display.CARD_SIZE
-                    ):
-                        row = j
-                        break
+                col = int((mouse[0] - display.CORNER[0]) / display.CARD_SIZE)
+                row = int((mouse[1] - display.CORNER[1]) / display.CARD_SIZE)
                 return col, row
             else:
                 return None
