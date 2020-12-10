@@ -565,6 +565,8 @@ class ScreenManager:
                     HINT * 0.6,
                     HINT * 0.6,
                     "sneaky_pirates_logo.png",
+                    action_func=self._open_link,
+                    action_arg=("https://sneakypirates.itch.io/")
                 )
                 stats = Button(
                     DISP_W - HINT * 0.2,
@@ -614,7 +616,7 @@ class ScreenManager:
                 FONTS_PATH + "ubuntu_regular.otf", int(HINT * 0.10)
             )
             UBUNTU_S = pygame.font.Font(
-                FONTS_PATH + "ubuntu_regular.otf", int(HINT * 0.05)
+                FONTS_PATH + "ubuntu_regular.otf", int(HINT * 0.06)
             )
             blit_text(display.WINDOW, DIMBO_L, "About", DISP_W * 0.5, HINT * 0.3)
             blit_long_text(
@@ -657,7 +659,7 @@ class ScreenManager:
             blit_text(
                 display.WINDOW,
                 UBUNTU_S,
-                f"Memory Kings v{VERSION} in Python3.85/Pygame2.0",
+                f"Memory Kings v{VERSION} in Python 3.9 / Pygame 2.0",
                 DISP_W * 0.01,
                 DISP_H * 0.99,
                 "bottomleft",
@@ -673,7 +675,7 @@ class ScreenManager:
             bgg_logo.button(display.WINDOW)
             tgc_logo.button(display.WINDOW)
             facebook_logo.button(display.WINDOW)
-            sneaky_pirates_logo.button(display.WINDOW, False)
+            sneaky_pirates_logo.button(display.WINDOW)
 
             pygame.display.update()
 
