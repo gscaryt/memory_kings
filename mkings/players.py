@@ -25,6 +25,7 @@ class Player:
         2) row: Row of the position to place the Pawn.
         """
         self.pawn.append(Pawn(self.color, col, row))
+        self.get_queen_sound(board, col, row)
         sound("click2.wav")
         card = board.get_card(col, row)
         if card.activate(Player.array, card.col, card.row):
@@ -38,7 +39,6 @@ class Player:
         1) col: Column of the position to place the Token.
         2) row: Row of the position to place the Token.
         """
-        sound("click2.wav")
         self.token.append(Token(self.color, col, row))
 
     @classmethod
@@ -103,7 +103,7 @@ class Player:
         )
         return screen_pos_x, screen_pos_y
 
-    def select(self, display, event):
+    def select(self, board, display, event):
         """Selects a pawn with a click."""
         mouse = pygame.mouse.get_pos()
         for pawn in self.pawn:
@@ -119,6 +119,22 @@ class Player:
                 break
             else:
                 Pawn.selected = False
+
+    def get_rank_sound(self, board, col, row):
+        card = board.get_card(col, row)
+        if card.rank == "ROOK":
+            sound("rook.wav")
+        elif card.rank == "BISHOP":
+            sound("bishop.wav")
+        elif card.rank == "KNIGHT":
+            sound("knight.wav")
+        elif card.rank == "QUEEN":
+            sound("queen.wav")
+
+    def get_queen_sound(self, board, col, row):
+        card = board.get_card(col, row)
+        if card.rank == "QUEEN":
+            sound("queen.wav")
 
     def move(self, display, board, event):
         """
@@ -172,7 +188,7 @@ class Player:
                 else:
                     return False
             else:
-                self.select(display, event)
+                self.select(board, display, event)
                 return False
 
     def recruit(self, board):
@@ -191,6 +207,7 @@ class Player:
                     # These cards were already recruited
                     return None
                 else:
+                    self.get_rank_sound(board, card_0.col, card_0.row)
                     self.place_token(self.pawn[0].col, self.pawn[0].row)
                     self.place_token(self.pawn[1].col, self.pawn[1].row)
                     self.score += 1
@@ -234,6 +251,7 @@ class CounterKing(Player):
                 and card_counter.color == card_player.color
                 and card_counter.rank == card_player.rank
             ):
+                sound("counter.wav")
                 self.place_token(counter.col, counter.row)
                 self.place_token(pawn.col, pawn.row)
                 self.score += 1

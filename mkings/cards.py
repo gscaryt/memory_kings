@@ -2,6 +2,7 @@ import pygame
 import sys
 from .buttons import Button
 from .constants import BACKGROUND, FPS
+from .assets import sound
 
 
 class Card:
@@ -113,6 +114,7 @@ class Queen(Card):
         peek any hidden card from the board.
         """
         clock = pygame.time.Clock()
+        sound("queen.wav")
         while True:
             clock.tick(FPS)
             display.get_cursor_eye()
