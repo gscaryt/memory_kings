@@ -8,8 +8,6 @@ from mkings.game import Game
 from mkings.stats import Stats
 from mkings.assets import Asset
 
-logging.basicConfig(filename='memorykings.log', encoding='utf-8', level=logging.DEBUG)
-
 def main(HINT=None, MONITOR=None):
     pygame.init()
     game = Game() # Init all main game variables.
@@ -53,8 +51,4 @@ def main(HINT=None, MONITOR=None):
 
 
 if __name__ == "__main__":
-    try:
         main()
-    except:
-        logging.exception('Exception raised in main() handler')
-        raise
