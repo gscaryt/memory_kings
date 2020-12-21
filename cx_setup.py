@@ -4,6 +4,7 @@ from mkings.constants import VERSION
 
 build_exe_options = {
     "packages": ["pygame", "random", "sys"],
+    "include_files": ["icon.ico", "fonts/", "images/", "sounds/"],
     "excludes": ["tkinter"]
 }
 
