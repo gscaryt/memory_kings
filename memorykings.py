@@ -1,6 +1,5 @@
 import pygame
 import sys
-import logging
 from mkings.constants import FPS, BACKGROUND
 from mkings.screens import ScreenManager
 from mkings.display import Display
